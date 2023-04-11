@@ -1,0 +1,34 @@
+:root {
+
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.header{
+
+
+
+  img{
+    width: 200px
+  }
+}
+
+.nav-title{
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin-right: 0.5rem;
+}
+.nav-icons{
+  font-size: 1.5rem;
+  margin-right: 0.5rem;
+}
