@@ -3,6 +3,7 @@ import cors from 'cors';
 import * as dotenv from "dotenv";
 dotenv.config();
 
+
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
 const hostname = process.env.SERVER_HOSTNAME || 'localhost';
@@ -21,7 +22,8 @@ app.use(express.json());
 // Für Built in Middleware für Formulardaten
 app.use(express.urlencoded({extended: true}));
 
-app.get('/', function (req, res) {
+app.get('/',  function (req, res) {
+
     res.send('Hello World!')
 })
 

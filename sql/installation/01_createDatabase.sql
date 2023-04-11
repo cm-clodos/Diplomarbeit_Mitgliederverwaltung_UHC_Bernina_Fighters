@@ -1,0 +1,1 @@
+CREATE OR REPLACE DATABASE Mitgliederverwaltung Bernina Fighters;
