@@ -18,6 +18,14 @@ class MemberHelper {
             throw error;
         }
     }
+    async addMember(member) {
+        const sql = "INSERT INTO members (firstname, lastname, email, telephone, active, role_id, entry_date) VALUES (?,?,?,?,?,?,?)";
+        try {
+            return await this.databaseConnector.query(sql, [member.firstname, member.lastname, member.email, member.telephone, member.active, member.role, member.entryDate]);
+        } catch (error){
+            throw error;
+        }
+    }
 
 }
 

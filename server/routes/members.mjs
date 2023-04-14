@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.get('/',  memberController.handleGetAllMembers);
 
+router.post('/', memberController.handleNewMember);
+
 
 
 export default router;
