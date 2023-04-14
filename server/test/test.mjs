@@ -164,7 +164,7 @@ describe('Testing MemberHelper for checking database operations', () => {
             assert.strictEqual(updatedMember.data[0].telephone, '000012345678');
             assert.strictEqual(updatedMember.data[0].active, 0);
             assert.strictEqual(updatedMember.data[0].role_id, 3);
-            assert.strictEqual(updatedMember.data[0].entry_date.toISOString().slice(0,10), new Date('2022-12-31').toISOString().slice(0,10));
+            assert.strictEqual(updatedMember.data[0].entry_date.toISOString().slice(0,10), new Date('2023-01-01').toISOString().slice(0,10));
 
         });
         it('should member not found and return no data', async function () {
