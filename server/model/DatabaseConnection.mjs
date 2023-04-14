@@ -42,7 +42,6 @@ class DatabaseConnection {
         let conn = await this.connectToDatabase();
         try {
             const result = await conn.query(sql, values);
-            delete result.meta;
             return {success: true, data: result};
         } catch (err) {
             throw err;

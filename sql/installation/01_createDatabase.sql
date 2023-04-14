@@ -1,1 +1,1 @@
-CREATE OR REPLACE DATABASE Mitgliederverwaltung Bernina Fighters;
+CREATE DATABASE IF NOT EXISTS `Mitgliederverwaltung Bernina Fighters`;

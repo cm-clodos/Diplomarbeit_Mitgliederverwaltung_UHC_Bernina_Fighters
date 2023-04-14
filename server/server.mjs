@@ -3,6 +3,7 @@ import cors from 'cors';
 import * as dotenv from "dotenv";
 dotenv.config();
 
+import membersRoute from './routes/members.mjs';
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
@@ -23,9 +24,10 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 app.get('/',  function (req, res) {
-
     res.send('Hello World!')
 })
+
+app.use('/members', membersRoute);
 
 app.use((req, res) => {
     res.status(404).send('Route not found! Check your URL!');
