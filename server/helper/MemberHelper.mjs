@@ -26,6 +26,39 @@ class MemberHelper {
             throw error;
         }
     }
+    async getMemberById(id) {
+        const sql = "SELECT * FROM members WHERE id = ?";
+        try {
+            return await this.databaseConnector.query(sql, [id]);
+        } catch (error){
+            throw error;
+        }
+    }
+    async deleteMemberById(id) {
+        const sql = "DELETE FROM members WHERE id = ?";
+        try {
+            return await this.databaseConnector.query(sql, [id]);
+        } catch (error){
+            throw error;
+        }
+    }
+    async deleteMemberByLastname(lastname) {
+        const sql = "DELETE FROM members WHERE lastname = ?";
+        try {
+            return await this.databaseConnector.query(sql, [lastname]);
+        } catch (error){
+            throw error;
+        }
+    }
+    async updateMember(id, member) {
+        const data = [member.firstname, member.lastname, member.email, member.telephone, member.active, member.role, member.entryDate, id];
+        const sql = "UPDATE members SET firstname=?, lastname=?, email=?, telephone=?, active=?, role_id=?, entry_date=? WHERE id=?";
+        try {
+            return await this.databaseConnector.query(sql, data);
+        } catch (error){
+            throw error;
+        }
+    }
 
 }
 
