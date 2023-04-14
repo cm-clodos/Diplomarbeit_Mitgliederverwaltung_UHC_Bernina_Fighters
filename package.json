@@ -4,6 +4,7 @@
   "description": "Mitgliederverwaltung für den Verein UHC Bernina Fighters",
   "main": "index.js",
   "scripts": {
+    "test": "cross-env NODE_ENV=test DB_NAME=Test_Mitgliederverwaltung concurrently -n=Server -c=magenta,cyan \"cd server && npm run test\"",
     "devStart": "cross-env NODE_ENV=development concurrently -n=Server,Client -c=magenta,cyan \"cd server && npm run start\" \"cd client && npm run serve\""
   },
   "dependencies": {
