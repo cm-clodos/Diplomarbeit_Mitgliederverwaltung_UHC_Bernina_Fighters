@@ -14,10 +14,10 @@ jobs:
         node-version: [18.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         host-port: [3306]
         database-host: [127.0.0.1]
-        database-name: [Test_Mitgliederverwaltung]
+        database-name: [Test Mitgliederverwaltung Bernina Fighters]
         database-root-pwd: [root]
-        database-user: [developer]
-        database-pwd: [developer]
+        database-user: [root]
+        database-pwd: [root]
 
     steps:
     - uses: actions/checkout@v3
@@ -30,8 +30,8 @@ jobs:
         #mariadb version: '10.4.10' # Optional, default value is "latest". The version of the MariaDB
         mysql database: ${{ matrix.database-name }} # Optional, default value is "test". The specified database which will be create
         mysql root password: ${{ matrix.database-root-pwd }} # Required if "mysql user" is empty, default is empty. The root superuser password
-        #mysql user: ${{ matrix.database-user }} # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
-        #mysql password: ${{ matrix.database-pwd }} # Required if "mysql user" exists. The password for the "mysql user"
+        mysql user: ${{ matrix.database-user }} # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+        mysql password: ${{ matrix.database-pwd }} # Required if "mysql user" exists. The password for the "mysql user"
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
@@ -45,11 +45,11 @@ jobs:
     - name: Run SQL files to install database tables
       env:
         NODE_ENV: citest
-        DB_HOST: ${{ matrix.database-host }}
-        DB_PORT: ${{ matrix.host-port }}
-        DB_USER: root
-        DB_PASSWORD: ${{ matrix.database-root-pwd }}
-        TEST_DB_NAME: ${{ matrix.database-name }}
+        TEST_DB_HOST: ${{ matrix.database-host }}
+        TEST_DB_PORT: ${{ matrix.host-port }}
+        TEST_DB_USER: root
+        TEST_DB_PASSWORD: ${{ matrix.database-root-pwd }}
+        TEST_DB_DATABASE: ${{ matrix.database-name }}
       run: |
         for file in sql/tables/*.sql; do
         mysql -h$DB_HOST -P$DB_PORT -u$DB_USER -p$DB_PASSWORD -D$TEST_DB_NAME < "$file"
@@ -59,10 +59,10 @@ jobs:
     - name: Run CI Tests
       env:
         NODE_ENV: citest
-        DB_HOST: ${{ matrix.database-host }}
-        DB_PORT: ${{ matrix.host-port }}
-        DB_USER: root
-        DB_PASSWORD: ${{ matrix.database-root-pwd }}
-        TEST_DB_NAME: ${{ matrix.database-name }}
-        DB_NAME: ${{ matrix.database-name }}
+        TEST_DB_HOST: ${{ matrix.database-host }}
+        TEST_DB_PORT: ${{ matrix.host-port }}
+        TEST_DB_USER: root
+        TEST_DB_PASSWORD: ${{ matrix.database-root-pwd }}
+        TEST_DB_DATABASE: ${{ matrix.database-name }}
+
       run: cd server && npm ls && npm run test --password=${{ matrix.database-root-pwd }}
