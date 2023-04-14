@@ -14,7 +14,7 @@ jobs:
         node-version: [18.x] # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
         host-port: [3306]
         database-host: [127.0.0.1]
-        database-name: [Test Mitgliederverwaltung Bernina Fighters]
+        database-name: [Test_Mitgliederverwaltung]
         database-root-pwd: [root]
         database-user: [root]
         database-pwd: [root]
@@ -29,7 +29,7 @@ jobs:
         collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
         #mariadb version: '10.4.10' # Optional, default value is "latest". The version of the MariaDB
         mysql database: ${{ matrix.database-name }} # Optional, default value is "test". The specified database which will be create
-        mysql root password:  # Required if "mysql user" is empty, default is empty. The root superuser password
+        mysql root password: ${{ matrix.database-root-pwd }}  # Required if "mysql user" is empty, default is empty. The root superuser password
         mysql user: ${{ matrix.database-user }} # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
         mysql password: ${{ matrix.database-pwd }} # Required if "mysql user" exists. The password for the "mysql user"
     - name: Use Node.js ${{ matrix.node-version }}
@@ -52,7 +52,7 @@ jobs:
         TEST_DB_DATABASE: ${{ matrix.database-name }}
       run: |
         for file in sql/tables/*.sql; do
-        mysql -h$DB_HOST -P$DB_PORT -u$DB_USER -p$DB_PASSWORD -D$TEST_DB_NAME < "$file"
+        mysql -h$TEST_DB_HOST -P$TEST_DB_PORT -u$TEST_DB_USER -p$TEST_DB_PASSWORD -D$TEST_DB_DATABASE < "$file"
         done
     - name: Install Dependencies
       run: cd server && npm install --include=dev
