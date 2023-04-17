@@ -90,6 +90,44 @@ class MemberHelper {
             throw error;
         }
     }
+    async getMemberPaymentsForPeriod() {
+        let sql = "SELECT p.id, p.paid, p.paid_date, p.created_at, m.firstname, m.lastname ";
+        sql += "FROM payment p ";
+        sql += "INNER JOIN members m ON p.member_id = m.id ";
+        sql +=  "WHERE m.role_id <> 3 AND m.active = 1";
+        try {
+            const res = await this.databaseConnector.query(sql, null);
+            return res.data;
+        } catch (error){
+            throw error;
+        }
+    }
+    async getMemberPaymentById(id) {
+        const sql = "SELECT * FROM payment WHERE id = ?";
+        try {
+            return await this.databaseConnector.query(sql, [id]);
+        } catch (error){
+            throw error;
+        }
+    }
+    async updateMemberPayment(id, paid) {
+        const data = [paid, id];
+        const sql = "UPDATE payment SET paid=? WHERE id=?";
+        try {
+            return await this.databaseConnector.query(sql, data);
+        } catch (error){
+            throw error;
+        }
+    }
+    async addMemberPaymentPeriod(){
+        let sql = "INSERT INTO payment (paid, member_id) SELECT 0, id FROM members ";
+        sql += "WHERE role_id <> 3 AND active = 1";
+        try {
+            return await this.databaseConnector.query(sql, null);
+        } catch (error){
+            throw error;
+        }
+    }
 
 }
 
