@@ -2,7 +2,8 @@ import MemberHelper from "../helper/memberHelper.mjs";
 import Member from "../model/member.mjs";
 import CreateResponse from "../model/CreateResponse.mjs";
 import ApiError from "../model/ApiError.mjs";
-import createResponse from "../model/CreateResponse.mjs";
+import fs from "fs";
+import {exportMemberList} from "../services/ExportService.mjs";
 
 
 const handleGetAllMembers = async (req, res) => {
@@ -80,6 +81,20 @@ const handleGetMemberById = async (req, res) => {
         res.status(500).json(new ApiError("ee-999"));
     }
 }
+const handleGetAllMemberInfo = async (req, res) => {
+    const memberHelper = new MemberHelper();
+    try {
+        const member = await memberHelper.getMemberByIdWithRole(req.params.id);
+        if (member.data.length === 0) {
+            return res.status(404).json( new ApiError("me-404"));
+        } else {
+            return res.status(200).json(member);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(new ApiError("ee-999"));
+    }
+}
 
 const handleDeleteMember = async (req, res) => {
     const memberHelper = new MemberHelper();
@@ -96,11 +111,55 @@ const handleDeleteMember = async (req, res) => {
         res.status(500).json(new ApiError("ee-999"));
     }
 }
+const handleGetAllRoles = async (req, res) => {
+    const memberHelper = new MemberHelper();
+    try {
+        const roles = await memberHelper.getAllMemberRoles();
+        res.status(200).json(roles);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(new ApiError("ee-999"));
+    }
+}
+const handleMemberListExportFile = async (req, res) => {
+
+    try {
+        // The folder path for the files
+        let downloaded = await exportMemberList();
+        // dynamischer folder path erstellen
+        const folderPath = '../server/temp';
+        if (fs.existsSync(folderPath + '/memberList.csv') && downloaded) {
+            res.download(folderPath + '/memberList.csv', function (err) {
+                if (err) {
+                    console.log(err);
+                }
+                fs.unlink(folderPath + '/memberList.csv', function (err) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log("File deleted");
+                    }
+                })
+            })
+        } else {
+            console.log("File not found")
+            res.status(404).json(new ApiError("fe-404"));
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(new ApiError("ee-999"));
+    }
+}
+
 
 export default {
     handleGetAllMembers,
     handleNewMember,
     handleUpdateMember,
     handleGetMemberById,
-    handleDeleteMember
+    handleDeleteMember,
+    handleGetAllMemberInfo,
+    handleGetAllRoles,
+    handleMemberListExportFile,
 }

@@ -5,6 +5,7 @@ const errorCodes = {
     "me-323": "Mitglieds ID ist erforderlich",
     "me-324": "Mitgliedsdaten sind erforderlich",
     "me-404": "Mitglied nicht gefunden",
+    "fe-404": "Datei nicht gefunden"
 }
 
 

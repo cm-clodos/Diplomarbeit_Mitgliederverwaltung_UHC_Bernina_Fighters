@@ -18,6 +18,18 @@ class MemberHelper {
             throw error;
         }
     }
+    async getAllActiveMembers() {
+        let sql = "SELECT members.id, members.firstname, members.lastname, members.email, members.telephone, members.active, memberrole.role, members.entry_date FROM members";
+        sql += " JOIN memberrole ON members.role_id = memberrole.id";
+        sql += " WHERE members.active = 1"; // Nur aktive Mitglieder
+        sql += " ORDER BY members.entry_date ASC";
+        try {
+            const res = await this.databaseConnector.query(sql, null);
+            return res.data;
+        } catch (error){
+            throw error;
+        }
+    }
     async addMember(member) {
         const sql = "INSERT INTO members (firstname, lastname, email, telephone, active, role_id, entry_date) VALUES (?,?,?,?,?,?,?)";
         try {
@@ -28,6 +40,16 @@ class MemberHelper {
     }
     async getMemberById(id) {
         const sql = "SELECT * FROM members WHERE id = ?";
+        try {
+            return await this.databaseConnector.query(sql, [id]);
+        } catch (error){
+            throw error;
+        }
+    }
+    async getMemberByIdWithRole(id) {
+        let sql = "SELECT members.id, members.firstname, members.lastname, members.email, members.telephone, members.active, memberrole.role, members.entry_date FROM members";
+        sql += " JOIN memberrole ON members.role_id = memberrole.id";
+        sql += " WHERE members.id = ?";
         try {
             return await this.databaseConnector.query(sql, [id]);
         } catch (error){
@@ -55,6 +77,15 @@ class MemberHelper {
         const sql = "UPDATE members SET firstname=?, lastname=?, email=?, telephone=?, active=?, role_id=?, entry_date=? WHERE id=?";
         try {
             return await this.databaseConnector.query(sql, data);
+        } catch (error){
+            throw error;
+        }
+    }
+    async getAllMemberRoles() {
+        const sql = "SELECT * FROM memberrole";
+        try {
+            const res = await this.databaseConnector.query(sql, null);
+            return res.data;
         } catch (error){
             throw error;
         }
