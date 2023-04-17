@@ -121,6 +121,59 @@ const handleGetAllRoles = async (req, res) => {
         res.status(500).json(new ApiError("ee-999"));
     }
 }
+const handleGetAllPayments = async (req, res) => {
+    const memberHelper = new MemberHelper();
+    try {
+        const payments = await memberHelper.getMemberPaymentsForPeriod();
+        res.status(200).json(payments);
+    }catch (error) {
+        console.log(error);
+        res.status(500).json(new ApiError("ee-999"));
+    }
+}
+const handleGetPaymentById = async (req, res) => {
+    const memberHelper = new MemberHelper();
+    try {
+        const payment = await memberHelper.getMemberPaymentById(req.params.id);
+        if (payment.data.length === 0) {
+            return res.status(404).json( new ApiError("pe-404"));
+        }
+        return res.status(200).json(payment);
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json(new ApiError("ee-999"));
+    }
+}
+const handleUpdatePayment = async (req, res) => {
+    const paymentId = req.params.id;
+    const memberHelper = new MemberHelper();
+    let paidStatus = req.body.paid
+    console.log(paidStatus)
+    console.log(paymentId)
+
+    try {
+        const result = await memberHelper.updateMemberPayment(paymentId, paidStatus);
+        console.log(result)
+        if (result.data.affectedRows === 0) return res.status(404).json(new ApiError("pe-404"));
+        return res.status(200).json(new CreateResponse("pere-200"));
+
+    }catch (error) {
+        console.log(error);
+        return res.status(500).json(new ApiError("ee-999"));
+    }
+}
+const handleCreateNewPaymentPeriod = async (req, res) => {
+    const memberHelper = new MemberHelper();
+    try {
+        const result = await memberHelper.addMemberPaymentPeriod();
+        console.log(result)
+        res.status(201).json(new CreateResponse("pere-201"));
+    }catch (error) {
+        console.log(error);
+        return res.status(500).json(new ApiError("ee-999"));
+    }
+}
 const handleMemberListExportFile = async (req, res) => {
 
     try {
@@ -162,4 +215,9 @@ export default {
     handleGetAllMemberInfo,
     handleGetAllRoles,
     handleMemberListExportFile,
+    handleGetAllPayments,
+    handleGetPaymentById,
+    handleUpdatePayment,
+    handleCreateNewPaymentPeriod
+
 }

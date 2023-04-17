@@ -3,6 +3,8 @@ const messageCodes = {
     "mere-201": "Mitglied erfolgreich hinzugefügt",
     "mere-202": "Mitglied erfolgreich gelöscht",
     "mere-404": "Mitglied nicht gefunden",
+    "pere-200": "Zahlung erfolgreich aktualisiert",
+    "pere-201": "Neue Zahlungsperiode erfolgreich hinzugefügt",
 }
 
 class CreateResponse {
