@@ -16,7 +16,7 @@ class Member {
         this.telephone = telephone;
         this.active = active;
         this.role = role;
-        this.entryDate = entryDate;
+        this.entryDate = new Date(entryDate);
     }
 
 }

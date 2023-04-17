@@ -1,10 +1,35 @@
 import {expect, assert} from "chai";
 import {describe, it} from "mocha";
-
 import MemberHelper from "../helper/MemberHelper.mjs";
 import Member from "../model/Member.mjs";
+import {memberDataSanitzer} from "../middleware/inputSanitizer.mjs";
 
 const memberHelper = new MemberHelper('test');
+
+describe('check the memberDataSanitizer', () => {
+    it('should sanitize member data fields', () => {
+        const req = {
+            body: {
+                firstname: '<script>alert("XSS attack!");</script>',
+                lastname: '<img src="not_an_image.jpg" onerror="alert(\'XSS attack!\');">',
+                email: 'example@<script>malicious.com</script>',
+                telephone: '1234<script>alert("XSS attack!");</script>'
+            }
+        };
+
+        const expected = {
+            firstname: '',
+            lastname: '',
+            email: 'example@',
+            telephone: '1234'
+        };
+
+        memberDataSanitzer(req, null, () => {
+            assert.deepEqual(req.body, expected);
+        });
+    });
+
+})
 
 
 describe('Testing MemberHelper for checking database operations', () => {
