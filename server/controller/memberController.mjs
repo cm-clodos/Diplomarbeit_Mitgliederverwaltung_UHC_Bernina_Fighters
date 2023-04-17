@@ -2,6 +2,7 @@ import MemberHelper from "../helper/memberHelper.mjs";
 import Member from "../model/member.mjs";
 import CreateResponse from "../model/CreateResponse.mjs";
 import ApiError from "../model/ApiError.mjs";
+import createResponse from "../model/CreateResponse.mjs";
 
 
 const handleGetAllMembers = async (req, res) => {
@@ -11,13 +12,13 @@ const handleGetAllMembers = async (req, res) => {
         res.status(200).json(members);
     } catch (error) {
         console.log(error);
-        res.status(500).json("Es ist ein interner Serverfehler aufgetreten. Bitte versuchen Sie es später erneut.");
+        res.status(500).json(new ApiError("ee-999"));
     }
 }
 
 const handleNewMember = async (req, res) => {
     const memberHelper = new MemberHelper();
-    let member = new Member(
+    const member = new Member(
         req.body.firstname,
         req.body.lastname,
         req.body.email,
@@ -31,7 +32,7 @@ const handleNewMember = async (req, res) => {
     try {
         const result = await memberHelper.addMember(member);
         console.log(result)
-        return res.status(201).json(new CreateResponse("me-201"));
+        return res.status(201).json(new CreateResponse("mere-201"));
 
     } catch (error) {
         console.log(error);
@@ -40,7 +41,66 @@ const handleNewMember = async (req, res) => {
     }
 }
 
+const handleUpdateMember = async (req, res) => {
+    const memberId = req.params.id;
+
+    const memberHelper = new MemberHelper();
+    const member = new Member(
+        req.body.firstname,
+        req.body.lastname,
+        req.body.email,
+        req.body.telephone,
+        req.body.active,
+        req.body.role_id,
+        req.body.entry_date
+    );
+    try {
+        const result = await memberHelper.updateMember(memberId, member);
+        console.log(result)
+        if (result.data.affectedRows === 0) return res.status(404).json(new ApiError("me-404"));
+        return res.status(200).json(new CreateResponse("mere-200"));
+
+    } catch (error) {
+        console.log(error);
+        if (error.code === "ER_DUP_ENTRY") return res.status(400).json(new ApiError("me-322"))
+        return res.status(500).json(new ApiError("ee-999"));
+    }
+}
+const handleGetMemberById = async (req, res) => {
+    const memberHelper = new MemberHelper();
+    try {
+        const member = await memberHelper.getMemberById(req.params.id);
+        if (member.data.length === 0) {
+            return res.status(404).json( new ApiError("me-404"));
+        } else {
+            return res.status(200).json(member);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(new ApiError("ee-999"));
+    }
+}
+
+const handleDeleteMember = async (req, res) => {
+    const memberHelper = new MemberHelper();
+    try {
+        const result = await memberHelper.deleteMemberById(req.params.id);
+        if (result.success && result.data.affectedRows === 1) {
+            return res.status(200).json(new CreateResponse("mere-202"));
+        }
+
+        return res.status(404).json(new ApiError("me-404"));
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(new ApiError("ee-999"));
+    }
+}
+
 export default {
     handleGetAllMembers,
-    handleNewMember
+    handleNewMember,
+    handleUpdateMember,
+    handleGetMemberById,
+    handleDeleteMember
 }

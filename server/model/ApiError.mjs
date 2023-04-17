@@ -1,6 +1,10 @@
 const errorCodes = {
     "ee-999": "Unbekannter Fehler",
+    "ee-404": "Route nicht gefunden, überprüfe die URL!",
     "me-322": "Email oder Telefonnummer existiert bereits",
+    "me-323": "Mitglieds ID ist erforderlich",
+    "me-324": "Mitgliedsdaten sind erforderlich",
+    "me-404": "Mitglied nicht gefunden",
 }
 
 

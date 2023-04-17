@@ -1,5 +1,8 @@
 const messageCodes = {
-    "me-201": "Mitglied erfolgreich hinzugefügt",
+    "mere-200": "Mitglied erfolgreich aktualisiert",
+    "mere-201": "Mitglied erfolgreich hinzugefügt",
+    "mere-202": "Mitglied erfolgreich gelöscht",
+    "mere-404": "Mitglied nicht gefunden",
 }
 
 class CreateResponse {

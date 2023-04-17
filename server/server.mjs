@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import membersRoute from './routes/members.mjs';
+import ApiError from "./model/ApiError.mjs";
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
@@ -30,7 +31,7 @@ app.get('/',  function (req, res) {
 app.use('/members', membersRoute);
 
 app.use((req, res) => {
-    res.status(404).send('Route not found! Check your URL!');
+    res.status(404).send(new ApiError("ee-404"));
 });
 
 app.listen(port, hostname,() => {

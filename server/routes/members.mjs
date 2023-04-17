@@ -7,8 +7,11 @@ const router = express.Router();
 
 
 router.get('/',  memberController.handleGetAllMembers);
-
+router.get('/:id', memberController.handleGetMemberById);
 router.post('/', memberController.handleNewMember);
+router.put('/:id', memberController.handleUpdateMember);
+router.delete('/:id', memberController.handleDeleteMember);
+
 
 
 
