@@ -177,4 +177,44 @@ describe('Testing MemberHelper for checking database operations', () => {
             }
         );
     });
+    describe('get all member-roles', async () => {
+        it('should return an array of member-roles', async () => {
+            const memberroles = await memberHelper.getAllMemberRoles();
+            assert.isArray(memberroles, 'member-roles is an array');
+        });
+
+    });
+    describe("create new member payment period for one member", async () => {
+        before(async () => {
+            const member = new Member(
+                'Test',
+                'TestPerson',
+                'test.testperson@example.com',
+                '12345678',
+                1,
+                5,
+                '2021-01-01'
+            );
+            await memberHelper.addMember(member);
+        });
+        it('should create a new payment period for a member', async () => {
+            const res = await memberHelper.addMemberPaymentPeriod();
+            assert.strictEqual(typeof res, 'object');
+            assert.strictEqual(res.data.affectedRows, 1);
+            assert.strictEqual(res.success, true);
+        });
+        it('update the payment should return paid ', async () => {
+            await memberHelper.updateMemberPayment(1, 1)
+            const payment = await memberHelper.getMemberPaymentById(1);
+            assert.strictEqual(payment.data[0].id, 1);
+            assert.strictEqual(payment.data[0].paid, 1);
+        });
+
+        after(async () => {
+            await memberHelper.deleteMemberByLastname('TestPerson');
+            await memberHelper.resetMemberPaymentTable();
+        });
+    });
+
+
 });

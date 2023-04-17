@@ -128,6 +128,14 @@ class MemberHelper {
             throw error;
         }
     }
+    async resetMemberPaymentTable(){
+        let sql = "TRUNCATE TABLE payment";
+        try {
+            return await this.databaseConnector.query(sql, null);
+        }catch (error){
+            throw error;
+        }
+    }
 
 }
 
