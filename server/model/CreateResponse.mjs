@@ -5,6 +5,9 @@ const messageCodes = {
     "mere-404": "Mitglied nicht gefunden",
     "pere-200": "Zahlung erfolgreich aktualisiert",
     "pere-201": "Neue Zahlungsperiode erfolgreich hinzugefügt",
+    "tere-200": "Trikot erfolgreich aktualisiert",
+    "tere-201": "Trikot erfolgreich hinzugefügt",
+    "tere-202": "Trikot erfolgreich gelöscht",
 }
 
 class CreateResponse {

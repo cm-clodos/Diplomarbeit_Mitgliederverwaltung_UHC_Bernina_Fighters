@@ -33,11 +33,12 @@ const handleNewMember = async (req, res) => {
     try {
         const result = await memberHelper.addMember(member);
         console.log(result)
-        return res.status(201).json(new CreateResponse("mere-201"));
+        if (result.success && result.data.affectedRows === 1)
+            return res.status(201).json(new CreateResponse("mere-201"));
 
     } catch (error) {
         console.log(error);
-        if (error.code === "ER_DUP_ENTRY") return res.status(400).json(new ApiError("me-322"))
+        if (error.code === "ER_DUP_ENTRY") return res.status(400).json(new ApiError("me-400"))
         return res.status(500).json(new ApiError("ee-999"));
     }
 }
@@ -63,7 +64,7 @@ const handleUpdateMember = async (req, res) => {
 
     } catch (error) {
         console.log(error);
-        if (error.code === "ER_DUP_ENTRY") return res.status(400).json(new ApiError("me-322"))
+        if (error.code === "ER_DUP_ENTRY") return res.status(400).json(new ApiError("me-400"))
         return res.status(500).json(new ApiError("ee-999"));
     }
 }

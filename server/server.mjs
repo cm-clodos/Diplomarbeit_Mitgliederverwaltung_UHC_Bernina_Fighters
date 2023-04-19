@@ -4,6 +4,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 import membersRoute from './routes/members.mjs';
+import trikotsRoute from './routes/trikots.mjs';
 import ApiError from "./model/ApiError.mjs";
 
 const app = express();
@@ -29,6 +30,7 @@ app.get('/',  function (req, res) {
 })
 
 app.use('/members', membersRoute);
+app.use('/trikots', trikotsRoute);
 
 app.use((req, res) => {
     res.status(404).send(new ApiError("ee-404"));

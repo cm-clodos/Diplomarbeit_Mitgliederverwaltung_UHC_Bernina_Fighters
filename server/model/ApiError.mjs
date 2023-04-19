@@ -1,12 +1,16 @@
 const errorCodes = {
     "ee-999": "Unbekannter Fehler",
     "ee-404": "Route nicht gefunden, überprüfe die URL!",
-    "me-322": "Email oder Telefonnummer existiert bereits",
+    "me-400": "Email oder Telefonnummer existiert bereits",
+    "me-401": "Mitglied besitzt bereits ein Trikot",
     "me-323": "Mitglieds ID ist erforderlich",
     "me-324": "Mitgliedsdaten sind erforderlich",
-    "me-404": "Mitglied nicht gefunden",
+    "me-404": "Mitglied wurde nicht gefunden",
     "fe-404": "Datei nicht gefunden",
     "pe-404": "Zahlung wurde nicht gefunden",
+    "te-404": "Trikot wurde nicht gefunden",
+    "te-400": "Trikotnummer existiert bereits",
+
 }
 
 
