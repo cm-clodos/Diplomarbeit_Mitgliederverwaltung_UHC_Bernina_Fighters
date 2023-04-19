@@ -87,13 +87,12 @@ describe('checkEmail from validateMemberData', () => {
     });
 });
 describe('checkTelephone from from validateMemberData', () => {
-    it('should not return an error if the telephone is missing', () => {
+    it('should return an error if the telephone is missing', () => {
         const error = checkTelephone('');
-        assert.deepEqual(error, {});
+        assert.deepEqual(error, {telephone: 'Telefonnummer ist ungültig.'});
     });
-
-    it('should return an error if the telephone is invalid', () => {
-        const error = checkTelephone('123');
+    it('should return an error if the telephone is under 10 digits', () => {
+        const error = checkTelephone('123456789');
         assert.deepEqual(error, { telephone: 'Telefonnummer ist ungültig.' });
     });
     it('should return an error if the telephone is invalid with whitespace', () => {
@@ -104,8 +103,8 @@ describe('checkTelephone from from validateMemberData', () => {
         const error = checkTelephone('acbdefghij');
         assert.deepEqual(error, { telephone: 'Telefonnummer ist ungültig.' });
     });
-    it('should  return an error if the telephone is to long', () => {
-        const error = checkTelephone('004941156901');
+    it('should  return an error if the telephone is more den 13 digits', () => {
+        const error = checkTelephone('00417943078920');
         assert.deepEqual(error, { telephone: 'Telefonnummer ist ungültig.' });
     });
     it('should not return an error if the telephone is valid', () => {

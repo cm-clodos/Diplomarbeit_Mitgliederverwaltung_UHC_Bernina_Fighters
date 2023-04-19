@@ -34,8 +34,8 @@ export function checkEmail(email){
 
 export function checkTelephone(telephone){
     const error = {}
-    const phoneRegex = /^\d{11}$/;
-    if (telephone && !phoneRegex.test(telephone)) {
+    const phoneRegex = /^\d{10,13}$/;
+    if (telephone === '' || !phoneRegex.test(telephone)) {
         console.log("telephone: " + telephone)
         error.telephone = 'Telefonnummer ist ungültig.';
     }
