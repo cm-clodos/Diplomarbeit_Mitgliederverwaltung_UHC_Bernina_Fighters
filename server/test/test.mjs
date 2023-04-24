@@ -11,8 +11,11 @@ import {
     checkRoleId,
     checkTelephone, checkTrikotName, checkTrikotNumber
 } from "../services/FieldChecker.mjs";
+import TrikotHelper from "../helper/TrikotHelper.mjs";
+import Trikot from "../model/Trikot.mjs";
 
 const memberHelper = new MemberHelper('test');
+const trikotHelper = new TrikotHelper('test');
 
 describe('check the memberDataSanitizer', () => {
     it('should sanitize member data fields', () => {
@@ -282,8 +285,6 @@ describe('Testing MemberHelper for checking database operations', () => {
             5,
             '2021-01-01'
         );
-
-
         it('should return an object with affectedRows 1', async () => {
             const res = await memberHelper.addMember(member);
             assert.strictEqual(typeof res, 'object');
@@ -295,14 +296,11 @@ describe('Testing MemberHelper for checking database operations', () => {
             } catch (error) {
                 assert.strictEqual(error.code, 'ER_DUP_ENTRY');
             }
-
         });
 
         after(async () => {
             await memberHelper.deleteMemberByLastname('TestPerson');
         });
-
-
     })
 
 
@@ -481,3 +479,113 @@ describe('Testing MemberHelper for checking database operations', () => {
 
 
 });
+describe('Testing TrikotHelper for checking database operations', () => {
+    describe('addTrikot', () => {
+        const trikot = new Trikot(
+            1,
+            'TestTrikot',
+            0,
+            null,
+        );
+        it('should return an object with affectedRows 1', async () => {
+            const res = await trikotHelper.addTrikot(trikot);
+            assert.strictEqual(typeof res, 'object');
+            assert.strictEqual(res.data.affectedRows, 1);
+        })
+        it('should return duple entry', async function () {
+            try {
+                await trikotHelper.addTrikot(trikot);
+            } catch (error) {
+                assert.strictEqual(error.code, 'ER_DUP_ENTRY');
+            }
+        });
+
+        after(async () => {
+            await trikotHelper.deleteTrikotByNumber(1);
+        });
+    })
+    describe('getAllTrikots', () => {
+        it('should return an array of trikots', async () => {
+            const trikots = await trikotHelper.getAllTrikots();
+            assert.isArray(trikots, 'trikots is an array');
+        });
+    });
+    describe('updateTrikot', () => {
+        before(async () => {
+            const trikot = new Trikot(
+                1,
+                'TestTrikot',
+                0,
+                null,
+            );
+            await trikotHelper.addTrikot(trikot);
+        });
+        it('should update trikot information data', async () => {
+            const trikot = new Trikot(
+                1,
+                'TestTrikotV2',
+                1,
+                null,
+            )
+            await trikotHelper.updateTrikot(trikot);
+            const updatedTrikot = await trikotHelper.getTrikotByNumber(1)
+            assert.strictEqual(updatedTrikot[0].number, 1);
+            assert.strictEqual(updatedTrikot[0].name, 'TestTrikotV2');
+            assert.strictEqual(updatedTrikot[0].available, 1);
+            assert.strictEqual(updatedTrikot[0].member_id, null);
+
+        });
+        it('should trikot not found and return no data', async function () {
+            const updatedTrikot = await trikotHelper.getTrikotByNumber(-1)
+            assert.strictEqual(updatedTrikot.length, 0);
+        });
+        after(async () => {
+            await trikotHelper.deleteTrikotByNumber(1);
+            }
+        );
+
+    });
+    describe('getTrikotByNumber', () => {
+            before(async () => {
+                const trikot = new Trikot(
+                    1,
+                    'TestTrikot',
+                    0,
+                    null,
+                );
+                await trikotHelper.addTrikot(trikot);
+            });
+            it('should return a trikot by number', async () => {
+                const trikot = await trikotHelper.getTrikotByNumber(1)
+                assert.strictEqual(typeof trikot, 'object');
+                assert.strictEqual(typeof trikot[0], 'object');
+                assert.strictEqual(trikot[0].number, 1);
+            });
+            after(async () => {
+                await trikotHelper.deleteTrikotByNumber(1);
+            });
+        });
+    describe('deleteTrikotByNumber', async () => {
+        before(async () => {
+            const trikot = new Trikot(
+                1,
+                'TestTrikot',
+                0,
+                null,
+            );
+            await trikotHelper.addTrikot(trikot);
+        });
+        it('should delete a trikot by number', async () => {
+            const res = await trikotHelper.deleteTrikotByNumber(1)
+            assert.strictEqual(typeof res, 'object');
+            assert.strictEqual(res.data.affectedRows, 1);
+            assert.strictEqual(res.success, true);
+        });
+        it('should not delete a member if id does not exist', async () => {
+            const res = await trikotHelper.deleteTrikotByNumber(-1)
+            assert.strictEqual(res.data.affectedRows, 0);
+        });
+    });
+});
+
+

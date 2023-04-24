@@ -17,6 +17,15 @@ class TrikotHelper {
             throw error;
         }
     }
+    async getTrikotByNumber(trikotNumber) {
+        const sql = "SELECT * FROM trikots WHERE number = ?";
+        try {
+            const res = await this.databaseConnector.query(sql, [trikotNumber]);
+            return res.data;
+        } catch (error){
+            throw error;
+        }
+    }
     async addTrikot(trikot) {
         const data = [trikot.number, trikot.name, trikot.available, trikot.member_id];
         const sql = "INSERT INTO trikots (number, name, available, member_id) VALUES (?,?,?,?)";
