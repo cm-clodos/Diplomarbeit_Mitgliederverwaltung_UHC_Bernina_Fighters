@@ -4,12 +4,28 @@ import CreateResponse from "../model/CreateResponse.mjs";
 import ApiError from "../model/ApiError.mjs";
 import fs from "fs";
 import {exportMemberList} from "../services/ExportService.mjs";
+import EncryptionService from "../services/EncryptionService.mjs";
+import {
+    checkIfUniqueEmail,
+    checkIfUniqueTelephone
+} from "../services/UniqueChecker.mjs";
+
 
 
 const handleGetAllMembers = async (req, res) => {
     const memberHelper = new MemberHelper();
+    const encryptionService = new EncryptionService();
+
     try {
         const members = await memberHelper.getAllMembers();
+        //console.log(members)
+        for (let member of members) {
+            console.log(member.firstname)
+            member.firstname = encryptionService.decrypt(member.firstname);
+            member.lastname = encryptionService.decrypt(member.lastname);
+            member.email = encryptionService.decrypt(member.email);
+            member.telephone = encryptionService.decrypt(member.telephone);
+        }
         res.status(200).json(members);
     } catch (error) {
         console.log(error);
@@ -19,22 +35,31 @@ const handleGetAllMembers = async (req, res) => {
 
 const handleNewMember = async (req, res) => {
     const memberHelper = new MemberHelper();
+    const encryptionService = new EncryptionService();
+
     const member = new Member(
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        req.body.telephone,
+        encryptionService.encrypt(req.body.firstname),
+        encryptionService.encrypt(req.body.lastname),
+        encryptionService.encrypt(req.body.email),
+        encryptionService.encrypt(req.body.telephone),
         req.body.active,
         req.body.role_id,
         req.body.entry_date
     );
-
-    console.log(member)
     try {
-        const result = await memberHelper.addMember(member);
-        console.log(result)
-        if (result.success && result.data.affectedRows === 1)
-            return res.status(201).json(new CreateResponse("mere-201"));
+        console.log(req.body.email)
+        console.log(req.body.telephone)
+        let isUniqueEmail = await checkIfUniqueEmail(req.body.email);
+        let isUniqueTelephone = await checkIfUniqueTelephone(req.body.telephone);
+        console.log("Unique email:",isUniqueEmail)
+        console.log("Unique telephone", isUniqueTelephone)
+        if (isUniqueEmail && isUniqueTelephone){
+            const result = await memberHelper.addMember(member);
+            if (result.success && result.data.affectedRows === 1)
+                return res.status(201).json(new CreateResponse("mere-201"));
+        }else {
+            return res.status(400).json(new ApiError("me-400"));
+        }
 
     } catch (error) {
         console.log(error);
@@ -70,12 +95,23 @@ const handleUpdateMember = async (req, res) => {
 }
 const handleGetMemberById = async (req, res) => {
     const memberHelper = new MemberHelper();
+    const encryptionService = new EncryptionService();
     try {
         const member = await memberHelper.getMemberById(req.params.id);
+        console.log(member.data)
+        let decriptedMember = {
+            ...member.data[0],
+            firstname: encryptionService.decrypt(member.data[0].firstname),
+            lastname: encryptionService.decrypt(member.data[0].lastname),
+            email: encryptionService.decrypt(member.data[0].email),
+            telephone: encryptionService.decrypt(member.data[0].telephone)
+        }
+        console.log(decriptedMember)
+
         if (member.data.length === 0) {
             return res.status(404).json( new ApiError("me-404"));
         } else {
-            return res.status(200).json(member);
+            return res.status(200).json(decriptedMember);
         }
     } catch (error) {
         console.log(error);
