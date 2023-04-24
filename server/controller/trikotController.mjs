@@ -28,6 +28,7 @@ const handleNewTrikot = async (req, res) => {
     catch (error) {
         console.log(error);
         if (error.code === "ER_DUP_ENTRY") return res.status(400).json(new ApiError("te-400"))
+        else if (error.code === "ER_NO_REFERENCED_ROW_2") return res.status(400).json(new ApiError("me-404"));
         return res.status(500).json(new ApiError("ee-999"));
     }
 }
@@ -47,6 +48,7 @@ const handleUpdateTrikot = async (req, res) => {
     } catch (error) {
         console.log(error);
         if (error.code === "ER_DUP_ENTRY") return res.status(400).json(new ApiError("me-401"))
+        else if (error.code === "ER_NO_REFERENCED_ROW_2") return res.status(400).json(new ApiError("me-404"));
         return res.status(500).json(new ApiError("ee-999"));
     }
 }
