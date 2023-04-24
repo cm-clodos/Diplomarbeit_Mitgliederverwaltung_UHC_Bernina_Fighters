@@ -136,6 +136,24 @@ class MemberHelper {
             throw error;
         }
     }
+    async getMemberTelephones() {
+        let sql = "SELECT telephone FROM members"
+        try {
+            const res = await this.databaseConnector.query(sql, null);
+            return res.data;
+        }catch (error){
+            throw error;
+        }
+    }
+    async getMemberEmails() {
+        let sql = "SELECT email FROM members"
+        try {
+            const res = await this.databaseConnector.query(sql, null);
+            return res.data;
+        }catch (error){
+            throw error;
+        }
+    }
 
 }
 
