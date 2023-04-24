@@ -72,5 +72,44 @@ export function checkEntryDate(entryDate){
     return error;
 }
 
+export function checkTrikotNumber(trikotNumber){
+    const error = {}
+    if (trikotNumber === '' || isNaN(parseInt(trikotNumber))) {
+        console.log("trikotNumber: " + trikotNumber)
+        error.number = 'Trikotnummer ist ungültig.';
+    }else if (parseInt(trikotNumber) < 0 || parseInt(trikotNumber)  > 99){
+        error.number = 'Trikotnummer muss zwischen 0 und 99 liegen.';
+    }
+    return error;
+}
+
+export function checkTrikotName(trikotName){
+    const error = {}
+    if (!trikotName || typeof trikotName !== 'string' || trikotName.trim().length === 0) {
+        console.log("trikotName: " + trikotName)
+        error.name = 'Trikotname ist erforderlich.';
+    } else if (trikotName.trim().length > 10) {
+        error.name = 'Trikotname darf maximal 10 Zeichen lang sein.';
+    }
+    return error;
+}
+
+export function checkAvailable(available){
+    const error = {}
+    if (available !== true && available !== false && available !== 0 && available !== 1) {
+        console.log("available: " + available)
+        error.available = 'Verfügbarkeit muss true, false, 0 oder 1 sein.';
+    }
+    return error;
+}
+
+export function checkMemberId(memberId){
+    const error = {};
+    if (memberId !== null && memberId !== 'null' && (isNaN(parseInt(memberId)) || parseInt(memberId) < 1)) {
+        error.member_id = 'Mitglieds ID ist ungültig.';
+    }
+    return error;
+}
+
 
 

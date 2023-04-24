@@ -4,12 +4,12 @@ import MemberHelper from "../helper/MemberHelper.mjs";
 import Member from "../model/Member.mjs";
 import {memberDataSanitzer, trikotDataSanitizer} from "../middleware/inputSanitizer.mjs";
 import {
-    checkActive,
+    checkActive, checkAvailable,
     checkEmail, checkEntryDate,
     checkFirstname,
-    checkLastname,
+    checkLastname, checkMemberId,
     checkRoleId,
-    checkTelephone
+    checkTelephone, checkTrikotName, checkTrikotNumber
 } from "../services/FieldChecker.mjs";
 
 const memberHelper = new MemberHelper('test');
@@ -59,13 +59,13 @@ describe('check the trikotDataSanitizer', () => {
 });
 
 describe('checkFirstname from validateMemberData', () => {
-    it('should return an error if the firstname is missing',  () => {
+    it('should return an error if the firstname is missing', () => {
         const error = checkFirstname('');
         assert.deepEqual(error, {firstname: 'Vorname ist erforderlich.'});
     });
     it('should return an error if the firstname is longer than 50 characters', () => {
         const error = checkFirstname('Thisfirstnameislongerthanfiftycharacterssoitshouldtriggeranerror');
-        assert.deepEqual(error, { firstname: 'Vorname darf maximal 50 Zeichen lang sein.' });
+        assert.deepEqual(error, {firstname: 'Vorname darf maximal 50 Zeichen lang sein.'});
     });
     it('should not return an error if the firstname is valid', () => {
         const error = checkFirstname('John');
@@ -76,12 +76,12 @@ describe('checkFirstname from validateMemberData', () => {
 describe('checkLastname from validateMemberData', () => {
     it('should return an error if the lastname is missing', () => {
         const error = checkLastname('');
-        assert.deepEqual(error, { lastname: 'Nachname ist erforderlich.' });
+        assert.deepEqual(error, {lastname: 'Nachname ist erforderlich.'});
     });
 
     it('should return an error if the lastname is longer than 50 characters', () => {
         const error = checkLastname('Thislastnameislongerthanfiftycharacterssoitshouldtriggeranerror');
-        assert.deepEqual(error, { lastname: 'Nachname darf maximal 50 Zeichen lang sein.' });
+        assert.deepEqual(error, {lastname: 'Nachname darf maximal 50 Zeichen lang sein.'});
     });
 
     it('should not return an error if the lastname is valid', () => {
@@ -92,12 +92,12 @@ describe('checkLastname from validateMemberData', () => {
 describe('checkEmail from validateMemberData', () => {
     it('should return an error if the email is missing', () => {
         const error = checkEmail('');
-        assert.deepEqual(error, { email: 'E-Mail-Adresse ist ungültig.' });
+        assert.deepEqual(error, {email: 'E-Mail-Adresse ist ungültig.'});
     });
 
     it('should return an error if the email is invalid', () => {
         const error = checkEmail('invalidemail');
-        assert.deepEqual(error, { email: 'E-Mail-Adresse ist ungültig.' });
+        assert.deepEqual(error, {email: 'E-Mail-Adresse ist ungültig.'});
     });
 
     it('should not return an error if the email is valid', () => {
@@ -112,19 +112,19 @@ describe('checkTelephone from from validateMemberData', () => {
     });
     it('should return an error if the telephone is under 10 digits', () => {
         const error = checkTelephone('123456789');
-        assert.deepEqual(error, { telephone: 'Telefonnummer ist ungültig.' });
+        assert.deepEqual(error, {telephone: 'Telefonnummer ist ungültig.'});
     });
     it('should return an error if the telephone is invalid with whitespace', () => {
         const error = checkTelephone('123 123');
-        assert.deepEqual(error, { telephone: 'Telefonnummer ist ungültig.' });
+        assert.deepEqual(error, {telephone: 'Telefonnummer ist ungültig.'});
     });
     it('should return an error if the telephone is invalid with letters', () => {
         const error = checkTelephone('acbdefghij');
-        assert.deepEqual(error, { telephone: 'Telefonnummer ist ungültig.' });
+        assert.deepEqual(error, {telephone: 'Telefonnummer ist ungültig.'});
     });
     it('should  return an error if the telephone is more den 13 digits', () => {
         const error = checkTelephone('00417943078920');
-        assert.deepEqual(error, { telephone: 'Telefonnummer ist ungültig.' });
+        assert.deepEqual(error, {telephone: 'Telefonnummer ist ungültig.'});
     });
     it('should not return an error if the telephone is valid', () => {
         const error = checkTelephone('00494115690');
@@ -133,34 +133,34 @@ describe('checkTelephone from from validateMemberData', () => {
 
 });
 describe('checkActive from from validateMemberData', () => {
-    it('should not return an error if active is valid',  () =>  {
+    it('should not return an error if active is valid', () => {
         assert.deepEqual(checkActive(true), {});
         assert.deepEqual(checkActive(false), {});
         assert.deepEqual(checkActive(0), {});
         assert.deepEqual(checkActive(1), {});
     });
 
-    it('should return an error object if active is an invalid value',  () => {
-        assert.deepEqual(checkActive('invalid'), { active: 'Aktives Flag muss true, false, 0 oder 1 sein.' });
-        assert.deepEqual(checkActive('1'), { active: 'Aktives Flag muss true, false, 0 oder 1 sein.' });
-        assert.deepEqual(checkActive(2), { active: 'Aktives Flag muss true, false, 0 oder 1 sein.' });
-        assert.deepEqual(checkActive(-1), { active: 'Aktives Flag muss true, false, 0 oder 1 sein.' });
+    it('should return an error object if active is an invalid value', () => {
+        assert.deepEqual(checkActive('invalid'), {active: 'Aktives Flag muss true, false, 0 oder 1 sein.'});
+        assert.deepEqual(checkActive('1'), {active: 'Aktives Flag muss true, false, 0 oder 1 sein.'});
+        assert.deepEqual(checkActive(2), {active: 'Aktives Flag muss true, false, 0 oder 1 sein.'});
+        assert.deepEqual(checkActive(-1), {active: 'Aktives Flag muss true, false, 0 oder 1 sein.'});
     });
 });
 describe('checkRoleId from from validateMemberData', () => {
     it('should return an error object when roleId is not a number', () => {
         const error = checkRoleId('not a number');
-        assert.deepEqual(error, { role_id: 'Rolle ist ungültig.' })
+        assert.deepEqual(error, {role_id: 'Rolle ist ungültig.'})
     });
 
     it('should return an error object when roleId is less than 1', () => {
         const error = checkRoleId(0);
-        assert.deepEqual(error, { role_id: 'Rolle ist ungültig.' })
+        assert.deepEqual(error, {role_id: 'Rolle ist ungültig.'})
     });
 
     it('should return an error object when roleId is greater than 5', () => {
         const error = checkRoleId(6);
-        assert.deepEqual(error, { role_id: 'Rolle ist ungültig.' })
+        assert.deepEqual(error, {role_id: 'Rolle ist ungültig.'})
     });
 
     it('should not return an error object when roleId is valid', () => {
@@ -169,19 +169,19 @@ describe('checkRoleId from from validateMemberData', () => {
     });
 });
 describe('checkEntryDate from from validateMemberData', () => {
-    it('should return an error object when entryDate is not a string', () =>  {
+    it('should return an error object when entryDate is not a string', () => {
         const error = checkEntryDate(123);
-        assert.deepEqual(error, { entry_date: 'Eintrittsdatum ist erforderlich.' })
+        assert.deepEqual(error, {entry_date: 'Eintrittsdatum ist erforderlich.'})
     });
 
     it('should return an error object when entryDate is an empty string', () => {
         const error = checkEntryDate('');
-        assert.deepEqual(error, { entry_date: 'Eintrittsdatum ist erforderlich.' })
+        assert.deepEqual(error, {entry_date: 'Eintrittsdatum ist erforderlich.'})
     });
 
     it('should return an error object when entryDate is too long', () => {
         const error = checkEntryDate('2022-05-15T12:00:00Z');
-        assert.deepEqual(error, { entry_date: 'Eintrittsdatum darf maximal 10 Zeichen lang sein.' })
+        assert.deepEqual(error, {entry_date: 'Eintrittsdatum darf maximal 10 Zeichen lang sein.'})
     });
 
     it('should not return an error object when entryDate is valid', () => {
@@ -189,8 +189,86 @@ describe('checkEntryDate from from validateMemberData', () => {
         assert.deepEqual(error, {});
     });
 });
-
-
+describe('checkTrikotNumber from validateTrikotData', () => {
+    it('should return an error object when trikotNumber is empty', () => {
+        const error = checkTrikotNumber(' ');
+        assert.deepEqual(error, {number: 'Trikotnummer ist ungültig.'});
+    });
+    it('should return an error object when trikotNumber is bigger than 99', () => {
+        const error = checkTrikotNumber(100);
+        assert.deepEqual(error, {number: 'Trikotnummer muss zwischen 0 und 99 liegen.'});
+    });
+    it('should return an error object when trikotNumber is smaller than 0', () => {
+        const error = checkTrikotNumber(-1);
+        assert.deepEqual(error, {number: 'Trikotnummer muss zwischen 0 und 99 liegen.'});
+    });
+    it('should not return an error object when trikotNumber is valid', () => {
+        const error = checkTrikotNumber(10);
+        assert.deepEqual(error, {});
+    });
+    it('should not return an error object when trikotNumber is not a number', () => {
+        const error = checkTrikotNumber('1');
+        assert.deepEqual(error, {});
+    });
+});
+describe('checkTrikotName from validateTrikotData', () => {
+    it('should return an error object when trikotName is empty', () => {
+        const error = checkTrikotName(' ');
+        assert.deepEqual(error, {name: 'Trikotname ist erforderlich.'});
+    });
+    it('should return an error object when trikotName is too long', () => {
+        const error = checkTrikotName('Piz Bellavista');
+        assert.deepEqual(error, {name: 'Trikotname darf maximal 10 Zeichen lang sein.'});
+    });
+    it('should not return an error object when trikotName is valid', () => {
+        const error = checkTrikotName('Piz');
+        assert.deepEqual(error, {});
+    });
+});
+describe('checkAvailable from validateTrikotData', () => {
+    it('should return an error object when available is not a boolean', () => {
+        const error = checkAvailable('true');
+        assert.deepEqual(error, {available: 'Verfügbarkeit muss true, false, 0 oder 1 sein.'});
+    });
+    it('should return an error object when available is not a boolean', () => {
+        const error = checkAvailable('1');
+        assert.deepEqual(error, {available: 'Verfügbarkeit muss true, false, 0 oder 1 sein.'});
+    });
+    it('should not return an error object when available is valid', () => {
+        const error = checkAvailable(true);
+        assert.deepEqual(error, {});
+    });
+    it('should not return an error object when available is valid', () => {
+        const error = checkAvailable(1);
+        assert.deepEqual(error, {});
+    });
+});
+describe('checkMemberId from validateTrikotData', () => {
+   it('should return an error object when memberId is empty', () => {
+        const error = checkMemberId(' ');
+        assert.deepEqual(error, {member_id: 'Mitglieds ID ist ungültig.'});
+    });
+   it('should return an error object when memberId is smaller than 1', () => {
+        const error = checkMemberId(0);
+        assert.deepEqual(error, {member_id: 'Mitglieds ID ist ungültig.'});
+    });
+   it('should not return an error object when memberId is valid', () => {
+        const error = checkMemberId(1);
+        assert.deepEqual(error, {});
+    });
+    it('should not return an error object when memberId is not a number', () => {
+        const error = checkMemberId('1');
+        assert.deepEqual(error, {});
+    });
+    it('should not return an error object when memberId is null', () => {
+        const error = checkMemberId(null);
+        assert.deepEqual(error, {});
+    });
+    it('should not return an error object when memberId is null as a string', () => {
+        const error = checkMemberId('null');
+        assert.deepEqual(error, {});
+    });
+});
 
 
 describe('Testing MemberHelper for checking database operations', () => {
@@ -353,8 +431,8 @@ describe('Testing MemberHelper for checking database operations', () => {
 
         });
         it('should member not found and return no data', async function () {
-                const updatedMember = await memberHelper.getMemberById(-1);
-                assert.strictEqual(updatedMember.data.length, 0);
+            const updatedMember = await memberHelper.getMemberById(-1);
+            assert.strictEqual(updatedMember.data.length, 0);
         });
 
         after(async () => {
