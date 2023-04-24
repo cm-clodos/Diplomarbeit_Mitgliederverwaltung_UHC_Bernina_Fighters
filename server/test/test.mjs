@@ -2,7 +2,7 @@ import {expect, assert} from "chai";
 import {describe, it} from "mocha";
 import MemberHelper from "../helper/MemberHelper.mjs";
 import Member from "../model/Member.mjs";
-import {memberDataSanitzer} from "../middleware/inputSanitizer.mjs";
+import {memberDataSanitzer, trikotDataSanitizer} from "../middleware/inputSanitizer.mjs";
 import {
     checkActive,
     checkEmail, checkEntryDate,
@@ -38,6 +38,25 @@ describe('check the memberDataSanitizer', () => {
     });
 
 })
+describe('check the trikotDataSanitizer', () => {
+    it('should sanitize trikot data field name', () => {
+        const req = {
+            body: {
+                name: '<script>alert("XSS attack!");</script>',
+            }
+        };
+
+        const expected = {
+            name: '',
+        };
+
+        trikotDataSanitizer(req, null, () => {
+            assert.deepEqual(req.body, expected);
+        });
+    });
+
+
+});
 
 describe('checkFirstname from validateMemberData', () => {
     it('should return an error if the firstname is missing',  () => {

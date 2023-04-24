@@ -12,6 +12,14 @@ import sanitizeHtml from 'sanitize-html';
     next();
 
 }
+function trikotDataSanitizer(req, res, next) {
+    const { name } = req.body;
+    const allowedTags = [];
+    const allowedAttributes = {};
+
+    req.body.name = sanitizeHtml(name, { allowedTags, allowedAttributes });
+    next();
+}
 
 
-export {memberDataSanitzer};
+export {memberDataSanitzer, trikotDataSanitizer};
