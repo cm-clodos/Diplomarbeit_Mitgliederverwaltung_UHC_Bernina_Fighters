@@ -1,5 +1,6 @@
 import * as crypto from "crypto";
 import dotenv from "dotenv";
+
 dotenv.config();
 
 class EncryptionService {
@@ -16,8 +17,34 @@ class EncryptionService {
 
     decrypt (text){
         const decipher = crypto.createDecipheriv(this.algorithm, this.secretKey, Buffer.from(text.split(":")[0], "hex"));
-        const decrpyted = Buffer.concat([decipher.update(Buffer.from(text.split(":")[1], "hex")), decipher.final()]);
-        return decrpyted.toString();
+        const decrypted = Buffer.concat([decipher.update(Buffer.from(text.split(":")[1], "hex")), decipher.final()]);
+        return decrypted.toString();
+    }
+    decryptMembersListData(members){
+        for (let member of members) {
+            member.firstname = this.decrypt(member.firstname);
+            member.lastname = this.decrypt(member.lastname);
+            member.email = this.decrypt(member.email);
+            member.telephone = this.decrypt(member.telephone);
+        }
+        return members;
+    }
+
+    decryptMemberdata(member){
+        return {
+            ...member.data[0],
+            firstname: this.decrypt(member.data[0].firstname),
+            lastname: this.decrypt(member.data[0].lastname),
+            email: this.decrypt(member.data[0].email),
+            telephone: this.decrypt(member.data[0].telephone)
+        };
+    }
+    decryptPaymentData(payments){
+        for (let payment of payments) {
+            payment.firstname = this.decrypt(payment.firstname);
+            payment.lastname = this.decrypt(payment.lastname);
+        }
+        return payments;
     }
 }
 
