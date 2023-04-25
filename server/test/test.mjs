@@ -18,6 +18,7 @@ const memberHelper = new MemberHelper('test');
 const trikotHelper = new TrikotHelper('test');
 import EncryptionService from "../services/EncryptionService.mjs";
 
+
 describe('check EncryptionService', () => {
     it('should encrypt and decrypt a string', () => {
         let encryptionService = new EncryptionService();
@@ -286,6 +287,7 @@ describe('checkMemberId from validateTrikotData', () => {
 
 describe('Testing MemberHelper for checking database operations', () => {
     describe('addMember', () => {
+        let memberId;
         const member = new Member(
             'Test',
             'TestPerson',
@@ -297,6 +299,7 @@ describe('Testing MemberHelper for checking database operations', () => {
         );
         it('should return an object with affectedRows 1', async () => {
             const res = await memberHelper.addMember(member);
+            memberId = parseInt(res.data.insertId);
             assert.strictEqual(typeof res, 'object');
             assert.strictEqual(res.data.affectedRows, 1);
         })
@@ -309,7 +312,7 @@ describe('Testing MemberHelper for checking database operations', () => {
         });
 
         after(async () => {
-            await memberHelper.deleteMemberByLastname('TestPerson');
+            await memberHelper.deleteMemberById(memberId);
         });
     })
 
@@ -346,7 +349,7 @@ describe('Testing MemberHelper for checking database operations', () => {
             assert.strictEqual(member.data[0].id, memberId);
         });
         after(async () => {
-                await memberHelper.deleteMemberByLastname('TestPerson');
+                await memberHelper.deleteMemberById(memberId);
             }
         );
     });
@@ -374,10 +377,10 @@ describe('Testing MemberHelper for checking database operations', () => {
         it('should not delete a member if id does not exist', async () => {
             const res = await memberHelper.deleteMemberById(-1);
             assert.strictEqual(res.data.affectedRows, 0);
-
         });
     });
     describe('deleteMemberByLastname', async () => {
+        let memberId;
         before(async () => {
             const member = new Member(
                 'Test',
@@ -388,10 +391,12 @@ describe('Testing MemberHelper for checking database operations', () => {
                 5,
                 '2021-01-01'
             );
-            await memberHelper.addMember(member);
+            const res = await memberHelper.addMember(member);
+            memberId = parseInt(res.data.insertId);
         });
         it('should delete a member by id', async () => {
-            const res = await memberHelper.deleteMemberByLastname('TestPerson');
+            const member = await memberHelper.getMemberById(memberId);
+            const res = await memberHelper.deleteMemberByLastname(member.data[0].lastname);
             assert.strictEqual(typeof res, 'object');
             assert.strictEqual(res.data.affectedRows, 1);
             assert.strictEqual(res.success, true);
@@ -428,14 +433,17 @@ describe('Testing MemberHelper for checking database operations', () => {
                 '2023-01-01'
             );
             await memberHelper.updateMember(memberId, member);
+            const encryptionService = new EncryptionService();
 
             const updatedMember = await memberHelper.getMemberById(memberId);
-            assert.strictEqual(updatedMember.data[0].firstname, 'UpdateTest');
-            assert.strictEqual(updatedMember.data[0].lastname, 'UpdateTestPerson');
-            assert.strictEqual(updatedMember.data[0].email, 'Updatetest.testperson@example.com');
-            assert.strictEqual(updatedMember.data[0].telephone, '000012345678');
-            assert.strictEqual(updatedMember.data[0].active, 0);
-            assert.strictEqual(updatedMember.data[0].role_id, 3);
+            let decryptedMember = encryptionService.decryptMemberdata(updatedMember)
+
+            assert.strictEqual(decryptedMember.firstname, 'UpdateTest');
+            assert.strictEqual(decryptedMember.lastname, 'UpdateTestPerson');
+            assert.strictEqual(decryptedMember.email, 'Updatetest.testperson@example.com');
+            assert.strictEqual(decryptedMember.telephone, '000012345678');
+            assert.strictEqual(decryptedMember.active, 0);
+            assert.strictEqual(decryptedMember.role_id, 3);
 
         });
         it('should member not found and return no data', async function () {
@@ -456,6 +464,7 @@ describe('Testing MemberHelper for checking database operations', () => {
 
     });
     describe("create new member payment period for one member", async () => {
+        let memberId;
         before(async () => {
             const member = new Member(
                 'Test',
@@ -466,7 +475,8 @@ describe('Testing MemberHelper for checking database operations', () => {
                 5,
                 '2021-01-01'
             );
-            await memberHelper.addMember(member);
+            const res = await memberHelper.addMember(member);
+            memberId = parseInt(res.data.insertId);
         });
         it('should create a new payment period for a member', async () => {
             const res = await memberHelper.addMemberPaymentPeriod();
@@ -482,7 +492,7 @@ describe('Testing MemberHelper for checking database operations', () => {
         });
 
         after(async () => {
-            await memberHelper.deleteMemberByLastname('TestPerson');
+            await memberHelper.deleteMemberById(memberId);
             await memberHelper.resetMemberPaymentTable();
         });
     });
