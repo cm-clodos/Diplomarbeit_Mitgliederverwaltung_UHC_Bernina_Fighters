@@ -1,0 +1,63 @@
+<template>
+<div class="header">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src="../assets/logo/Logo-ohneHintergrund.png" alt="logo"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="nav-icons"><font-awesome-icon icon="people-group"/></span>
+              <span class="nav-title">Mitgliederverwaltung</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+              <li> <router-link class="dropdown-item" :to="{name:'Mitgliederverwaltung'}">
+                <span>Mitgliederübersicht</span>
+              </router-link></li>
+              <li><router-link class="dropdown-item" :to="{name:'Mitglieder hinzufügen'}">
+                <span>Mitglied hinzufügen</span>
+              </router-link></li>
+              <li><router-link class="dropdown-item" :to="{name:'Bezahlübersicht'}">
+                <span>Bezahlübersicht</span>
+              </router-link></li>
+              <li><router-link class="dropdown-item" :to="{name:'Mitglieder Statistik und Exporte'}">
+                <span>Statistik/Exporte</span>
+              </router-link></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <span class="nav-icons"><font-awesome-icon icon="shirt"/></span>
+              <span class="nav-title">Trikotverwaltung</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+              <li> <router-link class="dropdown-item" :to="{name:'Trikotverwaltung'}">
+                <span class="header-icons"></span>
+                <span>Übersicht</span>
+              </router-link></li>
+              <li><router-link class="dropdown-item" :to="{name:'Trikot hinzufügen'}">
+                <span>Trikot hinzufügen</span>
+              </router-link></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+</template>
+
+<script>
+export default {
+  name: "Header"
+}
+</script>
+
+<style lang="scss" scoped>
+
+</style>
