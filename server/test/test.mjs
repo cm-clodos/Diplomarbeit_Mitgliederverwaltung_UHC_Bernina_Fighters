@@ -16,6 +16,16 @@ import Trikot from "../model/Trikot.mjs";
 
 const memberHelper = new MemberHelper('test');
 const trikotHelper = new TrikotHelper('test');
+import EncryptionService from "../services/EncryptionService.mjs";
+
+describe('check EncryptionService', () => {
+    it('should encrypt and decrypt a string', () => {
+        let encryptionService = new EncryptionService();
+        const encrypted = encryptionService.encrypt('test');
+        const decrypted = encryptionService.decrypt(encrypted);
+        assert.equal(decrypted, 'test');
+    });
+});
 
 describe('check the memberDataSanitizer', () => {
     it('should sanitize member data fields', () => {

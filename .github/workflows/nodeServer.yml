@@ -18,6 +18,8 @@ jobs:
         database-root-pwd: [root]
         database-user: [root]
         database-pwd: [root]
+        secret-key: [vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3]
+        algorithm: [aes-256-ctr]
 
     steps:
     - uses: actions/checkout@v3
@@ -64,5 +66,7 @@ jobs:
         TEST_DB_USER: root
         TEST_DB_PASSWORD: ${{ matrix.database-root-pwd }}
         TEST_DB_DATABASE: ${{ matrix.database-name }}
+        SECRET_KEY: ${{ matrix.secret-key }}
+        ALGORITHM: ${{ matrix.algorithm }}
 
       run: cd server && npm ls && npm run test
