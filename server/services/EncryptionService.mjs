@@ -46,6 +46,14 @@ class EncryptionService {
         }
         return payments;
     }
+    decryptTrikotData(trikots){
+        for (let trikot of trikots) {
+            if (trikot.firstname === null || trikot.lastname === null) continue;
+            trikot.firstname = this.decrypt(trikot.firstname);
+            trikot.lastname = this.decrypt(trikot.lastname);
+        }
+        return trikots;
+    }
 }
 
 export default EncryptionService;

@@ -2,13 +2,17 @@ import Trikot from "../model/Trikot.mjs";
 import TrikotHelper from "../helper/TrikotHelper.mjs";
 import ApiError from "../model/ApiError.mjs";
 import CreateResponse from "../model/CreateResponse.mjs";
+import EncryptionService from "../services/EncryptionService.mjs";
 
 const handleGetAllTrikots = async (req, res) => {
     const trikotHelper = new TrikotHelper();
+    const encryptionService = new EncryptionService();
     try {
         const trikots = await trikotHelper.getAllTrikots();
-        return res.status(200).json(trikots);
+        const decryptedTrikotData = encryptionService.decryptTrikotData(trikots);
+        return res.status(200).json(decryptedTrikotData);
     } catch (error) {
+        console.log(error);
         res.status(500).json(new ApiError("ee-999"));
     }
 }
