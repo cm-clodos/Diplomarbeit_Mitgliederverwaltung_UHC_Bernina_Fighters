@@ -33,23 +33,23 @@
             </thead>
             <tbody v-if="this.members.length > 0">
             <tr v-for="(member, index) in this.members" :key="index">
-              <td> {{ member.firstname }}</td>
-              <td> {{ member.lastname }}</td>
-              <td> {{ member.email }}</td>
-              <td> {{ member.telephone }}</td>
-              <td> {{ this.formatActiveValue(member.active) }}</td>
-              <td class="text-end"> {{ this.formatDate(member.entry_date) }}</td>
-              <td>
-
-
-                <RouterLink :to="{path: 'members/' + member.id + '/info' }" class="btn bg-warning"> <font-awesome-icon icon="eye" /></RouterLink>
-                <RouterLink :to="{path: 'members/' + member.id }" class="btn btn-success"> <font-awesome-icon icon="pencil"/></RouterLink>
-                <button type="button" @click="deleteMember(member.id)" class="btn btn-danger"><font-awesome-icon icon="trash-can"/></button>
+              <td data-cell="vorname"> {{ member.firstname }}</td>
+              <td data-cell="nachname"> {{ member.lastname }}</td>
+              <td data-cell="email"> {{ member.email }}</td>
+              <td data-cell="telefon"> {{ member.telephone }}</td>
+              <td data-cell="aktiv"> {{ this.formatActiveValue(member.active) }}</td>
+              <td data-cell="eintritt"> {{ this.formatDate(member.entry_date) }}</td>
+              <td data-cell="actions">
+                <div class="actions-container">
+                <RouterLink :to="{path: 'members/' + member.id + '/info' }" class="btn bg-warning"> <font-awesome-icon  class="action-icon" icon="eye" /></RouterLink>
+                <RouterLink :to="{path: 'members/' + member.id }" class="btn btn-success"> <font-awesome-icon class="action-icon" icon="pencil"/></RouterLink>
+                <button type="button" @click="deleteMember(member.id)" class="btn btn-danger"><font-awesome-icon class="action-icon" icon="trash-can"/></button>
+                </div>
               </td>
             </tr>
             <div class="row">
               <div class="mb-3 d-inline-block">
-                <h3>Total aktive Mitglieder: {{ this.sumActiveMembers }}</h3>
+                <h3 class="sum-text">Total aktive Mitglieder: {{ this.sumActiveMembers }}</h3>
               </div>
             </div>
 
@@ -157,42 +157,8 @@ export default {
   }
 }
 
-
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
-@media (max-width: 768px) {
-  /* Reduce font size for small screens */
-  table {
-    font-size: 14px;
-  }
-
-  /* Hide table headers on small screens */
-  table thead {
-    display: none;
-  }
-
-  /* Display table rows as block elements for small screens */
-  table tbody tr {
-    display: block;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-  }
-
-  /* Display table cells as block elements for small screens */
-  table tbody td {
-    display: block;
-    text-align: right;
-    padding: 5px;
-  }
-
-  /* Add labels for table cells on small screens */
-  table tbody td:before {
-    content: attr(data-label);
-    display: inline-block;
-    font-weight: bold;
-    margin-right: 5px;
-  }
-}
 </style>
