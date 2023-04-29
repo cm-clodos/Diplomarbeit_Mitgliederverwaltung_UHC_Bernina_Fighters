@@ -29,6 +29,7 @@ const handleGetAllMembers = async (req, res) => {
 
 const handleNewMember = async (req, res) => {
     const memberHelper = new MemberHelper();
+    const encryptionService = new EncryptionService();
 
     const member = new Member(
         req.body.firstname,
@@ -39,6 +40,7 @@ const handleNewMember = async (req, res) => {
         req.body.role_id,
         req.body.entry_date
     );
+    const encryptedMember = encryptionService.encryptMemberData(member);
     try {
         console.log(req.body.email)
         console.log(req.body.telephone)
@@ -47,7 +49,7 @@ const handleNewMember = async (req, res) => {
         console.log("Unique email:",isUniqueEmail)
         console.log("Unique telephone", isUniqueTelephone)
         if (isUniqueEmail && isUniqueTelephone){
-            const result = await memberHelper.addMember(member);
+            const result = await memberHelper.addMember(encryptedMember);
             if (result.success && result.data.affectedRows === 1)
                 return res.status(201).json(new CreateResponse("mere-201"));
         }else {
@@ -63,6 +65,7 @@ const handleNewMember = async (req, res) => {
 
 const handleUpdateMember = async (req, res) => {
     const memberId = req.params.id;
+    const encryptionService = new EncryptionService();
 
     const memberHelper = new MemberHelper();
     const member = new Member(
@@ -74,11 +77,14 @@ const handleUpdateMember = async (req, res) => {
         req.body.role_id,
         req.body.entry_date
     );
+    const encryptedMember = encryptionService.encryptMemberData(member);
     try {
+        // BUG: prüfen ob email und telefon nummer von Mitglied mit der ID schon vorhanden ist => nicht prüfen ob einzigartig
+        // erst prüfen ob einzigartig wenn email und telefonnummer geändert wurde.
         let isUniqueEmail = await checkIfUniqueEmail(req.body.email);
         let isUniqueTelephone = await checkIfUniqueTelephone(req.body.telephone);
         if (isUniqueEmail && isUniqueTelephone){
-            const result = await memberHelper.updateMember(memberId, member);
+            const result = await memberHelper.updateMember(memberId, encryptedMember);
             console.log(result)
             if (result.data.affectedRows === 0) return res.status(404).json(new ApiError("me-404"));
             return res.status(200).json(new CreateResponse("mere-200"));
@@ -97,7 +103,7 @@ const handleGetMemberById = async (req, res) => {
     try {
         const member = await memberHelper.getMemberById(req.params.id);
         console.log(member.data)
-        let decryptedMember = encryptionService.decryptMemberdata(member)
+        let decryptedMember = encryptionService.decryptMemberData(member)
         console.log(decryptedMember)
 
         if (member.data.length === 0) {
@@ -118,7 +124,7 @@ const handleGetAllMemberInfo = async (req, res) => {
         if (member.data.length === 0) {
             return res.status(404).json( new ApiError("me-404"));
         } else {
-            let decryptedMember = encryptionService.decryptMemberdata(member)
+            let decryptedMember = encryptionService.decryptMemberData(member)
             return res.status(200).json(decryptedMember);
         }
     } catch (error) {

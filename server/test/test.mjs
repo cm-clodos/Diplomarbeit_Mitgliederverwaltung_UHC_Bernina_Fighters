@@ -297,15 +297,17 @@ describe('Testing MemberHelper for checking database operations', () => {
             5,
             '2021-01-01'
         );
+        const encryptionService = new EncryptionService();
+        const encryptedMember = encryptionService.encryptMemberData(member);
         it('should return an object with affectedRows 1', async () => {
-            const res = await memberHelper.addMember(member);
+            const res = await memberHelper.addMember(encryptedMember);
             memberId = parseInt(res.data.insertId);
             assert.strictEqual(typeof res, 'object');
             assert.strictEqual(res.data.affectedRows, 1);
         })
         it('should return duple entry', async function () {
             try {
-                await memberHelper.addMember(member);
+                await memberHelper.addMember(encryptedMember);
             } catch (error) {
                 assert.strictEqual(error.code, 'ER_DUP_ENTRY');
             }
@@ -338,7 +340,9 @@ describe('Testing MemberHelper for checking database operations', () => {
                 5,
                 '2021-01-01'
             );
-            const res = await memberHelper.addMember(member);
+            const encryptionService = new EncryptionService();
+            const encryptedMember = encryptionService.encryptMemberData(member);
+            const res = await memberHelper.addMember(encryptedMember);
             memberId = parseInt(res.data.insertId);
 
         });
@@ -365,7 +369,9 @@ describe('Testing MemberHelper for checking database operations', () => {
                 5,
                 '2021-01-01'
             );
-            const res = await memberHelper.addMember(member);
+            const encryptionService = new EncryptionService();
+            const encryptedMember = encryptionService.encryptMemberData(member);
+            const res = await memberHelper.addMember(encryptedMember);
             memberId = parseInt(res.data.insertId);
         });
         it('should delete a member by id', async () => {
@@ -391,7 +397,9 @@ describe('Testing MemberHelper for checking database operations', () => {
                 5,
                 '2021-01-01'
             );
-            const res = await memberHelper.addMember(member);
+            const encryptionService = new EncryptionService();
+            const encryptedMember = encryptionService.encryptMemberData(member);
+            const res = await memberHelper.addMember(encryptedMember);
             memberId = parseInt(res.data.insertId);
         });
         it('should delete a member by id', async () => {
@@ -419,7 +427,9 @@ describe('Testing MemberHelper for checking database operations', () => {
                 5,
                 '2021-01-01'
             );
-            const res = await memberHelper.addMember(member);
+            const encryptionService = new EncryptionService();
+            const encryptedMember = encryptionService.encryptMemberData(member);
+            const res = await memberHelper.addMember(encryptedMember);
             memberId = parseInt(res.data.insertId);
         });
         it('should update member information in database', async () => {
@@ -432,11 +442,11 @@ describe('Testing MemberHelper for checking database operations', () => {
                 3,
                 '2023-01-01'
             );
-            await memberHelper.updateMember(memberId, member);
             const encryptionService = new EncryptionService();
-
+            const encryptedMember = encryptionService.encryptMemberData(member);
+            await memberHelper.updateMember(memberId, encryptedMember);
             const updatedMember = await memberHelper.getMemberById(memberId);
-            let decryptedMember = encryptionService.decryptMemberdata(updatedMember)
+            let decryptedMember = encryptionService.decryptMemberData(updatedMember)
 
             assert.strictEqual(decryptedMember.firstname, 'UpdateTest');
             assert.strictEqual(decryptedMember.lastname, 'UpdateTestPerson');
@@ -475,7 +485,9 @@ describe('Testing MemberHelper for checking database operations', () => {
                 5,
                 '2021-01-01'
             );
-            const res = await memberHelper.addMember(member);
+            const encryptionService = new EncryptionService();
+            const encryptedMember = encryptionService.encryptMemberData(member);
+            const res = await memberHelper.addMember(encryptedMember);
             memberId = parseInt(res.data.insertId);
         });
         it('should create a new payment period for a member', async () => {

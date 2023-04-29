@@ -20,6 +20,16 @@ class EncryptionService {
         const decrypted = Buffer.concat([decipher.update(Buffer.from(text.split(":")[1], "hex")), decipher.final()]);
         return decrypted.toString();
     }
+
+    encryptMemberData(member){
+        return {
+            ...member,
+            firstname: this.encrypt(member.firstname),
+            lastname: this.encrypt(member.lastname),
+            email: this.encrypt(member.email),
+            telephone: this.encrypt(member.telephone)
+        };
+    }
     decryptMembersListData(members){
         for (let member of members) {
             member.firstname = this.decrypt(member.firstname);
@@ -30,7 +40,7 @@ class EncryptionService {
         return members;
     }
 
-    decryptMemberdata(member){
+    decryptMemberData(member){
         return {
             ...member.data[0],
             firstname: this.decrypt(member.data[0].firstname),
