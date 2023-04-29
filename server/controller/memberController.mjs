@@ -6,10 +6,10 @@ import fs from "fs";
 import {exportMemberList} from "../services/ExportService.mjs";
 import EncryptionService from "../services/EncryptionService.mjs";
 import {
+    checkIfExistingEmailHasChanged, checkIfExistingTelephoneHasChanged,
     checkIfUniqueEmail,
     checkIfUniqueTelephone
-} from "../services/UniqueChecker.mjs";
-
+} from "../services/EmailAndPhoneChecker.mjs";
 
 
 const handleGetAllMembers = async (req, res) => {
@@ -46,13 +46,13 @@ const handleNewMember = async (req, res) => {
         console.log(req.body.telephone)
         let isUniqueEmail = await checkIfUniqueEmail(req.body.email);
         let isUniqueTelephone = await checkIfUniqueTelephone(req.body.telephone);
-        console.log("Unique email:",isUniqueEmail)
+        console.log("Unique email:", isUniqueEmail)
         console.log("Unique telephone", isUniqueTelephone)
-        if (isUniqueEmail && isUniqueTelephone){
+        if (isUniqueEmail && isUniqueTelephone) {
             const result = await memberHelper.addMember(encryptedMember);
             if (result.success && result.data.affectedRows === 1)
                 return res.status(201).json(new CreateResponse("mere-201"));
-        }else {
+        } else {
             return res.status(400).json(new ApiError("me-400"));
         }
 
@@ -78,19 +78,39 @@ const handleUpdateMember = async (req, res) => {
         req.body.entry_date
     );
     const encryptedMember = encryptionService.encryptMemberData(member);
+    const email = req.body.email;
+    const telephone = req.body.telephone;
+
     try {
-        // BUG: prüfen ob email und telefon nummer von Mitglied mit der ID schon vorhanden ist => nicht prüfen ob einzigartig
-        // erst prüfen ob einzigartig wenn email und telefonnummer geändert wurde.
-        let isUniqueEmail = await checkIfUniqueEmail(req.body.email);
-        let isUniqueTelephone = await checkIfUniqueTelephone(req.body.telephone);
-        if (isUniqueEmail && isUniqueTelephone){
-            const result = await memberHelper.updateMember(memberId, encryptedMember);
-            console.log(result)
-            if (result.data.affectedRows === 0) return res.status(404).json(new ApiError("me-404"));
-            return res.status(200).json(new CreateResponse("mere-200"));
-        }else {
-            return res.status(400).json(new ApiError("me-400"));
+        const emailHasChanged = await checkIfExistingEmailHasChanged(email, memberId);
+        const telephoneHasChanged = await checkIfExistingTelephoneHasChanged(telephone, memberId);
+
+        if (emailHasChanged && telephoneHasChanged) {
+            const isUniqueEmail = await checkIfUniqueEmail(email);
+            const isUniqueTelephone = await checkIfUniqueTelephone(telephone);
+
+            if (!isUniqueEmail || !isUniqueTelephone) {
+                return res.status(400).json(new ApiError("me-400"));
+            }
+        } else if (emailHasChanged) {
+            const isUniqueEmail = await checkIfUniqueEmail(email);
+
+            if (!isUniqueEmail) {
+                return res.status(400).json(new ApiError("me-400"));
+            }
+        } else if (telephoneHasChanged) {
+            const isUniqueTelephone = await checkIfUniqueTelephone(telephone);
+
+            if (!isUniqueTelephone) {
+                return res.status(400).json(new ApiError("me-400"));
+            }
         }
+
+        const result = await memberHelper.updateMember(memberId, encryptedMember);
+        console.log(result)
+        if (result.data.affectedRows === 0) return res.status(404).json(new ApiError("me-404"));
+        return res.status(200).json(new CreateResponse("mere-200"));
+
     } catch (error) {
         console.log(error);
         if (error.code === "ER_DUP_ENTRY") return res.status(400).json(new ApiError("me-400"))
@@ -107,7 +127,7 @@ const handleGetMemberById = async (req, res) => {
         console.log(decryptedMember)
 
         if (member.data.length === 0) {
-            return res.status(404).json( new ApiError("me-404"));
+            return res.status(404).json(new ApiError("me-404"));
         } else {
             return res.status(200).json(decryptedMember);
         }
@@ -122,7 +142,7 @@ const handleGetAllMemberInfo = async (req, res) => {
     try {
         const member = await memberHelper.getMemberByIdWithRole(req.params.id);
         if (member.data.length === 0) {
-            return res.status(404).json( new ApiError("me-404"));
+            return res.status(404).json(new ApiError("me-404"));
         } else {
             let decryptedMember = encryptionService.decryptMemberData(member)
             return res.status(200).json(decryptedMember);
@@ -163,7 +183,7 @@ const handleGetAllPayments = async (req, res) => {
         const payments = await memberHelper.getMemberPaymentsForPeriod();
         let decryptedPayments = encryptionService.decryptPaymentData(payments)
         res.status(200).json(decryptedPayments);
-    }catch (error) {
+    } catch (error) {
         console.log(error);
         res.status(500).json(new ApiError("ee-999"));
     }
@@ -173,11 +193,10 @@ const handleGetPaymentById = async (req, res) => {
     try {
         const payment = await memberHelper.getMemberPaymentById(req.params.id);
         if (payment.data.length === 0) {
-            return res.status(404).json( new ApiError("pe-404"));
+            return res.status(404).json(new ApiError("pe-404"));
         }
         return res.status(200).json(payment);
-    }
-    catch (error) {
+    } catch (error) {
         console.log(error);
         res.status(500).json(new ApiError("ee-999"));
     }
@@ -195,7 +214,7 @@ const handleUpdatePayment = async (req, res) => {
         if (result.data.affectedRows === 0) return res.status(404).json(new ApiError("pe-404"));
         return res.status(200).json(new CreateResponse("pere-200"));
 
-    }catch (error) {
+    } catch (error) {
         console.log(error);
         return res.status(500).json(new ApiError("ee-999"));
     }
@@ -206,7 +225,7 @@ const handleCreateNewPaymentPeriod = async (req, res) => {
         const result = await memberHelper.addMemberPaymentPeriod();
         console.log(result)
         res.status(201).json(new CreateResponse("pere-201"));
-    }catch (error) {
+    } catch (error) {
         console.log(error);
         return res.status(500).json(new ApiError("ee-999"));
     }
