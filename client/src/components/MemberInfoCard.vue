@@ -33,9 +33,9 @@ export default {
           role: "",
           entry_date: "",
         },
-        memberId: "",
-        toast: useToast(),
       },
+      memberId: "",
+      toast: useToast(),
     }
   },
 
@@ -52,14 +52,14 @@ export default {
             if (res.status === 200){
               this.model.member = res.data;
             }
-
           })
           .catch((error) => {
-            if (error.response.status === 404) {
-              console.log("Mitglied wurde nicht gefunden")
-              this.toast.error("Mitglied wurde nicht gefunden");
-            }
             console.log(error);
+            if ([404, 500].includes(error.response.status)) {
+              this.toast.error(error.response.data.message);
+            } else {
+              console.log("Unexpected error: " + error.response.status);
+            }
           });
     },
     formatDate(date){
