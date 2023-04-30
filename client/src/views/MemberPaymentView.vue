@@ -1,10 +1,174 @@
 <template>
-
+  <main class="memberPayment">
+    <h1>Übersicht Bezahlperiode</h1>
+    <div class="container">
+      <div class="card">
+        <div class="card-header">
+          <h4>Bezahlperiode: <select id="period" v-model="selectedPeriod" @change="renderSelectedPaymentPeriod">
+            <option value="">Jahr auswählen</option>
+            <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
+          </select>
+            <button type="button" @click="createNewPaymentPeriod" class="btn btn-primary float-end">Bezahlperiode erstellen</button>
+          </h4>
+        </div>
+        <div class="card-body">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th>Vorname</th>
+              <th>Nachname</th>
+              <th @click="sortByPaid">Bezahlt <font-awesome-icon icon="sort"/></th>
+              <th>Bezahldatum</th>
+              <th @click="sortByDate">Periode <font-awesome-icon icon="sort"/></th>
+              <th>Bezahlstatus ändern</th>
+            </tr>
+            </thead>
+            <tbody v-if="this.filteredPayments.length > 0">
+            <tr v-for="(payment, index) in this.filteredPayments" :key="index">
+              <td> {{payment.firstname}}</td>
+              <td> {{payment.lastname}}</td>
+              <td><input type="checkbox" @change="togglePayment(payment)" v-bind:checked="payment.paid ===1" :value="payment.paid"></td>
+              <td class="text-end"> {{payment.paid_date ? formatDate(payment.paid_date) : '' }}</td>
+              <td class="text-end"> {{formatDate(payment.created_at)}}</td>
+              <td>
+                <button type="button" @click="updatePayment(payment.id, payment.paid)" class="btn btn-success">Speichern</button>
+              </td>
+            </tr>
+            </tbody>
+            <tbody v-else >
+            <tr>
+              <td colspan="8" class="text-center">Daten werden geladen...</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
 </template>
 
 <script>
+import axios from "/src/api/axios.mjs";
+import {formatInSwissTime} from "/src/services/formatterService.mjs";
+import {useToast} from 'vue-toast-notification';
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 export default {
-  name: "MemberPaymentView"
+  name: "MemberPaymentView",
+  components: {
+    FontAwesomeIcon
+  },
+  data() {
+    return {
+      payments: [],
+      toast: useToast(),
+      selectedPeriod: '',
+      filteredPayments: [],
+      years: [],
+      sortAscending: true,
+      model: {
+        payment: {
+          firstname: "",
+          lastname: "",
+          paid: "",
+          paid_date: "",
+          created_at: "",
+        },
+      },
+    };
+  },
+  mounted() {
+    this.createYearRange();
+    this.getPayments();
+  },
+  methods: {
+    getPayments() {
+      axios.get("/members/payments").then(res => {
+        this.payments = res.data
+        this.filteredPayments = this.payments
+      })
+    },
+
+    updatePayment(id, paidStatus) {
+      try {
+        axios.put(`/members/payments/${id}`, {
+          paid: paidStatus
+        }).then(res => {
+          if (res.status === 200) {
+            this.toast.success(res.data.message);
+            this.getPayments();
+          }
+        })
+      } catch (error) {
+        console.log(error);
+        if ([404, 500].includes(error.response.status)) {
+          this.toast.error(error.response.data.message);
+        } else {
+          console.log("Unexpected error: " + error.response.status);
+        }
+      }
+    },
+    togglePayment(payment) {
+      payment.paid = payment.paid === 1 ? 0 : 1;
+      console.log(payment.paid)
+    },
+    formatDate(date) {
+      return formatInSwissTime(date);
+    },
+    renderSelectedPaymentPeriod() {
+      if (this.selectedPeriod === '') {
+        this.filteredPayments = this.payments
+      } else {
+        this.filterPaymentsByPeriod(this.selectedPeriod)
+      }
+
+    },
+    filterPaymentsByPeriod(year) {
+      const filteredPayments = this.payments.filter(payment => {
+        const createdAt = new Date(payment.created_at);
+        return createdAt.getFullYear() === year;
+      });
+      return this.filteredPayments = filteredPayments;
+
+    },
+    createYearRange() {
+      for (let year = 2015; year <= 2099; year++) {
+        this.years.push(year);
+      }
+    },
+
+    createNewPaymentPeriod(){
+      if(confirm("Sind Sie sicher, dass Sie eine neue Bezahlperiode erstellen möchten?")){
+        try{
+          axios.post("/members/payments/period").then(res => {
+            if (res.status === 201) {
+              this.toast.success(res.data.message);
+              this.getPayments();
+            }
+          })
+        }catch (error) {
+          console.log(error);
+          if ([500].includes(error.response.status)) {
+            this.toast.error(error.response.data.message);
+          } else {
+            console.log("Unexpected error: " + error.response.status);
+          }
+        }
+      }
+    },
+
+    sortByDate() {
+      this.filteredPayments.sort((a, b) => {
+        return this.sortAscending ? a.created_at.localeCompare(b.created_at) : b.created_at.localeCompare(a.created_at);
+      });
+      this.sortAscending = !this.sortAscending;
+    },
+    sortByPaid() {
+      this.filteredPayments.sort((a, b) => {
+        return this.sortAscending ? a.paid - b.paid : b.paid - a.paid;
+      });
+      this.sortAscending = !this.sortAscending;
+    }
+  }
 }
 </script>
 

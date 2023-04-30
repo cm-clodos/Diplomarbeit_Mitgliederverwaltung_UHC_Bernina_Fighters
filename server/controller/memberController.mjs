@@ -205,7 +205,6 @@ const handleUpdatePayment = async (req, res) => {
     let paidStatus = req.body.paid
     console.log(paidStatus)
     console.log(paymentId)
-
     try {
         const result = await memberHelper.updateMemberPayment(paymentId, paidStatus);
         console.log(result)
