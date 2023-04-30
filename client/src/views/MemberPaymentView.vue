@@ -25,13 +25,13 @@
             </thead>
             <tbody v-if="this.filteredPayments.length > 0">
             <tr v-for="(payment, index) in this.filteredPayments" :key="index">
-              <td> {{payment.firstname}}</td>
-              <td> {{payment.lastname}}</td>
-              <td><input type="checkbox" @change="togglePayment(payment)" v-bind:checked="payment.paid ===1" :value="payment.paid"></td>
-              <td class="text-end"> {{payment.paid_date ? formatDate(payment.paid_date) : '' }}</td>
-              <td class="text-end"> {{formatDate(payment.created_at)}}</td>
-              <td>
-                <button type="button" @click="updatePayment(payment.id, payment.paid)" class="btn btn-success">Speichern</button>
+              <td data-cell="vorname"> {{payment.firstname}}</td>
+              <td data-cell="nachname"> {{payment.lastname}}</td>
+              <td data-cell="bezahlt"><input type="checkbox" @change="togglePayment(payment)" v-bind:checked="payment.paid ===1" :value="payment.paid"></td>
+              <td data-cell="bezahldatum"> {{payment.paid_date ? formatDate(payment.paid_date) : '' }}</td>
+              <td data-cell="periode"> {{formatDate(payment.created_at)}}</td>
+              <td data-cell="bezahlstatus ändern">
+                <button type="button" @click="updatePayment(payment.id, payment.paid)" class="btn btn-success save-paid-btn">Speichern</button>
               </td>
             </tr>
             </tbody>

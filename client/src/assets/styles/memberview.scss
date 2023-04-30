@@ -63,7 +63,7 @@
       margin-right: 5px;
     }
 
-    .btn {
+    .action-btn {
       width: 30px;
       height: 30px;
       margin-right: 5px;
@@ -76,6 +76,15 @@
         width: 15px;
         height: 15px;
       }
+    }
+    .save-paid-btn{
+      width: 70px;
+      height: 30px;
+      display: flex;
+      font-size: 13px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 5px;
     }
   }
 
