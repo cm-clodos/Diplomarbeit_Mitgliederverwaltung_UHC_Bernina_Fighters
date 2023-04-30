@@ -123,12 +123,11 @@ const handleGetMemberById = async (req, res) => {
     try {
         const member = await memberHelper.getMemberById(req.params.id);
         console.log(member.data)
-        let decryptedMember = encryptionService.decryptMemberData(member)
-        console.log(decryptedMember)
-
         if (member.data.length === 0) {
             return res.status(404).json(new ApiError("me-404"));
         } else {
+            let decryptedMember = encryptionService.decryptMemberData(member)
+            console.log(decryptedMember)
             return res.status(200).json(decryptedMember);
         }
     } catch (error) {
