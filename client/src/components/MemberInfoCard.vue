@@ -16,7 +16,7 @@
 
 <script>
 import axios from "/src/api/axios.mjs";
-import {formatInSwissTime} from "/src/services/formatterService.mjs";
+import {formatInSwissTime, formatActiveValue} from "/src/services/formatterService.mjs";
 import {useToast} from 'vue-toast-notification';
 export default {
   name: "MemberInfoCard",
@@ -44,6 +44,7 @@ export default {
     this.getMemberInfo(this.$route.params.id);
   },
   methods: {
+    formatActiveValue,
     getMemberInfo(id) {
       axios
           .get(`/members/${id}/info`)
@@ -63,14 +64,6 @@ export default {
     },
     formatDate(date){
       return formatInSwissTime(date);
-    },
-
-    formatActiveValue(active){
-      if(active === 1){
-        return "Aktiv";
-      }else{
-        return "Inaktiv";
-      }
     },
   },
 }

@@ -37,7 +37,7 @@
               <td data-cell="nachname"> {{ member.lastname }}</td>
               <td data-cell="email"> {{ member.email }}</td>
               <td data-cell="telefon"> {{ member.telephone }}</td>
-              <td data-cell="aktiv"> {{ this.formatActiveValue(member.active) }}</td>
+              <td data-cell="aktiv"> {{formatActiveValue(member.active) }}</td>
               <td data-cell="eintritt"> {{ this.formatDate(member.entry_date) }}</td>
               <td data-cell="actions">
                 <div class="actions-container">
@@ -58,9 +58,7 @@
             <tr>
               <td colspan="8" class="text-center">Mitgliederdaten werden geladen...</td>
             </tr>
-
             </tbody>
-
           </table>
         </div>
       </div>
@@ -73,7 +71,7 @@
 import Header from "@/components/Header.vue";
 import axios from "/src/api/axios.mjs";
 import {useToast} from 'vue-toast-notification';
-import {formatInSwissTime} from "@/services/formatterService.mjs";
+import {formatInSwissTime, formatActiveValue} from "@/services/formatterService.mjs";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 export default {
@@ -99,6 +97,7 @@ export default {
 
   },
   methods: {
+    formatActiveValue,
     getMembers() {
       axios.get("/members/").then(res => {
         this.members = res.data
@@ -152,15 +151,6 @@ export default {
     formatDate(date){
       return formatInSwissTime(date);
     },
-
-    formatActiveValue(active){
-      if(active === 1){
-        return "Aktiv";
-      }else{
-        return "Inaktiv";
-      }
-    },
-
   }
 }
 
