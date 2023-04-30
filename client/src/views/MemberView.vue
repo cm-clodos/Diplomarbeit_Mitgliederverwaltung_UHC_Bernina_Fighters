@@ -102,22 +102,30 @@ export default {
     getMembers() {
       axios.get("/members/").then(res => {
         this.members = res.data
-        //console.log(this.members)
         this.filterActiveMembers();
-      })
+      }).catch(error => {
+        console.log(error)
+        if ([500].includes(error.response.status)) {
+          this.toast.error(error.response.data.message);
+        }else {
+          console.log("Unexpected error: " + error.response.status);
+        }
+      });
     },
     deleteMember(id) {
       if (confirm("Möchten Sie das Mitglied wirklich löschen?")) {
         axios.delete(`/members/${id}`).then(res => {
           console.log(res)
           if (res.status === 200) {
-            this.toast.success('Mitglied wurde gelöscht');
+            this.toast.success(res.data.message);
             this.getMembers();
           }
         }).catch(error => {
-          if (error.response.status === 404) {
-            console.log("Mitglied wurde nicht gefunden")
-            this.toast.error("Mitglied wurde nicht gefunden");
+          console.log(error);
+          if ([404, 500].includes(error.response.status)) {
+            this.toast.error(error.response.data.message);
+          } else {
+            console.log("Unexpected error: " + error.response.status);
           }
         });
       }
@@ -140,7 +148,6 @@ export default {
     filterActiveMembers() {
       const activeMembers = this.members.filter(member => member.active === 1);
       this.sumActiveMembers = activeMembers.length;
-
     },
     formatDate(date){
       return formatInSwissTime(date);
