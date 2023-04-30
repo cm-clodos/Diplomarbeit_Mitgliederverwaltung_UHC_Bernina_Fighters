@@ -1,10 +1,14 @@
 <template>
-
+<MemberInfoCard />
 </template>
 
 <script>
+import MemberInfoCard from "@/components/MemberInfoCard.vue";
 export default {
-  name: "MemberInfoView"
+  name: "MemberInfoView",
+  components: {
+    MemberInfoCard
+  }
 }
 </script>
 
