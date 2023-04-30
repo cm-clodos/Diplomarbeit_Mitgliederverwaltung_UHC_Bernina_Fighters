@@ -81,15 +81,12 @@ export default {
   },
   mounted() {
     this.getMemberRoles();
-
-
   },
   methods: {
     getMemberRoles() {
       axios
           .get("/members/roles")
           .then((res) => {
-            // console.log(res.data)
             this.memberRoles = res.data;
           })
           .catch((error) => {
@@ -98,24 +95,22 @@ export default {
     },
     addMember() {
       console.log(this.model.member)
-
       axios
           .post("/members", this.model.member)
           .then((res) => {
             console.log(res.data)
             if (res.status === 201) {
-              this.toast.success("Mitglied wurde erfolgreich hinzugefügt");
-              console.log("Mitglied wurde erfolgreich hinzugefügt");
+              this.toast.success(res.data.message);
               this.$router.push("/members");
             }
           })
           .catch((error) => {
-            console.log(error.response);
-            console.log(error.response.data)
-            if (error.response.status === 400 || error.response.status === 500) {
-              this.toast.error("Fehler beim Hinzufügen des Mitglieds");
-              console.log("Fehler beim Hinzufügen des Mitglieds");
-              console.log(error);
+            console.log(error);
+            if ([400, 500].includes(error.response.status)) {
+              this.toast.error(error.response.data.message);
+              console.log(error.response.data)
+            } else {
+              console.log("Unexpected error: " + error.response.status);
             }
           });
 

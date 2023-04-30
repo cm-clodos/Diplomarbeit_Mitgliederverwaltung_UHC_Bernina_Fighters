@@ -55,7 +55,6 @@ const handleNewMember = async (req, res) => {
         } else {
             return res.status(400).json(new ApiError("me-400"));
         }
-
     } catch (error) {
         console.log(error);
         if (error.code === "ER_DUP_ENTRY") return res.status(400).json(new ApiError("me-400"))
