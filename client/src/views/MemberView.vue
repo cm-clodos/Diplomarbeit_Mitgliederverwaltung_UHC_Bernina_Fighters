@@ -41,9 +41,9 @@
               <td data-cell="eintritt"> {{ this.formatDate(member.entry_date) }}</td>
               <td data-cell="actions">
                 <div class="actions-container">
-                <RouterLink :to="{path: 'members/' + member.id + '/info' }" class="btn bg-warning"> <font-awesome-icon  class="action-icon" icon="eye" /></RouterLink>
-                <RouterLink :to="{path: 'members/' + member.id }" class="btn btn-success"> <font-awesome-icon class="action-icon" icon="pencil"/></RouterLink>
-                <button type="button" @click="deleteMember(member.id)" class="btn btn-danger"><font-awesome-icon class="action-icon" icon="trash-can"/></button>
+                <RouterLink :to="{path: 'members/' + member.id + '/info' }" class="btn bg-warning action-btn"> <font-awesome-icon  class="action-icon" icon="eye" /></RouterLink>
+                <RouterLink :to="{path: 'members/' + member.id }" class="btn btn-success action-btn"> <font-awesome-icon class="action-icon" icon="pencil"/></RouterLink>
+                <button type="button" @click="deleteMember(member.id)" class="btn btn-danger action-btn"><font-awesome-icon class="action-icon" icon="trash-can"/></button>
                 </div>
               </td>
             </tr>
