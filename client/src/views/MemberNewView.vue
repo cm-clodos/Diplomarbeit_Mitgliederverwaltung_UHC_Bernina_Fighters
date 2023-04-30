@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "/src/api/axios.mjs";
 import {useToast} from 'vue-toast-notification';
 
 export default {
@@ -87,7 +87,7 @@ export default {
   methods: {
     getMemberRoles() {
       axios
-          .get("http://localhost:3000/members/roles")
+          .get("/members/roles")
           .then((res) => {
             // console.log(res.data)
             this.memberRoles = res.data;
@@ -100,7 +100,7 @@ export default {
       console.log(this.model.member)
 
       axios
-          .post("http://localhost:3000/members", this.model.member)
+          .post("/members", this.model.member)
           .then((res) => {
             console.log(res.data)
             if (res.status === 201) {

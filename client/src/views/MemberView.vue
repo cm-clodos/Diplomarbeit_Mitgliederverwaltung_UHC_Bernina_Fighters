@@ -71,7 +71,7 @@
 
 <script>
 import Header from "@/components/Header.vue";
-import axios from "axios";
+import axios from "/src/api/axios.mjs";
 import {useToast} from 'vue-toast-notification';
 import {formatInSwissTime} from "@/services/formatterService.mjs";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
@@ -100,7 +100,7 @@ export default {
   },
   methods: {
     getMembers() {
-      axios.get("http://localhost:3000/members/").then(res => {
+      axios.get("/members/").then(res => {
         this.members = res.data
         //console.log(this.members)
         this.filterActiveMembers();
@@ -108,7 +108,7 @@ export default {
     },
     deleteMember(id) {
       if (confirm("Möchten Sie das Mitglied wirklich löschen?")) {
-        axios.delete(`http://localhost:3000/members/${id}`).then(res => {
+        axios.delete(`/members/${id}`).then(res => {
           console.log(res)
           if (res.status === 200) {
             this.toast.success('Mitglied wurde gelöscht');
