@@ -85,23 +85,31 @@ export default {
   },
   methods: {
     getAllTrikots() {
-      axios.get('/trikots')
+      axios.get('/trikots/')
           .then(res => {
+            console.log(res.data)
             this.trikots = res.data;
-          })
-          .catch(error => {
+          }).catch(error => {
             console.log(error)
-            this.toast.error('Fehler beim Laden der Trikots');
+            if ([500].includes(error.response.status)) {
+              this.toast.error(error.response.data.message);
+            }else {
+              console.log("Unexpected error: " + error.response.status);
+            }
           });
     },
     getAllMembers() {
-      axios.get('/members')
+      axios.get('/members/')
           .then(res => {
+            console.log(res.data)
             this.members = res.data;
-          })
-          .catch(error => {
+          }).catch(error => {
             console.log(error)
-            this.toast.error('Fehler beim Laden der Mitglieder');
+            if ([500].includes(error.response.status)) {
+              this.toast.error(error.response.data.message);
+            }else {
+              console.log("Unexpected error: " + error.response.status);
+            }
           });
     },
     updateTrikot(trikotNumber, memberId, available, trikotName) {
@@ -111,27 +119,34 @@ export default {
         name: trikotName
       })
           .then(res => {
-            console.log(res.data)
-            return this.toast.success('Trikot erfolgreich aktualisiert');
-          })
-          .catch(error => {
-            console.log(error)
-            if (error.response.status === 400) {
-              return this.toast.error('Fehler beim Aktualisieren: Mitglied besitzt bereits ein Trikot');
+            if (res.status === 200){
+              console.log(res.data)
+              this.toast.success(res.data.message);
             }
-            this.toast.error('Fehler beim Aktualisieren des Trikots');
+          }).catch(error => {
+            console.log(error);
+            if ([400, 404, 500].includes(error.response.status)) {
+              this.toast.error(error.response.data.message);
+            } else {
+              console.log("Unexpected error: " + error.response.status);
+            }
           });
     },
     deleteTrikot(trikotNumber) {
       axios.delete(`/trikots/${trikotNumber}`)
           .then(res => {
-            console.log(res.data)
-            this.toast.success('Trikot erfolgreich gelöscht');
-            this.getAllTrikots();
-          })
-          .catch(error => {
-            console.log(error)
-            this.toast.error('Fehler beim Löschen des Trikots');
+            if (res.status === 200) {
+              console.log(res.data)
+              this.toast.success(res.data.message);
+              this.getAllTrikots();
+            }
+          }).catch(error => {
+            console.log(error);
+            if ([404, 500].includes(error.response.status)) {
+              this.toast.error(error.response.data.message);
+            } else {
+              console.log("Unexpected error: " + error.response.status);
+            }
           });
     },
 
