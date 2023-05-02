@@ -9,7 +9,7 @@ const errorCodes = {
     "fe-404": "Datei nicht gefunden",
     "pe-404": "Zahlung wurde nicht gefunden",
     "te-404": "Trikot wurde nicht gefunden",
-    "te-400": "Trikotnummer existiert bereits",
+    "te-400": "Trikotnummer existiert bereits oder Mitglied besitzt bereits ein Trikot",
 
 }
 

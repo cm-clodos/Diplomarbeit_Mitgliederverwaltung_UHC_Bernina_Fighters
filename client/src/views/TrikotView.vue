@@ -87,7 +87,6 @@ export default {
     getAllTrikots() {
       axios.get('/trikots/')
           .then(res => {
-            console.log(res.data)
             this.trikots = res.data;
           }).catch(error => {
             console.log(error)
@@ -101,7 +100,6 @@ export default {
     getAllMembers() {
       axios.get('/members/')
           .then(res => {
-            console.log(res.data)
             this.members = res.data;
           }).catch(error => {
             console.log(error)
