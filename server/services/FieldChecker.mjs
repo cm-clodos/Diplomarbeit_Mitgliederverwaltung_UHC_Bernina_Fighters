@@ -88,8 +88,8 @@ export function checkTrikotName(trikotName){
     if (!trikotName || typeof trikotName !== 'string' || trikotName.trim().length === 0) {
         console.log("trikotName: " + trikotName)
         error.name = 'Trikotname ist erforderlich.';
-    } else if (trikotName.trim().length > 10) {
-        error.name = 'Trikotname darf maximal 10 Zeichen lang sein.';
+    } else if (trikotName.trim().length >= 20) {
+        error.name = 'Trikotname darf maximal 20 Zeichen lang sein.';
     }
     return error;
 }

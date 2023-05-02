@@ -231,8 +231,8 @@ describe('checkTrikotName from validateTrikotData', () => {
         assert.deepEqual(error, {name: 'Trikotname ist erforderlich.'});
     });
     it('should return an error object when trikotName is too long', () => {
-        const error = checkTrikotName('Piz Bellavista');
-        assert.deepEqual(error, {name: 'Trikotname darf maximal 10 Zeichen lang sein.'});
+        const error = checkTrikotName('Piz Bellavista von Graubünden');
+        assert.deepEqual(error, {name: 'Trikotname darf maximal 20 Zeichen lang sein.'});
     });
     it('should not return an error object when trikotName is valid', () => {
         const error = checkTrikotName('Piz');
