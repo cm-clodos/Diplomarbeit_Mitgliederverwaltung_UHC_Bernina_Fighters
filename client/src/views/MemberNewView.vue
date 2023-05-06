@@ -115,7 +115,6 @@ export default {
           lastname: {required: helpers.withMessage('Nachname ist erforderlich', required)},
           email: {required, email: helpers.withMessage('Ungültige Email', email)},
           telephone: {phone: helpers.withMessage('Telefonnummer muss 10-13 Ziffern enthalten', phone)},
-          role_id: {required: helpers.withMessage('Vereinsrolle ist erforderlich', required)},
           entry_date: {required: helpers.withMessage('Eintrittsdatum ist erforderlich', required)},
         },
       },
