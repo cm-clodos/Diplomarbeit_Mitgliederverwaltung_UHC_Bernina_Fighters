@@ -131,21 +131,23 @@ export default {
           });
     },
     deleteTrikot(trikotNumber) {
-      axios.delete(`/trikots/${trikotNumber}`)
-          .then(res => {
-            if (res.status === 200) {
-              console.log(res.data)
-              this.toast.success(res.data.message);
-              this.getAllTrikots();
-            }
-          }).catch(error => {
-            console.log(error);
-            if ([404, 500].includes(error.response.status)) {
-              this.toast.error(error.response.data.message);
-            } else {
-              console.log("Unexpected error: " + error.response.status);
-            }
-          });
+        if (confirm("Möchten Sie das Trikot wirklich löschen?")) {
+            axios.delete(`/trikots/${trikotNumber}`)
+              .then(res => {
+                  if (res.status === 200) {
+                      console.log(res.data)
+                      this.toast.success(res.data.message);
+                      this.getAllTrikots();
+                  }
+              }).catch(error => {
+                console.log(error);
+                if ([404, 500].includes(error.response.status)) {
+                    this.toast.error(error.response.data.message);
+                } else {
+                    console.log("Unexpected error: " + error.response.status);
+                }
+            });
+        }
     },
 
     toggleAvailable(trikot) {
