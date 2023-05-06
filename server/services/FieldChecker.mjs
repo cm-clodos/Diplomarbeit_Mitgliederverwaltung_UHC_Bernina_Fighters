@@ -111,5 +111,18 @@ export function checkMemberId(memberId){
     return error;
 }
 
+export function trimData(data){
+    const trimmedData = {};
+
+    Object.keys(data).forEach((key) => {
+        if (typeof data[key] === 'string') {
+            trimmedData[key] = data[key].trim();
+        } else {
+            trimmedData[key] = data[key];
+        }
+    });
+    return trimmedData;
+}
+
 
 
