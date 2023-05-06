@@ -9,7 +9,7 @@ import {
     checkFirstname,
     checkLastname, checkMemberId,
     checkRoleId,
-    checkTelephone, checkTrikotName, checkTrikotNumber
+    checkTelephone, checkTrikotName, checkTrikotNumber, trimData
 } from "../services/FieldChecker.mjs";
 import TrikotHelper from "../helper/TrikotHelper.mjs";
 import Trikot from "../model/Trikot.mjs";
@@ -281,6 +281,35 @@ describe('checkMemberId from validateTrikotData', () => {
     it('should not return an error object when memberId is null as a string', () => {
         const error = checkMemberId('null');
         assert.deepEqual(error, {});
+    });
+});
+describe('trimData',  () => {
+    it('should trim string values in the data object',  () => {
+        const data = {
+            name: '  Test Testperson  ',
+            age: 25,
+            email: '  test@example.com  ',
+        };
+
+        const trimmedData = trimData(data);
+
+        assert.strictEqual(trimmedData.name, 'Test Testperson');
+        assert.strictEqual(trimmedData.age, 25);
+        assert.strictEqual(trimmedData.email, 'test@example.com');
+    });
+
+    it('should not modify non-string values in the data object',  () =>  {
+        const data = {
+            name: '  Test Testperson  ',
+            age: 25,
+            email: '  test@example.com  ',
+        };
+
+        const trimmedData = trimData(data);
+
+        assert.strictEqual(trimmedData.name, 'Test Testperson');
+        assert.strictEqual(trimmedData.age, 25);
+        assert.strictEqual(trimmedData.email, 'test@example.com');
     });
 });
 
