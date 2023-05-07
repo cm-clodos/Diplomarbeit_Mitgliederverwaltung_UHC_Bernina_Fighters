@@ -4,7 +4,6 @@
 
     <div class="app-content">
 
-
       <router-view :key="$route.fullPath"/>
     </div>
 
@@ -13,10 +12,12 @@
 
 <script>
 import Header from "@/components/Header.vue";
+import ConfirmModal from "@/components/ConfirmModal.vue";
 
 export default {
   name: 'App',
   components: {
+    ConfirmModal,
     Header
   }
 }

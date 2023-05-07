@@ -43,7 +43,7 @@
                 <div class="actions-container">
                 <RouterLink :to="{path: 'members/' + member.id + '/info' }" class="btn bg-warning action-btn"> <font-awesome-icon  class="action-icon" icon="eye" /></RouterLink>
                 <RouterLink :to="{path: 'members/' + member.id }" class="btn btn-success action-btn"> <font-awesome-icon class="action-icon" icon="pencil"/></RouterLink>
-                <button type="button" @click="deleteMember(member.id)" class="btn btn-danger action-btn"><font-awesome-icon class="action-icon" icon="trash-can"/></button>
+                <button type="button" @click="deleteConfirmation(member.id)" class="btn btn-danger action-btn"><font-awesome-icon class="action-icon" icon="trash-can"/></button>
                 </div>
               </td>
             </tr>
@@ -60,6 +60,11 @@
             </tr>
             </tbody>
           </table>
+          <ConfirmModal :show="modalVisible"
+                        @confirm="handleConfirm"
+                        @cancel="closeModal"
+                        title="Mitglied löschen"
+                        message="Das Mitglied wirklich löschen?"></ConfirmModal>
         </div>
       </div>
     </div>
@@ -73,11 +78,13 @@ import axios from "/src/api/axios.mjs";
 import {useToast} from 'vue-toast-notification';
 import {formatInSwissTime, formatActiveValue} from "@/services/formatterService.mjs";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import ConfirmModal from "@/components/ConfirmModal.vue";
 
 export default {
   name: 'MitgliederView',
   computed: {},
   components: {
+    ConfirmModal,
     FontAwesomeIcon,
     Header,
   },
@@ -89,7 +96,8 @@ export default {
       search: '',
       filteredMembers: [],
       sumActiveMembers: 0,
-
+      modalVisible: false,
+      memberIdToDelete: null,
     };
   },
   mounted() {
@@ -112,7 +120,6 @@ export default {
       });
     },
     deleteMember(id) {
-      if (confirm("Möchten Sie das Mitglied wirklich löschen?")) {
         axios.delete(`/members/${id}`).then(res => {
           console.log(res)
           if (res.status === 200) {
@@ -127,8 +134,6 @@ export default {
             console.log("Unexpected error: " + error.response.status);
           }
         });
-      }
-
     },
     searchMember() {
       console.log(this.search)
@@ -150,6 +155,19 @@ export default {
     },
     formatDate(date){
       return formatInSwissTime(date);
+    },
+    handleConfirm(value) {
+      this.modalVisible = false;
+      if (value) {
+        this.deleteMember(this.memberIdToDelete);
+      }
+    },
+    closeModal() {
+      this.modalVisible = false;
+    },
+    deleteConfirmation(id) {
+      this.modalVisible = true;
+      this.memberIdToDelete = id;
     },
   }
 }
