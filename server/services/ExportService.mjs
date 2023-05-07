@@ -1,9 +1,9 @@
-
 import JSONToCSVConverter from "./jsonToCsvConverter.mjs";
 import MemberHelper from "../helper/MemberHelper.mjs";
 import EncryptionService from "./EncryptionService.mjs";
 import TrikotHelper from "../helper/TrikotHelper.mjs";
-async function exportAllMemberList(query){
+
+async function exportAllMemberList(filter){
     let memberHelper = new MemberHelper();
     const encryptionService = new EncryptionService();
     let data = await memberHelper.getAllMembers();
@@ -18,10 +18,10 @@ async function exportAllMemberList(query){
     const converter = new JSONToCSVConverter(options);
 
 // Konvertiere JSON-Daten in ein CSV-File und speichere es auf dem Dateisystem
-    return converter.convert(decryptedMembersList, `temp/${query}MemberList.csv`);
+    return converter.convert(decryptedMembersList, `temp/${filter}MemberList.csv`);
 
 }
-async function exportActiveMemberList(query){
+async function exportActiveMemberList(filter){
     let memberHelper = new MemberHelper();
     const encryptionService = new EncryptionService();
     let data = await memberHelper.getAllActiveMembers();
@@ -36,15 +36,11 @@ async function exportActiveMemberList(query){
     const converter = new JSONToCSVConverter(options);
 
 // Konvertiere JSON-Daten in ein CSV-File und speichere es auf dem Dateisystem
-    return converter.convert(decryptedMembersList, `temp/${query}MemberList.csv`);
+    return converter.convert(decryptedMembersList, `temp/${filter}MemberList.csv`);
 
 }
 
-async function exportPaymentList(){
-
-}
-
-async function exportAllTrikotList(query){
+async function exportAllTrikotList(filter){
    let trikotHelper = new TrikotHelper();
     const encryptionService = new EncryptionService();
     let data = await trikotHelper.getAllTrikots();
@@ -56,9 +52,10 @@ async function exportAllTrikotList(query){
 
     const converter = new JSONToCSVConverter(options);
 
-    return converter.convert(decryptedTrikotData, `temp/${query}TrikotList.csv`);
+    return converter.convert(decryptedTrikotData, `temp/${filter}TrikotList.csv`);
+
 }
-async function exportAvailableTrikotList(query){
+async function exportAvailableTrikotList(filter){
   let trikotHelper = new TrikotHelper();
   const encryptionService = new EncryptionService();
   let data = await trikotHelper.getAllTrikots();
@@ -72,11 +69,67 @@ async function exportAvailableTrikotList(query){
 
   const converter = new JSONToCSVConverter(options);
 
-  return converter.convert(availableTrikots, `temp/${query}TrikotList.csv`);
+  return converter.convert(availableTrikots, `temp/${filter}TrikotList.csv`);
 }
 
-async function exportMailList(){
+async function exportAllMailList(filter){
+  let memberHelper = new MemberHelper();
+  const encryptionService = new EncryptionService();
+  let data = await memberHelper.getActiveMemberEmails();
+  const decryptedMemberEmails = encryptionService.decryptMemberEmails(data);
 
+  let options = {
+    fields: ['email']
+  }
+
+  const converter = new JSONToCSVConverter(options);
+
+  return converter.convert(decryptedMemberEmails, `temp/${filter}MailList.csv`);
+}
+async function exportPaidMemberMailList(filter, period){
+  let memberHelper = new MemberHelper();
+  const encryptionService = new EncryptionService();
+  let data = await memberHelper.getMemberEmailsWithPaymentInfos();
+  const decryptedMemberEmails = encryptionService.decryptMemberEmails(data.data);
+
+  let filteredEmails = filterEmailByPaidAndYear(decryptedMemberEmails, period);
+
+  let options = {
+    fields: ['email']
+  }
+
+  const converter = new JSONToCSVConverter(options);
+
+  return converter.convert(filteredEmails, `temp/${filter}${period}MailList.csv`);
+}
+async function exportUnpaidMemberMailList(filter, period){
+  let memberHelper = new MemberHelper();
+  const encryptionService = new EncryptionService();
+  let data = await memberHelper.getMemberEmailsWithPaymentInfos();
+  const decryptedMemberEmails = encryptionService.decryptMemberEmails(data.data);
+
+  let filteredEmails = filterEmailByUnpaidAndYear(decryptedMemberEmails, period)
+
+  let options = {
+    fields: ['email']
+  }
+
+  const converter = new JSONToCSVConverter(options);
+
+  return converter.convert(filteredEmails, `temp/${filter}${period}MailList.csv`);
+}
+function filterEmailByPaidAndYear(emails, year) {
+  return emails.filter(item => {
+      const periodeYear = new Date(item.created_at).getFullYear();
+      return item.paid === 1 && periodeYear === parseInt(year);
+    });
+}
+function filterEmailByUnpaidAndYear(emails, year) {
+  return emails.filter(item => {
+    const periodeYear = new Date(item.created_at).getFullYear();
+    return item.paid === 0 && periodeYear === parseInt(year);
+  });
 }
 
-export {exportAllMemberList,exportActiveMemberList, exportPaymentList, exportAllTrikotList,exportAvailableTrikotList, exportMailList}
+
+export {exportAllMemberList,exportActiveMemberList, exportAllTrikotList,exportAvailableTrikotList, exportAllMailList, exportPaidMemberMailList, exportUnpaidMemberMailList}
