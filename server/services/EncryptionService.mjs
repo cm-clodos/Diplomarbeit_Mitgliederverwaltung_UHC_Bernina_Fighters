@@ -49,6 +49,12 @@ class EncryptionService {
             telephone: this.decrypt(member.data[0].telephone)
         };
     }
+    decryptMemberEmails(emails){
+        for (let email of emails) {
+            email.email = this.decrypt(email.email);
+        }
+        return emails;
+    }
     decryptPaymentData(payments){
         for (let payment of payments) {
             payment.firstname = this.decrypt(payment.firstname);
