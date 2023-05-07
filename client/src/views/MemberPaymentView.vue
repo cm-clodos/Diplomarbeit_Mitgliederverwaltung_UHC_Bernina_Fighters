@@ -8,7 +8,7 @@
             <option value="">Jahr auswählen</option>
             <option v-for="year in years" :key="year" :value="year">{{ year }}</option>
           </select>
-            <button type="button" @click="createNewPaymentPeriod" class="btn btn-primary float-end">Bezahlperiode erstellen</button>
+            <button type="button" @click="confirmation" class="btn btn-primary float-end">Bezahlperiode erstellen</button>
           </h4>
         </div>
         <div class="card-body">
@@ -41,6 +41,11 @@
             </tr>
             </tbody>
           </table>
+          <ConfirmModal :show="modalVisible"
+                        @confirm="handleConfirm"
+                        @cancel="closeModal"
+                        title="Bezahlperiode erstellen"
+                        message="Sind Sie sicher, dass Sie eine neue Bezahlperiode erstellen möchten?"></ConfirmModal>
         </div>
       </div>
     </div>
@@ -52,9 +57,11 @@ import axios from "/src/api/axios.mjs";
 import {formatInSwissTime} from "/src/services/formatterService.mjs";
 import {useToast} from 'vue-toast-notification';
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import ConfirmModal from "@/components/ConfirmModal.vue";
 export default {
   name: "MemberPaymentView",
   components: {
+    ConfirmModal,
     FontAwesomeIcon
   },
   data() {
@@ -65,6 +72,7 @@ export default {
       filteredPayments: [],
       years: [],
       sortAscending: true,
+      modalVisible: false,
       model: {
         payment: {
           firstname: "",
@@ -137,7 +145,6 @@ export default {
     },
 
     createNewPaymentPeriod(){
-      if(confirm("Sind Sie sicher, dass Sie eine neue Bezahlperiode erstellen möchten?")){
         try{
           axios.post("/members/payments/period").then(res => {
             if (res.status === 201) {
@@ -153,7 +160,6 @@ export default {
             console.log("Unexpected error: " + error.response.status);
           }
         }
-      }
     },
 
     sortByDate() {
@@ -167,7 +173,19 @@ export default {
         return this.sortAscending ? a.paid - b.paid : b.paid - a.paid;
       });
       this.sortAscending = !this.sortAscending;
-    }
+    },
+    handleConfirm(value) {
+      this.modalVisible = false;
+      if (value) {
+      this.createNewPaymentPeriod();
+      }
+    },
+    closeModal() {
+      this.modalVisible = false;
+    },
+    confirmation() {
+      this.modalVisible = true;
+    },
   }
 }
 </script>
