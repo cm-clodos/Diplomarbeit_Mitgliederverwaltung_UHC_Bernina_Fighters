@@ -3,6 +3,13 @@ import TrikotHelper from "../helper/TrikotHelper.mjs";
 import ApiError from "../model/ApiError.mjs";
 import CreateResponse from "../model/CreateResponse.mjs";
 import EncryptionService from "../services/EncryptionService.mjs";
+import {
+    exportActiveMemberList,
+    exportAllMemberList,
+    exportAllTrikotList,
+    exportAvailableTrikotList
+} from "../services/ExportService.mjs";
+import fs from "fs";
 
 const handleGetAllTrikots = async (req, res) => {
     const trikotHelper = new TrikotHelper();
@@ -68,10 +75,47 @@ const handleDeleteTrikot = async (req, res) => {
         res.status(500).json(new ApiError("ee-999"));
     }
 }
+const handleTrikotListExportFile = async (req, res) => {
+    console.log(req.query.filter);
+    const query = req.query.filter;
+    let downloaded;
+    try {
+        if (query === "all") {
+            downloaded = await exportAllTrikotList(query);
+        } else if (query === "available") {
+            downloaded = await exportAvailableTrikotList(query);
+        }
+        const folderPath = '../server/temp';
+        const filename = `${query}TrikotList.csv`;
+
+        if (fs.existsSync(`${folderPath}/${filename}`) && downloaded) {
+            res.download(`${folderPath}/${filename}`, (err) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    fs.unlink(`${folderPath}/${filename}`, (err) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log("File deleted");
+                        }
+                    });
+                }
+            });
+        } else {
+            console.log("File not found");
+            res.status(404).json(new ApiError("fe-404"));
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(new ApiError("ee-999"));
+    }
+};
 
 export default {
     handleGetAllTrikots,
     handleNewTrikot,
     handleUpdateTrikot,
-    handleDeleteTrikot
+    handleDeleteTrikot,
+    handleTrikotListExportFile
 }

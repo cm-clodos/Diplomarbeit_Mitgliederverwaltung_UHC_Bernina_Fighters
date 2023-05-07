@@ -9,5 +9,6 @@ router.get('/', trikotController.handleGetAllTrikots);
 router.post('/', trikotDataSanitizer, validateTrikotData, trikotController.handleNewTrikot);
 router.put('/:id', trikotDataSanitizer,validateTrikotData, trikotController.handleUpdateTrikot);
 router.delete('/:id',trikotController.handleDeleteTrikot);
+router.post('/export/download', trikotController.handleTrikotListExportFile);
 
 export default router;

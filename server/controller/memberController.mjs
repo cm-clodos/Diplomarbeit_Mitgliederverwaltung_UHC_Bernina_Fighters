@@ -232,8 +232,6 @@ const handleMemberListExportFile = async (req, res) => {
     const query = req.query.filter;
     let downloaded;
     try {
-
-
         if (query === "all") {
             downloaded = await exportAllMemberList(query);
         } else if (query === "active") {
