@@ -3,7 +3,7 @@ import Member from "../model/member.mjs";
 import CreateResponse from "../model/CreateResponse.mjs";
 import ApiError from "../model/ApiError.mjs";
 import fs from "fs";
-import {exportMemberList} from "../services/ExportService.mjs";
+import {exportActiveMemberList, exportAllMemberList} from "../services/ExportService.mjs";
 import EncryptionService from "../services/EncryptionService.mjs";
 import {
     checkIfExistingEmailHasChanged, checkIfExistingTelephoneHasChanged,
@@ -32,13 +32,13 @@ const handleNewMember = async (req, res) => {
     const encryptionService = new EncryptionService();
 
     const member = new Member(
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        req.body.telephone,
-        req.body.active,
-        req.body.role_id,
-        req.body.entry_date
+      req.body.firstname,
+      req.body.lastname,
+      req.body.email,
+      req.body.telephone,
+      req.body.active,
+      req.body.role_id,
+      req.body.entry_date
     );
     const encryptedMember = encryptionService.encryptMemberData(member);
     try {
@@ -68,13 +68,13 @@ const handleUpdateMember = async (req, res) => {
 
     const memberHelper = new MemberHelper();
     const member = new Member(
-        req.body.firstname,
-        req.body.lastname,
-        req.body.email,
-        req.body.telephone,
-        req.body.active,
-        req.body.role_id,
-        req.body.entry_date
+      req.body.firstname,
+      req.body.lastname,
+      req.body.email,
+      req.body.telephone,
+      req.body.active,
+      req.body.role_id,
+      req.body.entry_date
     );
     const encryptedMember = encryptionService.encryptMemberData(member);
     const email = req.body.email;
@@ -228,34 +228,43 @@ const handleCreateNewPaymentPeriod = async (req, res) => {
     }
 }
 const handleMemberListExportFile = async (req, res) => {
+    console.log(req.query.filter);
+    const query = req.query.filter;
+    let downloaded;
     try {
-        // The folder path for the files
-        let downloaded = await exportMemberList();
-        // dynamischer folder path erstellen
+
+
+        if (query === "all") {
+            downloaded = await exportAllMemberList(query);
+        } else if (query === "active") {
+            downloaded = await exportActiveMemberList(query);
+        }
         const folderPath = '../server/temp';
-        if (fs.existsSync(folderPath + '/memberList.csv') && downloaded) {
-            res.download(folderPath + '/memberList.csv', function (err) {
+        const filename = `${query}MemberList.csv`;
+
+        if (fs.existsSync(`${folderPath}/${filename}`) && downloaded) {
+            res.download(`${folderPath}/${filename}`, (err) => {
                 if (err) {
                     console.log(err);
+                } else {
+                    fs.unlink(`${folderPath}/${filename}`, (err) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log("File deleted");
+                        }
+                    });
                 }
-                fs.unlink(folderPath + '/memberList.csv', function (err) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        console.log("File deleted");
-                    }
-                })
-            })
+            });
         } else {
-            console.log("File not found")
+            console.log("File not found");
             res.status(404).json(new ApiError("fe-404"));
         }
-
     } catch (error) {
         console.log(error);
         res.status(500).json(new ApiError("ee-999"));
     }
-}
+};
 
 
 export default {
