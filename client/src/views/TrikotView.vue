@@ -44,7 +44,7 @@
                         class="btn btn-success action-btn">
                   <font-awesome-icon class="action-icon" icon="floppy-disk"/>
                 </button>
-                <button type="button" @click="deleteTrikot(trikot.number)" class="btn btn-danger action-btn">
+                <button type="button" @click="deleteConfirmation(trikot.number)" class="btn btn-danger action-btn">
                   <font-awesome-icon class="action-icon" icon="trash-can"/>
                 </button>
                 </div>
@@ -57,6 +57,11 @@
             </tr>
             </tbody>
           </table>
+          <ConfirmModal :show="modalVisible"
+                        @confirm="handleConfirm"
+                        @cancel="closeModal"
+                        title="Trikot löschen"
+                        message="Das Trikot wirklich löschen?"></ConfirmModal>
         </div>
       </div>
     </div>
@@ -67,9 +72,11 @@
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {useToast} from 'vue-toast-notification';
 import axios from "/src/api/axios.mjs";
+import ConfirmModal from "@/components/ConfirmModal.vue";
 export default {
   name: "TrikotView",
   components: {
+    ConfirmModal,
     FontAwesomeIcon
   },
   data() {
@@ -77,6 +84,8 @@ export default {
       toast: useToast(),
       trikots: [],
       members: [],
+      modalVisible: false,
+      trikotNumberToDelete: null,
     }
   },
   mounted() {
@@ -131,7 +140,6 @@ export default {
           });
     },
     deleteTrikot(trikotNumber) {
-        if (confirm("Möchten Sie das Trikot wirklich löschen?")) {
             axios.delete(`/trikots/${trikotNumber}`)
               .then(res => {
                   if (res.status === 200) {
@@ -147,7 +155,7 @@ export default {
                     console.log("Unexpected error: " + error.response.status);
                 }
             });
-        }
+
     },
 
     toggleAvailable(trikot) {
@@ -156,6 +164,19 @@ export default {
     },
     renderMemberName(member) {
       return member.firstname && member.lastname ? member.firstname + ' ' + member.lastname : '';
+    },
+    handleConfirm(value) {
+      this.modalVisible = false;
+      if (value) {
+        this.deleteTrikot(this.trikotNumberToDelete)
+      }
+    },
+    closeModal() {
+      this.modalVisible = false;
+    },
+    deleteConfirmation(trikotNumber) {
+      this.modalVisible = true;
+      this.trikotNumberToDelete = trikotNumber;
     },
   }
 }
