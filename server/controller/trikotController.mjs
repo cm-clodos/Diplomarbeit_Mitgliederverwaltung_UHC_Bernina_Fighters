@@ -77,16 +77,16 @@ const handleDeleteTrikot = async (req, res) => {
 }
 const handleTrikotListExportFile = async (req, res) => {
     console.log(req.query.filter);
-    const query = req.query.filter;
+    const filter = req.query.filter;
     let downloaded;
     try {
-        if (query === "all") {
-            downloaded = await exportAllTrikotList(query);
-        } else if (query === "available") {
-            downloaded = await exportAvailableTrikotList(query);
+        if (filter === "all") {
+            downloaded = await exportAllTrikotList(filter);
+        } else if (filter === "available") {
+            downloaded = await exportAvailableTrikotList(filter);
         }
         const folderPath = '../server/temp';
-        const filename = `${query}TrikotList.csv`;
+        const filename = `${filter}TrikotList.csv`;
 
         if (fs.existsSync(`${folderPath}/${filename}`) && downloaded) {
             res.download(`${folderPath}/${filename}`, (err) => {
