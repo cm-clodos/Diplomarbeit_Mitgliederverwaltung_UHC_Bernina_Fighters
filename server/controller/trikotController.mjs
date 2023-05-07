@@ -4,8 +4,6 @@ import ApiError from "../model/ApiError.mjs";
 import CreateResponse from "../model/CreateResponse.mjs";
 import EncryptionService from "../services/EncryptionService.mjs";
 import {
-    exportActiveMemberList,
-    exportAllMemberList,
     exportAllTrikotList,
     exportAvailableTrikotList
 } from "../services/ExportService.mjs";
