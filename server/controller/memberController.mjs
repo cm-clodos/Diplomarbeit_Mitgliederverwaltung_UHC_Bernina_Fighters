@@ -3,7 +3,13 @@ import Member from "../model/member.mjs";
 import CreateResponse from "../model/CreateResponse.mjs";
 import ApiError from "../model/ApiError.mjs";
 import fs from "fs";
-import {exportActiveMemberList, exportAllMemberList} from "../services/ExportService.mjs";
+import {
+    exportActiveMemberList,
+    exportAllMailList,
+    exportAllMemberList,
+    exportPaidMemberMailList,
+    exportUnpaidMemberMailList
+} from "../services/ExportService.mjs";
 import EncryptionService from "../services/EncryptionService.mjs";
 import {
     checkIfExistingEmailHasChanged, checkIfExistingTelephoneHasChanged,
@@ -227,18 +233,27 @@ const handleCreateNewPaymentPeriod = async (req, res) => {
         return res.status(500).json(new ApiError("ee-999"));
     }
 }
+const handleGetAllPaymentPeriods = async (req, res) => {
+    const memberHelper = new MemberHelper();
+    try {
+        const periods = await memberHelper.getAllMemberPaymentsPeriods();
+        res.status(200).json(periods);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(new ApiError("ee-999"));
+    }
+}
 const handleMemberListExportFile = async (req, res) => {
-    console.log(req.query.filter);
-    const query = req.query.filter;
+    const filter = req.query.filter;
     let downloaded;
     try {
-        if (query === "all") {
-            downloaded = await exportAllMemberList(query);
-        } else if (query === "active") {
-            downloaded = await exportActiveMemberList(query);
+        if (filter === "all") {
+            downloaded = await exportAllMemberList(filter);
+        } else if (filter === "active") {
+            downloaded = await exportActiveMemberList(filter);
         }
         const folderPath = '../server/temp';
-        const filename = `${query}MemberList.csv`;
+        const filename = `${filter}MemberList.csv`;
 
         if (fs.existsSync(`${folderPath}/${filename}`) && downloaded) {
             res.download(`${folderPath}/${filename}`, (err) => {
@@ -263,6 +278,45 @@ const handleMemberListExportFile = async (req, res) => {
         res.status(500).json(new ApiError("ee-999"));
     }
 };
+const handleMailListExportFile = async (req, res) => {
+    const filter = req.query.filter;
+    const period = req.query.period;
+    let downloaded;
+    try {
+        if (filter === "all") {
+            downloaded = await exportAllMailList(filter);
+        } else if (filter === "paid") {
+            downloaded = await exportPaidMemberMailList(filter, period);
+        }else if (filter === "unpaid") {
+            downloaded = await exportUnpaidMemberMailList(filter, period)
+        }
+        const folderPath = '../server/temp';
+        const filename = `${filter}${period}MailList.csv`;
+
+        if (fs.existsSync(`${folderPath}/${filename}`) && downloaded) {
+            res.download(`${folderPath}/${filename}`, (err) => {
+                if (err) {
+                    console.log(err);
+                } else {
+                    fs.unlink(`${folderPath}/${filename}`, (err) => {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            console.log("File deleted");
+                        }
+                    });
+                }
+            });
+        } else {
+            console.log("File not found");
+            res.status(404).json(new ApiError("fe-404"));
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(new ApiError("ee-999"));
+    }
+}
+
 
 
 export default {
@@ -277,6 +331,8 @@ export default {
     handleGetAllPayments,
     handleGetPaymentById,
     handleUpdatePayment,
-    handleCreateNewPaymentPeriod
+    handleCreateNewPaymentPeriod,
+    handleMailListExportFile,
+    handleGetAllPaymentPeriods
 
 }

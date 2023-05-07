@@ -128,6 +128,15 @@ class MemberHelper {
             throw error;
         }
     }
+    async getAllMemberPaymentsPeriods(){
+        let sql = "SELECT created_at FROM payment";
+        try {
+            const res = await this.databaseConnector.query(sql, null);
+            return res.data;
+        } catch (error){
+            throw error;
+        }
+    }
     async resetMemberPaymentTable(){
         let sql = "TRUNCATE TABLE payment";
         try {
@@ -151,6 +160,25 @@ class MemberHelper {
             const res = await this.databaseConnector.query(sql, null);
             return res.data;
         }catch (error){
+            throw error;
+        }
+    }
+    async getActiveMemberEmails() {
+        let sql = "SELECT email FROM members WHERE active = 1"
+        try {
+            const res = await this.databaseConnector.query(sql, null);
+            return res.data;
+        }catch (error){
+            throw error;
+        }
+    }
+    async getMemberEmailsWithPaymentInfos(){
+        let sql = "SELECT p.paid, p.created_at, m.email FROM payment p ";
+            sql += "JOIN members m ON p.member_id = m.id ";
+            sql += "WHERE m.active = 1";
+        try {
+            return await this.databaseConnector.query(sql, null);
+        } catch (error){
             throw error;
         }
     }
