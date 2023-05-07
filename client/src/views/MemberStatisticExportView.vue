@@ -1,32 +1,24 @@
 <template>
   <div class="statistics">
     <h1>Mitglieder Statistik und Exporte</h1>
-    <div>
-      <form ref="downloadForm" action="http://localhost:3000/members/export/download" method="POST" hidden>
-        <input type="hidden" name="_method" value="POST"/>
-      </form>
-      <button class="btn btn-primary" @click="download">Export Mitgliederliste</button>
-    </div>
+   <MemberExport />
   </div>
 </template>
-
 <script>
-import {useToast} from 'vue-toast-notification';
+
+
+import MemberExport from "@/components/MemberExport.vue";
+
 export default {
   name: "MemberStatisticExportView",
-  components: {},
+  components: {MemberExport},
   data() {
     return {
-      toast: useToast(),
+
     }
   },
-  mounted() {
-
-  },
   methods: {
-    download() {
-      this.$refs.downloadForm.submit();
-    },
+
   }
 }
 </script>
