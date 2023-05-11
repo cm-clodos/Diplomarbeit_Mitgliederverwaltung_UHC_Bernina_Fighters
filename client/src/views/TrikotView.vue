@@ -26,7 +26,7 @@
             </tr>
             </thead>
             <tbody v-if="this.trikots.length > 0">
-            <tr v-for="(trikot, index) in trikots " :key="index">
+            <tr v-for="(trikot, index) in displayedTrikots " :key="index">
               <td data-cell="mitglied">
                 <select v-model="trikot.memberId">
                   <option value="null">- Nicht zugewiesen -</option>
@@ -57,6 +57,12 @@
             </tr>
             </tbody>
           </table>
+          <Pagination
+            :totalPages="totalPages"
+            :currentPage="currentPage"
+            :changePage="changePage"
+          ></Pagination>
+
           <ConfirmModal :show="modalVisible"
                         @confirm="handleConfirm"
                         @cancel="closeModal"
@@ -73,9 +79,11 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {useToast} from 'vue-toast-notification';
 import axios from "/src/api/axios.mjs";
 import ConfirmModal from "@/components/ConfirmModal.vue";
+import Pagination from "@/components/Pagination.vue";
 export default {
   name: "TrikotView",
   components: {
+    Pagination,
     ConfirmModal,
     FontAwesomeIcon
   },
@@ -86,8 +94,21 @@ export default {
       members: [],
       modalVisible: false,
       trikotNumberToDelete: null,
+      currentPage: 1,
+      itemsPerPage: 20
     }
   },
+  computed:{
+    totalPages() {
+      return Math.ceil(this.trikots.length / this.itemsPerPage);
+    },
+    displayedTrikots() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.trikots.slice(startIndex, endIndex);
+    }
+  },
+
   mounted() {
     this.getAllTrikots();
     this.getAllMembers();
@@ -178,6 +199,11 @@ export default {
       this.modalVisible = true;
       this.trikotNumberToDelete = trikotNumber;
     },
+    changePage(pageNumber) {
+      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+        this.currentPage = pageNumber;
+      }
+    }
   }
 }
 </script>
