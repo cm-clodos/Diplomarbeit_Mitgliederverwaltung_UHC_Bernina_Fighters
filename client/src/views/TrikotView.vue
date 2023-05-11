@@ -30,8 +30,10 @@
               <td data-cell="mitglied">
                 <select v-model="trikot.memberId">
                   <option value="null">- Nicht zugewiesen -</option>
-                  <option v-for="member in members" :value="member.id">{{ renderMemberName(member) }}</option>
+                  <option v-if="!trikot.memberId" v-for="member in membersWithoutTrikots" :value="member.id">{{ renderMemberName(member.id) }}</option>
+                  <option v-if="trikot.memberId"  :value="trikot.memberId">{{ renderMemberName(trikot.memberId) }}</option>
                 </select>
+                {{ renderMemberName(trikot.memberId) }}
               </td>
               <td data-cell="nummer"> {{ trikot.number }}</td>
               <td data-cell="trikotname"><input type="text" class="form-control border-transparent" v-model="trikot.name"></td>
@@ -95,7 +97,8 @@ export default {
       modalVisible: false,
       trikotNumberToDelete: null,
       currentPage: 1,
-      itemsPerPage: 20
+      itemsPerPage: 20,
+      membersWithoutTrikots: [],
     }
   },
   computed:{
@@ -112,6 +115,7 @@ export default {
   mounted() {
     this.getAllTrikots();
     this.getAllMembers();
+
   },
   methods: {
     getAllTrikots() {
@@ -131,6 +135,7 @@ export default {
       axios.get('/members/')
           .then(res => {
             this.members = res.data;
+            this.filterMembersWithoutTrikot(this.members, this.trikots);
           }).catch(error => {
             console.log(error)
             if ([500].includes(error.response.status)) {
@@ -150,6 +155,8 @@ export default {
             if (res.status === 200){
               console.log(res.data)
               this.toast.success(res.data.message);
+              this.filterMembersWithoutTrikot(this.members, this.trikots);
+              this.getAllTrikots();
             }
           }).catch(error => {
             console.log(error);
@@ -183,8 +190,12 @@ export default {
       trikot.available = trikot.available === 1 ? 0 : 1;
       console.log(trikot.available)
     },
-    renderMemberName(member) {
-      return member.firstname && member.lastname ? member.firstname + ' ' + member.lastname : '';
+    renderMemberName(memberId) {
+      const foundMember = this.members.find(member => member.id === memberId);
+      if (foundMember) {
+        return foundMember.firstname && foundMember.lastname ? foundMember.firstname + ' ' + foundMember.lastname : '';
+      }
+      return '';
     },
     handleConfirm(value) {
       this.modalVisible = false;
@@ -203,7 +214,13 @@ export default {
       if (pageNumber >= 1 && pageNumber <= this.totalPages) {
         this.currentPage = pageNumber;
       }
-    }
+    },
+    filterMembersWithoutTrikot(members, trikots){
+      const memberIds = members.map(member => member.id);
+      const trikotMemberIds = trikots.map(trikot => trikot.memberId);
+      const uniqueMemberIds = memberIds.filter(id => !trikotMemberIds.includes(id));
+      this.membersWithoutTrikots = members.filter(member => uniqueMemberIds.includes(member.id));
+    },
   }
 }
 </script>
