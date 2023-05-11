@@ -30,7 +30,7 @@
                 <label for="member" class="form-label">Mitglied</label>
                 <select id="member" name="member" class="form-select" v-model="model.trikot.member_id" required>
                   <option value="null">- Nicht zugewiesen -</option>
-                  <option v-for="member in members" :value="member.id">{{ renderMemberName(member) }}</option>
+                  <option v-for="member in membersWithoutTrikots" :value="member.id">{{ renderMemberName(member.id) }}</option>
                 </select>
               </div>
             </div>
@@ -58,7 +58,9 @@ export default {
   data() {
     return {
       members: [],
+      trikots: [],
       toast: useToast(),
+      membersWithoutTrikots: [],
       model: {
         trikot: {
           number: '',
@@ -80,20 +82,41 @@ export default {
   },
   mounted() {
     this.getAllMembers();
+    this.getAllTrikots();
   },
+
   methods: {
     getAllMembers() {
       axios.get('/members')
           .then(res => {
             this.members = res.data;
+            this.filterMembersWithoutTrikot();
           })
           .catch(error => {
             console.log(error)
             this.toast.error('Fehler beim Laden der Mitglieder');
           });
     },
-    renderMemberName(member) {
-      return member.firstname && member.lastname ? member.firstname + ' ' + member.lastname : '';
+    getAllTrikots() {
+      axios.get('/trikots/')
+          .then(res => {
+            this.trikots = res.data;
+            this.filterMembersWithoutTrikot();
+          }).catch(error => {
+        console.log(error)
+        if ([500].includes(error.response.status)) {
+          this.toast.error(error.response.data.message);
+        }else {
+          console.log("Unexpected error: " + error.response.status);
+        }
+      });
+    },
+    renderMemberName(memberId) {
+      const foundMember = this.members.find(member => member.id === memberId);
+      if (foundMember) {
+        return foundMember.firstname && foundMember.lastname ? foundMember.firstname + ' ' + foundMember.lastname : '';
+      }
+      return '';
     },
     addTrikot() {
       axios.post('/trikots', this.model.trikot)
@@ -133,6 +156,12 @@ export default {
       } else {
         this.toast.error("Bitte fülle die Felder korrekt aus!")
       }
+    },
+    filterMembersWithoutTrikot(){
+      const memberIds = this.members.map(member => member.id);
+      const trikotMemberIds = this.trikots.map(trikot => trikot.memberId);
+      const uniqueMemberIds = memberIds.filter(id => !trikotMemberIds.includes(id));
+      this.membersWithoutTrikots = this.members.filter(member => uniqueMemberIds.includes(member.id));
     },
   }
 }
