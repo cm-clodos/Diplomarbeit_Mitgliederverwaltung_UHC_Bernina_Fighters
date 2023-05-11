@@ -20,19 +20,15 @@
               <th @click="sortByPaid">Bezahlt <font-awesome-icon icon="sort"/></th>
               <th>Bezahldatum</th>
               <th @click="sortByDate">Periode <font-awesome-icon icon="sort"/></th>
-              <th>Bezahlstatus ändern</th>
             </tr>
             </thead>
             <tbody v-if="this.filteredPayments.length > 0">
             <tr v-for="(payment, index) in this.filteredPayments" :key="index">
               <td data-cell="vorname"> {{payment.firstname}}</td>
               <td data-cell="nachname"> {{payment.lastname}}</td>
-              <td data-cell="bezahlt"><input type="checkbox" @change="togglePayment(payment)" v-bind:checked="payment.paid ===1" :value="payment.paid"></td>
+              <td data-cell="bezahlt"><input type="checkbox" @change="updatePayment(payment.id, payment.paid)" v-model="payment.paid" :checked="payment.paid === 1" :value="1"></td>
               <td data-cell="bezahldatum"> {{payment.paid_date ? formatDate(payment.paid_date) : '' }}</td>
               <td data-cell="periode"> {{formatDate(payment.created_at)}}</td>
-              <td data-cell="bezahlstatus ändern">
-                <button type="button" @click="updatePayment(payment.id, payment.paid)" class="btn btn-success save-paid-btn">Speichern</button>
-              </td>
             </tr>
             </tbody>
             <tbody v-else >
@@ -70,6 +66,7 @@ export default {
       toast: useToast(),
       selectedPeriod: '',
       filteredPayments: [],
+      formattedPayments: [],
       years: [],
       sortAscending: true,
       modalVisible: false,
@@ -92,7 +89,11 @@ export default {
     getPayments() {
       axios.get("/members/payments").then(res => {
         this.payments = res.data
-        this.filteredPayments = this.payments
+        this.formattedPayments = this.payments.map(payment => ({
+          ...payment,
+          paid: payment.paid === 1,
+        }))
+        this.filteredPayments = this.formattedPayments
       })
     },
 
@@ -115,23 +116,18 @@ export default {
         }
       }
     },
-    togglePayment(payment) {
-      payment.paid = payment.paid === 1 ? 0 : 1;
-      console.log(payment.paid)
-    },
     formatDate(date) {
       return formatInSwissTime(date);
     },
     renderSelectedPaymentPeriod() {
       if (this.selectedPeriod === '') {
-        this.filteredPayments = this.payments
+        this.filteredPayments = this.formattedPayments
       } else {
         this.filterPaymentsByPeriod(this.selectedPeriod)
       }
-
     },
     filterPaymentsByPeriod(year) {
-      const filteredPayments = this.payments.filter(payment => {
+      const filteredPayments = this.formattedPayments.filter(payment => {
         const createdAt = new Date(payment.created_at);
         return createdAt.getFullYear() === year;
       });
