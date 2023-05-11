@@ -32,7 +32,7 @@
             </tr>
             </thead>
             <tbody v-if="this.members.length > 0">
-            <tr v-for="(member, index) in this.members" :key="index">
+            <tr v-for="(member, index) in displayedMembers" :key="index">
               <td data-cell="vorname"> {{ member.firstname }}</td>
               <td data-cell="nachname"> {{ member.lastname }}</td>
               <td data-cell="email"> {{ member.email }}</td>
@@ -60,6 +60,12 @@
             </tr>
             </tbody>
           </table>
+          <Pagination
+            :totalPages="totalPages"
+            :currentPage="currentPage"
+            :changePage="changePage"
+          ></Pagination>
+
           <ConfirmModal :show="modalVisible"
                         @confirm="handleConfirm"
                         @cancel="closeModal"
@@ -79,14 +85,16 @@ import {useToast} from 'vue-toast-notification';
 import {formatInSwissTime, formatActiveValue} from "@/services/formatterService.mjs";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ConfirmModal from "@/components/ConfirmModal.vue";
+import Pagination from "@/components/Pagination.vue";
 
 export default {
   name: 'MitgliederView',
-  computed: {},
+
   components: {
     ConfirmModal,
     FontAwesomeIcon,
     Header,
+    Pagination
   },
   //inject: ['host'],
   data() {
@@ -98,7 +106,19 @@ export default {
       sumActiveMembers: 0,
       modalVisible: false,
       memberIdToDelete: null,
+      currentPage: 1,
+      itemsPerPage: 10
     };
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.members.length / this.itemsPerPage);
+    },
+    displayedMembers() {
+      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+      const endIndex = startIndex + this.itemsPerPage;
+      return this.members.slice(startIndex, endIndex);
+    }
   },
   mounted() {
     this.getMembers();
@@ -169,6 +189,11 @@ export default {
       this.modalVisible = true;
       this.memberIdToDelete = id;
     },
+    changePage(pageNumber) {
+      if (pageNumber >= 1 && pageNumber <= this.totalPages) {
+        this.currentPage = pageNumber;
+      }
+    }
   }
 }
 
