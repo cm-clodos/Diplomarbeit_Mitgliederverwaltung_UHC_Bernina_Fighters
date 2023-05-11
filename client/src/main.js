@@ -16,10 +16,11 @@ import {
     faEye,
     faPencil,
     faTrashCan,
-    faFloppyDisk
+    faFloppyDisk,
+    faFileCsv
 } from '@fortawesome/free-solid-svg-icons'
 
-library.add(faPeopleGroup, faShirt, faSort, faEye, faPencil, faTrashCan, faFloppyDisk)
+library.add(faPeopleGroup, faShirt, faSort, faEye, faPencil, faTrashCan, faFloppyDisk, faFileCsv)
 const toastOptions = {};
 
 const app = createApp(App)

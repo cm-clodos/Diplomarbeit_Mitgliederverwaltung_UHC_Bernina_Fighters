@@ -27,9 +27,6 @@
               <li><router-link class="dropdown-item" :to="{name:'Bezahlübersicht'}">
                 <span>Bezahlübersicht</span>
               </router-link></li>
-              <li><router-link class="dropdown-item" :to="{name:'Mitglieder Statistik und Exporte'}">
-                <span>Statistik/Exporte</span>
-              </router-link></li>
             </ul>
           </li>
         </ul>
@@ -48,6 +45,13 @@
                 <span>Trikot hinzufügen</span>
               </router-link></li>
             </ul>
+          </li>
+        </ul>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="#"> <router-link :to="{name:'Mitglieder Statistik und Exporte'}">
+              <span class="nav-icons"><font-awesome-icon icon="file-csv"/></span>
+            </router-link></a>
           </li>
         </ul>
       </div>
