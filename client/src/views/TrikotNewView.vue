@@ -19,9 +19,6 @@
               <div class="mb-3">
                 <label for="trikotName" class="form-label">Trikotname</label>
                 <input type="text" class="form-control" id="trikotName" v-model="model.trikot.name" >
-                <span v-if="v$.model.trikot.name.$error" :class="`${v$.model.trikot.name.$error ? 'error-message' : ''}`">
-              {{ v$.model.trikot.name.required.$message }}
-            </span>
               </div>
               <div class="mb-3">
                 <label for="available" class="form-label">Verfügbar</label>
@@ -77,7 +74,6 @@ export default {
       model: {
         trikot: {
           number: {required: helpers.withMessage('Trikotnummer ist erforderlich', required)},
-          name: {required: helpers.withMessage('Trikotname ist erforderlich', required)}
         }
       }
     }

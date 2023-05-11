@@ -85,10 +85,7 @@ export function checkTrikotNumber(trikotNumber){
 
 export function checkTrikotName(trikotName){
     const error = {}
-    if (!trikotName || typeof trikotName !== 'string' || trikotName.trim().length === 0) {
-        console.log("trikotName: " + trikotName)
-        error.name = 'Trikotname ist erforderlich.';
-    } else if (trikotName.trim().length >= 20) {
+     if (trikotName.trim().length >= 20) {
         error.name = 'Trikotname darf maximal 20 Zeichen lang sein.';
     }
     return error;

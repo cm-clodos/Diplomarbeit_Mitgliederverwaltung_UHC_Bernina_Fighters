@@ -236,10 +236,6 @@ describe('checkTrikotNumber from validateTrikotData', () => {
     });
 });
 describe('checkTrikotName from validateTrikotData', () => {
-    it('should return an error object when trikotName is empty', () => {
-        const error = checkTrikotName(' ');
-        assert.deepEqual(error, {name: 'Trikotname ist erforderlich.'});
-    });
     it('should return an error object when trikotName is too long', () => {
         const error = checkTrikotName('Piz Bellavista von Graubünden');
         assert.deepEqual(error, {name: 'Trikotname darf maximal 20 Zeichen lang sein.'});
