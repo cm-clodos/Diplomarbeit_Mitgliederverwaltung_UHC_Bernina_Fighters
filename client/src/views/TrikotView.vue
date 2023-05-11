@@ -135,7 +135,7 @@ export default {
       axios.get('/members/')
           .then(res => {
             this.members = res.data;
-            this.filterMembersWithoutTrikot(this.members, this.trikots);
+            this.filterMembersWithoutTrikot();
           }).catch(error => {
             console.log(error)
             if ([500].includes(error.response.status)) {
@@ -155,7 +155,7 @@ export default {
             if (res.status === 200){
               console.log(res.data)
               this.toast.success(res.data.message);
-              this.filterMembersWithoutTrikot(this.members, this.trikots);
+              this.filterMembersWithoutTrikot();
               this.getAllTrikots();
             }
           }).catch(error => {
@@ -215,11 +215,11 @@ export default {
         this.currentPage = pageNumber;
       }
     },
-    filterMembersWithoutTrikot(members, trikots){
-      const memberIds = members.map(member => member.id);
-      const trikotMemberIds = trikots.map(trikot => trikot.memberId);
+    filterMembersWithoutTrikot(){
+      const memberIds = this.members.map(member => member.id);
+      const trikotMemberIds = this.trikots.map(trikot => trikot.memberId);
       const uniqueMemberIds = memberIds.filter(id => !trikotMemberIds.includes(id));
-      this.membersWithoutTrikots = members.filter(member => uniqueMemberIds.includes(member.id));
+      this.membersWithoutTrikots = this.members.filter(member => uniqueMemberIds.includes(member.id));
     },
   }
 }
