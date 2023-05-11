@@ -13,10 +13,13 @@ import {
 } from "../services/FieldChecker.mjs";
 import TrikotHelper from "../helper/TrikotHelper.mjs";
 import Trikot from "../model/Trikot.mjs";
+import EncryptionService from "../services/EncryptionService.mjs";
+import {formatInSwissTime} from "../services/ExportService.mjs";
+
 
 const memberHelper = new MemberHelper('test');
 const trikotHelper = new TrikotHelper('test');
-import EncryptionService from "../services/EncryptionService.mjs";
+
 
 
 describe('check EncryptionService', () => {
@@ -25,6 +28,13 @@ describe('check EncryptionService', () => {
         const encrypted = encryptionService.encrypt('test');
         const decrypted = encryptionService.decrypt(encrypted);
         assert.equal(decrypted, 'test');
+    });
+});
+describe('Test formatInSwissTime', () => {
+    it('should return a formatted string in Swiss date format', () => {
+        let formattedDate = formatInSwissTime("2021-05-05T22:00:00.000Z");
+        assert.strictEqual(typeof formattedDate, 'string');
+        assert.strictEqual(formattedDate, "06.05.2021");
     });
 });
 

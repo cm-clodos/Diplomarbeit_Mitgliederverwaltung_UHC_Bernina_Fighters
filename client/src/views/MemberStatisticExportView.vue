@@ -1,9 +1,11 @@
 <template>
   <div class="statistics">
     <h1>Mitglieder Statistik und Exporte</h1>
-   <MemberExport />
-    <TrikotExport />
-    <EmailExport />
+    <div class="container mt-5">
+      <MemberExport />
+      <TrikotExport />
+      <EmailExport />
+    </div>
   </div>
 </template>
 <script>
@@ -28,5 +30,8 @@ export default {
 </script>
 
 <style scoped>
+.container {
+    display: flex;
+}
 
 </style>

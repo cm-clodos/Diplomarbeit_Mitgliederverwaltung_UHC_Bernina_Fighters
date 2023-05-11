@@ -8,6 +8,7 @@ async function exportAllMemberList(filter){
     const encryptionService = new EncryptionService();
     let data = await memberHelper.getAllMembers();
     const decryptedMembersList = encryptionService.decryptMembersListData(data);
+    formatEntryDates(decryptedMembersList)
 
 
     let options = {
@@ -26,7 +27,7 @@ async function exportActiveMemberList(filter){
     const encryptionService = new EncryptionService();
     let data = await memberHelper.getAllActiveMembers();
     const decryptedMembersList = encryptionService.decryptMembersListData(data);
-
+    formatEntryDates(decryptedMembersList)
 
     let options = {
         fields: ['firstname', 'lastname', 'email', 'telephone', 'active', 'role', 'entry_date']
@@ -130,6 +131,16 @@ function filterEmailByUnpaidAndYear(emails, year) {
     return item.paid === 0 && periodeYear === parseInt(year);
   });
 }
+function formatInSwissTime(unformattedDate){
+  let date = new Date(unformattedDate);
+  const options = {timeZone: 'Europe/Zurich', year: 'numeric', month: '2-digit', day: '2-digit'};
+  return date.toLocaleDateString('de-CH', options);
+}
+function formatEntryDates(membersList) {
+  membersList.forEach(member => {
+    member.entry_date = formatInSwissTime(member.entry_date);
+  });
+}
 
 
-export {exportAllMemberList,exportActiveMemberList, exportAllTrikotList,exportAvailableTrikotList, exportAllMailList, exportPaidMemberMailList, exportUnpaidMemberMailList}
+export {exportAllMemberList,exportActiveMemberList, exportAllTrikotList,exportAvailableTrikotList, exportAllMailList, exportPaidMemberMailList, exportUnpaidMemberMailList, formatInSwissTime}
