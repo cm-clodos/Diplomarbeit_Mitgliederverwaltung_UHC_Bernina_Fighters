@@ -25,8 +25,7 @@
               </div>
               <div class="mb-3">
                 <label for="available" class="form-label">Verfügbar</label>
-                <input class="form-check-input" type="checkbox" id="available" v-model="model.trikot.available" checked
-                       required>
+                <input class="form-check-input" type="checkbox" id="available" v-model="model.trikot.available" checked>
               </div>
             </div>
             <div class="col-md-6">
