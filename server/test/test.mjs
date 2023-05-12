@@ -9,7 +9,7 @@ import {
     checkFirstname,
     checkLastname, checkMemberId,
     checkRoleId,
-    checkTelephone, checkTrikotName, checkTrikotNumber, trimData
+    checkTelephone, checkTrikotName, checkTrikotNumber, formatFirstLetterOfNames, trimData
 } from "../services/FieldChecker.mjs";
 import TrikotHelper from "../helper/TrikotHelper.mjs";
 import Trikot from "../model/Trikot.mjs";
@@ -317,6 +317,22 @@ describe('trimData',  () => {
         assert.strictEqual(trimmedData.age, 25);
         assert.strictEqual(trimmedData.email, 'test@example.com');
     });
+});
+
+describe ("formatFirstLetterOfNames", () => {
+    it('should format the first letter of a given name and converts the rest of the letters to lowercase.', function () {
+        const formattedName = formatFirstLetterOfNames('hans');
+        assert.strictEqual(formattedName, 'Hans');
+    });
+    it('should format the first letter of a given name and converts the rest of the letters to lowercase.', function () {
+        const formattedName = formatFirstLetterOfNames('HANS');
+        assert.strictEqual(formattedName, 'Hans');
+    });
+    it('should format the first letter of a given name and converts the rest of the letters to lowercase.', function () {
+        const formattedName = formatFirstLetterOfNames('hAnS');
+        assert.strictEqual(formattedName, 'Hans');
+    });
+
 });
 
 

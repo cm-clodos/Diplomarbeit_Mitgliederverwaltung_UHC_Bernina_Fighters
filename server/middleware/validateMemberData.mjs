@@ -6,12 +6,16 @@ import {
     checkTelephone,
     checkActive,
     checkEntryDate,
-    trimData
+    trimData, formatFirstLetterOfNames
 } from "../services/FieldChecker.mjs";
 
 export function validateMemberData(req, res, next) {
     req.body = trimData(req.body);
+    req.body.firstname = formatFirstLetterOfNames(req.body.firstname)
+    req.body.lastname = formatFirstLetterOfNames(req.body.lastname)
+
     const {firstname, lastname, email, telephone, active, role_id, entry_date} = req.body;
+
 
     const errors = []
     const firstnameError = checkFirstname(firstname);
@@ -36,3 +40,4 @@ export function validateMemberData(req, res, next) {
         next();
     }
 }
+

@@ -121,5 +121,9 @@ export function trimData(data){
     return trimmedData;
 }
 
+export function formatFirstLetterOfNames(name){
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+}
+
 
 
