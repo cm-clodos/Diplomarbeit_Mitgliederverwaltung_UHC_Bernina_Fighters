@@ -280,10 +280,11 @@ const handleMemberListExportFile = async (req, res) => {
 };
 const handleMailListExportFile = async (req, res) => {
     const filter = req.query.filter;
-    const period = req.query.period;
+    let period = req.query.period;
     let downloaded;
     try {
         if (filter === "all") {
+            period = "";
             downloaded = await exportAllMailList(filter);
         } else if (filter === "paid") {
             downloaded = await exportPaidMemberMailList(filter, period);

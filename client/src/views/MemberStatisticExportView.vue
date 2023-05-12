@@ -4,7 +4,7 @@
     <div class="container mt-5">
       <MemberExport />
       <TrikotExport />
-      <EmailExport />
+      <MailExport />
     </div>
   </div>
 </template>
@@ -13,11 +13,11 @@
 
 import MemberExport from "@/components/MemberExport.vue";
 import TrikotExport from "@/components/TrikotExport.vue";
-import EmailExport from "@/components/MailExport.vue";
+import MailExport from "@/components/MailExport.vue";
 
 export default {
   name: "MemberStatisticExportView",
-  components: {EmailExport, TrikotExport, MemberExport},
+  components: {MailExport, TrikotExport, MemberExport},
   data() {
     return {
 

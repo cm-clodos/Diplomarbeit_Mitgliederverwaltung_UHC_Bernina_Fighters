@@ -9,8 +9,8 @@
       </div>
       <div class="form-check">
         <label for="payPeriod">Wähle Bezahlperiode:</label>
-        <select class="form-control" id="period" v-model="selectedPeriod">
-          <option value="" disabled selected>Bitte wählen</option>
+        <select class="form-control" id="period" v-model="selectedPeriod" :disabled="selectedOption === 'all'">
+          <option value="" :disabled="selectedOption === 'paid' || 'unpaid'" >Bitte wählen</option>
           <option v-for="year in periodsInYears" :value="year">{{ year }}</option>
         </select>
       </div>
@@ -24,20 +24,28 @@
       </div>
       <button class="btn btn-primary" @click="handleMailExport">Export Mailliste</button>
     </form>
+
   </div>
+  <ConfirmModal :show="modalVisible"
+                @confirm="handleConfirm"
+                @cancel="closeModal"
+                title="Bezahlperiode auswählen!"
+                message="Bitte wählen zuerst eine Bezahlperiode aus!"></ConfirmModal>
 </template>
 <script>
 import axios from "../api/axios.mjs"
+import ConfirmModal from "./ConfirmModal.vue"
 
 export default {
   name: "MailExport",
-  components: {},
+  components: {ConfirmModal},
   data() {
     return {
       selectedOption: "all",
       selectedPeriod: "",
       periods: [],
-      periodsInYears: []
+      periodsInYears: [],
+      modalVisible: false
     }
   },
   mounted() {
@@ -45,11 +53,16 @@ export default {
   },
   methods: {
     handleMailExport() {
-      const baseUrl = "http://localhost:3000/members/mail/export/download";
-      const queryParam = `filter=${this.selectedOption}`;
-      const queryParam2 = `&period=${this.selectedPeriod}`;
-      this.$refs.downloadForm.action = `${baseUrl}?${queryParam}${queryParam2}`;
-      this.$refs.downloadForm.submit();
+      if (!this.checkSelectPeriod()) {
+        event.preventDefault();
+        this.modalVisible = true;
+      }else {
+        const baseUrl = "http://localhost:3000/members/mail/export/download";
+        const queryParam = `filter=${this.selectedOption}`;
+        const queryParam2 = `&period=${this.selectedPeriod}`;
+        this.$refs.downloadForm.action = `${baseUrl}?${queryParam}${queryParam2}`;
+        this.$refs.downloadForm.submit();
+      }
     },
     getAllPaymentPeriods(){
       axios.get("/members/payments/period").then(res => {
@@ -60,6 +73,15 @@ export default {
     renderPeriodsToYears(periods){
       const years = periods.map(item => new Date(item.created_at).getFullYear());
       return years.filter((year, index) => years.indexOf(year) === index);
+    },
+    checkSelectPeriod(){
+      return !((this.selectedOption === 'paid' || this.selectedOption === 'unpaid') && !this.selectedPeriod);
+    },
+    handleConfirm() {
+      this.modalVisible = false;
+    },
+    closeModal() {
+      this.modalVisible = false;
     },
   }
 }
