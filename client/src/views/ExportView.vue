@@ -16,7 +16,7 @@ import TrikotExport from "@/components/TrikotExport.vue";
 import MailExport from "@/components/MailExport.vue";
 
 export default {
-  name: "MemberStatisticExportView",
+  name: "ExportView",
   components: {MailExport, TrikotExport, MemberExport},
   data() {
     return {

@@ -38,7 +38,6 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
               <li> <router-link class="dropdown-item" :to="{name:'Trikotverwaltung'}">
-                <span class="header-icons"></span>
                 <span>Übersicht</span>
               </router-link></li>
               <li><router-link class="dropdown-item" :to="{name:'Trikot hinzufügen'}">
@@ -49,7 +48,7 @@
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="#"> <router-link :to="{name:'Mitglieder Statistik und Exporte'}">
+            <a class="nav-link" href="#"> <router-link :to="{name:'Mitglieder Exporte'}">
               <span class="nav-icons"><font-awesome-icon icon="file-csv"/></span>
             </router-link></a>
           </li>
