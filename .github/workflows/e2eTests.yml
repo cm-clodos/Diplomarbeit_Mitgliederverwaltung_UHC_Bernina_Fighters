@@ -80,7 +80,6 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
-          browser: chrome
           working-directory: client
           build: npm run build
           start: npx http-server dist -p 8080 &
