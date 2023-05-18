@@ -1,6 +1,6 @@
 <template>
   <main class="home">
-    <h1>Übersicht Mitgliederverwaltung</h1>
+    <h1 data-test="site-title">Übersicht Mitgliederverwaltung</h1>
     <div class="container">
       <div class="card">
         <div class="card-header">

@@ -13,18 +13,18 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a data-test="dropdown-membermenu" class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <span class="nav-icons"><font-awesome-icon icon="people-group"/></span>
               <span class="nav-title">Mitgliederverwaltung</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-              <li><router-link class="dropdown-item" :to="{name:'Mitgliederverwaltung'}">
+              <li><router-link data-test="link-mitgliedsübersicht" class="dropdown-item" :to="{name:'Mitgliederverwaltung'}">
                 <span>Mitgliederübersicht</span>
               </router-link></li>
-              <li><router-link class="dropdown-item" :to="{name:'Mitglieder hinzufügen'}">
+              <li><router-link data-test="link-mitglied-hinzufügen" class="dropdown-item" :to="{name:'Mitglieder hinzufügen'}">
                 <span>Mitglied hinzufügen</span>
               </router-link></li>
-              <li><router-link class="dropdown-item" :to="{name:'Bezahlübersicht'}">
+              <li><router-link data-test="link-bezahlübersicht" class="dropdown-item" :to="{name:'Bezahlübersicht'}">
                 <span>Bezahlübersicht</span>
               </router-link></li>
             </ul>
@@ -32,15 +32,15 @@
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a data-test="dropdown-trikotmenu" class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               <span class="nav-icons"><font-awesome-icon icon="shirt"/></span>
               <span class="nav-title">Trikotverwaltung</span>
             </a>
             <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-              <li> <router-link class="dropdown-item" :to="{name:'Trikotverwaltung'}">
+              <li> <router-link data-test="link-trikotübersicht" class="dropdown-item" :to="{name:'Trikotverwaltung'}">
                 <span>Übersicht</span>
               </router-link></li>
-              <li><router-link class="dropdown-item" :to="{name:'Trikot hinzufügen'}">
+              <li><router-link data-test="link-trikot-hinzufügen" class="dropdown-item" :to="{name:'Trikot hinzufügen'}">
                 <span>Trikot hinzufügen</span>
               </router-link></li>
             </ul>
