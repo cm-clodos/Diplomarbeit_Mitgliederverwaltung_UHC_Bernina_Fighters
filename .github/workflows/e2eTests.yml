@@ -111,7 +111,8 @@ jobs:
             export ALGORITHM=$ALGORITHM
             export SERVER_HOSTNAME=$SERVER_HOSTNAME
             export SERVER_PORT=$SERVER_PORT
-            npm run start-api, npx http-server dist -p 8080
+            npm run start-api
+            npx http-server dist -p 8080
           wait-on: 'http://127.0.0.1:3000, http://127.0.0.1:8080'
 
           # after the test run completes
