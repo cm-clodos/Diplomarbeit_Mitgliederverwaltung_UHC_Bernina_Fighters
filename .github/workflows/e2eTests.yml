@@ -22,7 +22,6 @@ jobs:
         algorithm: [aes-256-ctr]
         server-hostname: [127.0.0.1]
         server-port: [3000]
-        api-url: [http://localhost:3000]
 
     steps:
       - uses: actions/checkout@v3
@@ -85,7 +84,7 @@ jobs:
           build: npm run build
           start: npx http-server dist -p 8080 &
         env:
-          API_URL: ${{ matrix.api-url }}
+          API_URL: http://127.0.0.1:3000
           # after the test run completes
           # store videos and any screenshots
           # NOTE: screenshots will be generated only if E2E test failed
