@@ -83,7 +83,7 @@ jobs:
         with:
           working-directory: client
           build: npm run build
-          start: npm install http-server && npx http-server dist -p 8080 &
+          start: npx http-server dist -p 8080 &
           # after the test run completes
           # store videos and any screenshots
           # NOTE: screenshots will be generated only if E2E test failed
