@@ -1,4 +1,4 @@
-import MemberHelper from "../helper/memberHelper.mjs";
+import MemberHelper from "../helper/MemberHelper.mjs";
 import EncryptionService from "./EncryptionService.mjs";
 
 
