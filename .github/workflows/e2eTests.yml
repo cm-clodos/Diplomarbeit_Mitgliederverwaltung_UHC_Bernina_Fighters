@@ -78,15 +78,11 @@ jobs:
           ALGORITHM: ${{ matrix.algorithm }}
           SERVER_HOSTNAME: ${{ matrix.server-hostname }}
           SERVER_PORT: ${{ matrix.server-port }}
-
-      - name: Build Client
-        run: cd client && npm run build
-      - name: Install http-server
-        run: npm install http-server
-      - name: Start HTTP server
-        run: npx http-server dist -p 8080 &
-      - name: Run E2E Tests
-        run: cd client && npx cypress run
+      - name: Cypress run
+        uses: cypress-io/github-action@v5
+        with:
+          build: cd client && npm run build
+          start: npm install http-server && npx http-server dist -p 8080 &
           # after the test run completes
           # store videos and any screenshots
           # NOTE: screenshots will be generated only if E2E test failed
