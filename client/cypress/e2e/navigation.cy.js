@@ -2,7 +2,7 @@ import {beforeEach} from "mocha";
 
 describe('home page', () => {
   beforeEach(() => {
-    cy.visit('/')
+    cy.visit('http://localhost:8080')
   })
 
   it('should display home page', () => {
