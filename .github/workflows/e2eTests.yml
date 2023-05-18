@@ -65,7 +65,9 @@ jobs:
           cd .. && cd client && npm install --include=dev
       - name: Start server
         run: |
-          cd server && npm run start &
+          cd server && npm run start > /dev/null &
+          sleep 5  # Wait for server to start (adjust the duration as needed)
+          tail -f server.log
 
         env:
           NODE_ENV: citest
@@ -80,7 +82,7 @@ jobs:
           SERVER_PORT: ${{ matrix.server-port }}
       - name: Verify Backend Server Availability
         run: |
-          while [ $(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000/members) != "200" ]; do
+          while [ $(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000) != "200" ]; do
             sleep 1
           done
       - name: Cypress run
