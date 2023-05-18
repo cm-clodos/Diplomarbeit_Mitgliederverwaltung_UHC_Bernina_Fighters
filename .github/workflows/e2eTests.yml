@@ -77,13 +77,17 @@ jobs:
           ALGORITHM: ${{ matrix.algorithm }}
           SERVER_HOSTNAME: ${{ matrix.server-hostname }}
           SERVER_PORT: ${{ matrix.server-port }}
+      - name: Verify Backend Server Availability
+        run: |
+          while [ $(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000) != "200" ]; do
+            sleep 1
+          done
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           working-directory: client
           build: npm run build
           start: npx http-server dist -p 8080 &
-          wait-on: 'http://127.0.0.1:3000', 'http://127.0.0.1:8080'
           # after the test run completes
           # store videos and any screenshots
           # NOTE: screenshots will be generated only if E2E test failed
