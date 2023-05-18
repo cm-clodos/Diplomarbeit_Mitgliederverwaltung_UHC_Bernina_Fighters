@@ -1,5 +1,5 @@
 import MemberHelper from "../helper/MemberHelper.mjs";
-import Member from "../model/member.mjs";
+import Member from "../model/Member.mjs";
 import CreateResponse from "../model/CreateResponse.mjs";
 import ApiError from "../model/ApiError.mjs";
 import fs from "fs";
