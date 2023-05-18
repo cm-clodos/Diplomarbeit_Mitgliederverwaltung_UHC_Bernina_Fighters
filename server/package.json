@@ -5,7 +5,8 @@
   "main": "server.mjs",
   "scripts": {
     "test": "mocha",
-    "start": "nodemon server.mjs"
+    "start": "nodemon server.mjs",
+    "dev": "cross-env DB_TYPE=test nodemon server.mjs"
   },
   "author": "",
   "license": "ISC",

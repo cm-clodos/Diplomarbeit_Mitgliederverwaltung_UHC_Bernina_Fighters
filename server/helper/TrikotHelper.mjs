@@ -3,7 +3,7 @@ import DatabaseConnection from "../model/DatabaseConnection.mjs";
 class TrikotHelper {
     databaseConnector = null;
 
-    constructor(databaseType = 'production') {
+    constructor(databaseType = process.env.DB_TYPE || 'production') {
         this.databaseConnector = new DatabaseConnection(databaseType);
     }
 

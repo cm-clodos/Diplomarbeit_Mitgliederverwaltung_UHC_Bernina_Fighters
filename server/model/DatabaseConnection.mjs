@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 class DatabaseConnection {
-    constructor(databaseType = 'production') {
+    constructor(databaseType = process.env.DB_TYPE || 'production') {
         this.host = process.env.DB_HOST;
         this.port = process.env.DB_PORT;
         this.user = process.env.DB_USER;
