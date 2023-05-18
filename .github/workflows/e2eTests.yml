@@ -65,7 +65,8 @@ jobs:
           cd .. && cd client && npm install --include=dev
       - name: start server
         run: |
-          cd server && npm run start &
+          cd server && npm run start > server.log &
+          tail -f server.log
         env:
           NODE_ENV: citest
           TEST_DB_HOST: ${{ matrix.database-host }}
