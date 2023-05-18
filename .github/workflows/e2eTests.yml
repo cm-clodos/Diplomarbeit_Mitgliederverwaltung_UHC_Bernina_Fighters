@@ -63,11 +63,10 @@ jobs:
           npm install --include=dev
           cd server && npm install --include=dev
           cd .. && cd client && npm install --include=dev
-      - name: Start server
-        run: |
-          cd server && npm run start > /dev/null &
-          sleep 5  # Wait for server to start (adjust the duration as needed)
-          tail -f server.log
+      #- name: Start server
+       # run: |
+        #  cd server && npm run start &
+
 
         env:
           NODE_ENV: citest
@@ -80,19 +79,28 @@ jobs:
           ALGORITHM: ${{ matrix.algorithm }}
           SERVER_HOSTNAME: ${{ matrix.server-hostname }}
           SERVER_PORT: ${{ matrix.server-port }}
-      - name: Verify Backend Server Availability
-        run: |
-          while [ $(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000) != "200" ]; do
-            sleep 1
-          done
+      #- name: Verify Backend Server Availability
+       # run: |
+        #  while [ $(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000) != "200" ]; do
+         #   sleep 1
+          #done
       - name: Cypress run
         uses: cypress-io/github-action@v5
         with:
           working-directory: client
           build: npm run build
-          start: npx http-server dist -p 8080 &
+          start: npm run start-api, npx http-server dist -p 8080 &
         env:
           NODE_ENV: citest
+          TEST_DB_HOST: ${{ matrix.database-host }}
+          TEST_DB_PORT: ${{ matrix.host-port }}
+          TEST_DB_USER: root
+          TEST_DB_PASSWORD: ${{ matrix.database-root-pwd }}
+          TEST_DB_DATABASE: ${{ matrix.database-name }}
+          SECRET_KEY: ${{ matrix.secret-key }}
+          ALGORITHM: ${{ matrix.algorithm }}
+          SERVER_HOSTNAME: ${{ matrix.server-hostname }}
+          SERVER_PORT: ${{ matrix.server-port }}
           # after the test run completes
           # store videos and any screenshots
           # NOTE: screenshots will be generated only if E2E test failed

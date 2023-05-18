@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test": "mocha src/test/unit --recursive --extension mjs"
+    "test": "mocha src/test/unit --recursive --extension mjs",
+    "start-api": "cd ../server && npm run start"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
