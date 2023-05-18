@@ -88,6 +88,8 @@ jobs:
           working-directory: client
           build: npm run build
           start: npx http-server dist -p 8080 &
+        env:
+          NODE_ENV: citest
           # after the test run completes
           # store videos and any screenshots
           # NOTE: screenshots will be generated only if E2E test failed
