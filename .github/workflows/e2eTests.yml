@@ -68,17 +68,17 @@ jobs:
         #  cd server && npm run start &
 
 
-        env:
-          NODE_ENV: citest
-          TEST_DB_HOST: ${{ matrix.database-host }}
-          TEST_DB_PORT: ${{ matrix.host-port }}
-          TEST_DB_USER: root
-          TEST_DB_PASSWORD: ${{ matrix.database-root-pwd }}
-          TEST_DB_DATABASE: ${{ matrix.database-name }}
-          SECRET_KEY: ${{ matrix.secret-key }}
-          ALGORITHM: ${{ matrix.algorithm }}
-          SERVER_HOSTNAME: ${{ matrix.server-hostname }}
-          SERVER_PORT: ${{ matrix.server-port }}
+        #env:
+         # NODE_ENV: citest
+          #TEST_DB_HOST: ${{ matrix.database-host }}
+          #TEST_DB_PORT: ${{ matrix.host-port }}
+          #TEST_DB_USER: root
+          #TEST_DB_PASSWORD: ${{ matrix.database-root-pwd }}
+          #TEST_DB_DATABASE: ${{ matrix.database-name }}
+          #SECRET_KEY: ${{ matrix.secret-key }}
+          #ALGORITHM: ${{ matrix.algorithm }}
+          #SERVER_HOSTNAME: ${{ matrix.server-hostname }}
+          #SERVER_PORT: ${{ matrix.server-port }}
       #- name: Verify Backend Server Availability
        # run: |
         #  while [ $(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:3000) != "200" ]; do
@@ -89,19 +89,31 @@ jobs:
         with:
           working-directory: client
           build: npm run build
-          start: npm run start-api, npx http-server dist -p 8080
+          env:
+            NODE_ENV: citest
+            TEST_DB_HOST: ${{ matrix.database-host }}
+            TEST_DB_PORT: ${{ matrix.host-port }}
+            TEST_DB_USER: root
+            TEST_DB_PASSWORD: ${{ matrix.database-root-pwd }}
+            TEST_DB_DATABASE: ${{ matrix.database-name }}
+            SECRET_KEY: ${{ matrix.secret-key }}
+            ALGORITHM: ${{ matrix.algorithm }}
+            SERVER_HOSTNAME: ${{ matrix.server-hostname }}
+            SERVER_PORT: ${{ matrix.server-port }}
+          start: |
+            export NODE_ENV=$NODE_ENV
+            export TEST_DB_HOST=$TEST_DB_HOST
+            export TEST_DB_PORT=$TEST_DB_PORT
+            export TEST_DB_USER=$TEST_DB_USER
+            export TEST_DB_PASSWORD=$TEST_DB_PASSWORD
+            export TEST_DB_DATABASE=$TEST_DB_DATABASE
+            export SECRET_KEY=$SECRET_KEY
+            export ALGORITHM=$ALGORITHM
+            export SERVER_HOSTNAME=$SERVER_HOSTNAME
+            export SERVER_PORT=$SERVER_PORT
+            npm run start-api, npx http-server dist -p 8080
           wait-on: 'http://127.0.0.1:3000, http://127.0.0.1:8080'
-        env:
-          NODE_ENV: citest
-          TEST_DB_HOST: ${{ matrix.database-host }}
-          TEST_DB_PORT: ${{ matrix.host-port }}
-          TEST_DB_USER: root
-          TEST_DB_PASSWORD: ${{ matrix.database-root-pwd }}
-          TEST_DB_DATABASE: ${{ matrix.database-name }}
-          SECRET_KEY: ${{ matrix.secret-key }}
-          ALGORITHM: ${{ matrix.algorithm }}
-          SERVER_HOSTNAME: ${{ matrix.server-hostname }}
-          SERVER_PORT: ${{ matrix.server-port }}
+
           # after the test run completes
           # store videos and any screenshots
           # NOTE: screenshots will be generated only if E2E test failed
