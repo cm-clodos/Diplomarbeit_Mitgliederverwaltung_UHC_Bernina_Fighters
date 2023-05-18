@@ -24,7 +24,6 @@ jobs:
         server-port: [3000]
         api-url: [http://localhost:3000]
 
-
     steps:
       - uses: actions/checkout@v3
       - uses: getong/mariadb-action@v1.1
