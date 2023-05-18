@@ -61,9 +61,9 @@ jobs:
           done
       - name: Install Dependencies
         run: |
-          npm run install --include=dev
-          cd server && npm run install --include=dev
-          cd .. && cd client && npm run install --include=dev
+          npm install --include=dev
+          cd server && npm install --include=dev
+          cd .. && cd client && npm install --include=dev
       - name: start server
         run: |
           cd server && npm run start &
