@@ -1,4 +1,4 @@
-import MemberHelper from "../helper/memberHelper.mjs";
+import MemberHelper from "../helper/MemberHelper.mjs";
 import Member from "../model/member.mjs";
 import CreateResponse from "../model/CreateResponse.mjs";
 import ApiError from "../model/ApiError.mjs";

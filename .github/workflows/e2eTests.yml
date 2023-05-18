@@ -81,6 +81,8 @@ jobs:
 
       - name: Build Client
         run: cd client && npm run build
+      - name: Install http-server
+        run: npm install http-server
       - name: Start HTTP server
         run: npx http-server dist -p 8080 &
       - name: Run E2E Tests
