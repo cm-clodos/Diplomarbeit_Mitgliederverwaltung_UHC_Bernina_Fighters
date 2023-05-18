@@ -3,9 +3,11 @@
 @import "modal";
 @import "memberExport";
 @import "pagination";
+@import "header";
 
 
 :root {
+
 
 }
 
@@ -20,6 +22,7 @@ html {
   scroll-behavior: smooth;
 }
 
+/*
 .header{
   img{
     width: 200px
@@ -36,3 +39,6 @@ html {
   font-size: 1.5rem;
   margin-right: 0.5rem;
 }
+
+ */
+

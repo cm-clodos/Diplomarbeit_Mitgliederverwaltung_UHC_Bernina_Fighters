@@ -1,0 +1,66 @@
+.header {
+  .navbar {
+    background-color: #f8f9fa; // Hintergrundfarbe des Headers
+
+    .navbar-brand {
+      img {
+        width: 200px
+      }
+    }
+
+    .navbar-nav {
+      .nav-item {
+        .nav-link {
+          display: flex;
+          align-items: center;
+          color: #231f20; // Farbe der Nav-Links
+          transition: background-color 0.3s;
+
+          .nav-title{
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+          }
+          a {
+            color: #231f20; // Farbe der Nav-Links
+            text-decoration: none;
+
+            &:hover {
+              color: #666; // Hintergrundfarbe bei Hover
+            }
+          }
+          .nav-icons{
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+          }
+
+          &:hover {
+            #color: #a61a20; // Hintergrundfarbe bei Hover Bernina Fighters farbe
+            color: #666; // Hintergrundfarbe bei Hover
+
+          }
+
+          .nav-icons {
+            margin-right: 5px; // Abstand zwischen Icon und Titel
+          }
+        }
+
+        .dropdown-menu {
+          background-color: #555; // Hintergrundfarbe des Dropdown-Menüs
+
+          .dropdown-item {
+            color: #f5f5f5; // Farbe der Dropdown-Elemente
+
+            &:hover {
+              /*
+              background-color: #c4676b; // Hintergrundfarbe bei Hover
+
+               */
+              background-color: #666;  // Hintergrundfarbe bei Hover
+            }
+          }
+        }
+      }
+    }
+  }
+}
