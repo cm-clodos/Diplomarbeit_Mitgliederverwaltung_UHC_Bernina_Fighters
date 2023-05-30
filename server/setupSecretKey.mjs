@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import fs from "fs";
 
 function generateSecretKey() {
-  return crypto.randomBytes(32).toString('hex');
+  return crypto.randomBytes(16).toString('hex');
 }
 
 let secretKey = generateSecretKey();
