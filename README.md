@@ -61,11 +61,16 @@ brew services stop mariadb
 
 ### Installation der Abhängigkeiten
 Um alle Abhängigkeiten zu installieren, führen Sie folgende Befehle aus:
-```
+```bash
 npm install
+```
+```bash
 cd client && npm install
+```
+```bash
 cd server && npm install
 ```
+
 
 
 ## Konfiguration
