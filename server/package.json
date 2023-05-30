@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha",
     "start": "nodemon server.mjs",
-    "dev": "cross-env DB_TYPE=test nodemon server.mjs"
+    "dev": "cross-env DB_TYPE=test nodemon server.mjs",
+    "config-keys": "node setupSecretKey.mjs"
   },
   "author": "",
   "license": "ISC",
