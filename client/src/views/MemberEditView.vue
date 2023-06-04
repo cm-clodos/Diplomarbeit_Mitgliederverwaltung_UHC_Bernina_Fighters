@@ -1,6 +1,6 @@
 <template>
   <main class="memberNew">
-    <h1>Mitglied bearbeiten</h1>
+    <h1 class="view-title">Mitglied bearbeiten</h1>
     <div class="container mt-5">
       <form ref="form" @submit.prevent="handleSubmit">
       <div class="card">

@@ -1,6 +1,6 @@
 <template>
   <main class="trikot">
-    <h1>Übersicht Trikots</h1>
+    <h1 class="view-title">Übersicht Trikots</h1>
     <div class="container">
       <div class="card">
         <div class="card-header">

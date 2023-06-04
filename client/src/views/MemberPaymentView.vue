@@ -1,6 +1,6 @@
 <template>
   <main class="memberPayment">
-    <h1>Übersicht Bezahlperiode</h1>
+    <h1 class="view-title">Übersicht Bezahlperiode</h1>
     <div class="container">
       <div class="card">
         <div class="card-header">

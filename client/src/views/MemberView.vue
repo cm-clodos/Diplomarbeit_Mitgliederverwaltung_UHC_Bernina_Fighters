@@ -1,6 +1,6 @@
 <template>
   <main class="home">
-    <h1 data-test="site-title">Übersicht Mitgliederverwaltung</h1>
+    <h1 class="view-title" data-test="site-title">Übersicht Mitgliederverwaltung</h1>
     <div class="container">
       <div class="card">
         <div class="card-header">
@@ -47,7 +47,7 @@
               <td data-cell="eintritt"> {{ this.formatDate(member.entry_date) }}</td>
               <td data-cell="actions">
                 <div class="actions-container">
-                <RouterLink :to="{path: 'members/' + member.id + '/info' }" class="btn bg-warning action-btn"> <font-awesome-icon  class="action-icon" icon="eye" /></RouterLink>
+                <RouterLink :to="{path: 'members/' + member.id + '/info' }" class="btn btn-warning action-btn"> <font-awesome-icon  class="action-icon" icon="eye" /></RouterLink>
                 <RouterLink :to="{path: 'members/' + member.id }" class="btn btn-success action-btn"> <font-awesome-icon class="action-icon" icon="pencil"/></RouterLink>
                 <button type="button" @click="deleteConfirmation(member.id)" class="btn btn-danger action-btn"><font-awesome-icon class="action-icon" icon="trash-can"/></button>
                 </div>

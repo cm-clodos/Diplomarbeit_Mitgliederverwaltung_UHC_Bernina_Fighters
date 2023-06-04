@@ -1,6 +1,7 @@
 <template>
   <main class="trikotNew">
-    <div class="container mt-5">
+    <h1 class="view-title">Trikot hinzufügen</h1>
+    <div class="container">
       <form ref="form" @submit.prevent="handleSubmit">
       <div class="card">
         <div class="card-header">

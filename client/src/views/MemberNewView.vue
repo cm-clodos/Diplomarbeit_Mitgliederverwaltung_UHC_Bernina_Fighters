@@ -1,7 +1,7 @@
 <template>
   <main class="memberNew">
-    <h1>Mitglied hinzufügen</h1>
-    <div class="container mt-5">
+    <h1 class="view-title">Mitglied hinzufügen</h1>
+    <div class="container">
       <form ref="form" @submit.prevent="handleSubmit">
         <div class="card">
           <div class="card-header">

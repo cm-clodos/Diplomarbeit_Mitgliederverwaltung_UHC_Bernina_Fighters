@@ -1,7 +1,7 @@
 <template>
   <div class="statistics">
-    <h1>Mitglieder Statistik und Exporte</h1>
-    <div class="container mt-5">
+    <h1 class="view-title">Mitglieder Statistik und Exporte</h1>
+    <div class="container">
       <MemberExport />
       <TrikotExport />
       <MailExport />
