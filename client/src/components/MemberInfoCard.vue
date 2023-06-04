@@ -1,6 +1,6 @@
 <template>
   <main class="member-info">
-    <h1>Mitglied Informationen</h1>
+    <h1 class="view-title">Mitglied Informationen</h1>
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">{{ this.model.member.firstname }} {{ this.model.member.lastname }}</h5>
@@ -70,5 +70,7 @@ export default {
 </script>
 
 <style scoped>
-
+.card {
+margin: 10px;
+}
 </style>
