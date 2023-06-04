@@ -9,4 +9,3 @@ let secretKey = generateSecretKey();
 fs.appendFileSync('.env', `\n\n# Key für Verschlüsselungsservice\nSECRET_KEY=${secretKey}\nALGORITHM=aes-256-ctr`);
 
 
-console.log('Neuer Secret Key:', secretKey);
