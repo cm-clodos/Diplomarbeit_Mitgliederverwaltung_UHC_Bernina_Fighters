@@ -12,15 +12,15 @@
           <table class="table table-bordered">
             <thead>
             <tr>
-              <th>Mitglied</th>
+              <th>Mitglied
+                <font-awesome-icon @click="sortByMemberName" icon="sort"/>
+              </th>
               <th @click=""> Nummer
-                <font-awesome-icon icon="sort"/>
+                <font-awesome-icon @click="sortByTrikotNumber" icon="sort"/>
               </th>
-              <th @click=""> Trikotname
-                <font-awesome-icon icon="sort"/>
-              </th>
+              <th>Trikotname</th>
               <th>Verfügbar
-                <font-awesome-icon icon="sort"/>
+                <font-awesome-icon @click="sortByAvailable" icon="sort"/>
               </th>
               <th>Actions</th>
             </tr>
@@ -37,7 +37,7 @@
               </td>
               <td data-cell="nummer"> {{ trikot.number }}</td>
               <td data-cell="trikotname"><input type="text" class="form-control border-transparent" v-model="trikot.name"></td>
-              <td data-cell="verfügbar"> {{ trikot.available }} <input type="checkbox" @change="toggleAvailable(trikot)"
+              <td data-cell="verfügbar"><input type="checkbox" @change="toggleAvailable(trikot)"
                                                  v-bind:checked="trikot.available ===1" :value="trikot.available"></td>
               <td data-cell="actions">
                 <div class="actions-container">
@@ -99,6 +99,7 @@ export default {
       currentPage: 1,
       itemsPerPage: 20,
       membersWithoutTrikots: [],
+      sortAscending: true,
     }
   },
   computed:{
@@ -221,6 +222,27 @@ export default {
       const uniqueMemberIds = memberIds.filter(id => !trikotMemberIds.includes(id));
       this.membersWithoutTrikots = this.members.filter(member => uniqueMemberIds.includes(member.id));
     },
+    sortByAvailable() {
+      this.trikots.sort((a, b) => {
+        return this.sortAscending ? b.available - a.available : a.available - b.available;
+      });
+      this.sortAscending = !this.sortAscending;
+    },
+    sortByTrikotNumber(){
+      this.trikots.sort((a, b) => {
+        return this.sortAscending ? b.number - a.number : a.number - b.number;
+      });
+      this.sortAscending = !this.sortAscending;
+    },
+    sortByMemberName(){
+      this.trikots.sort((a, b) => {
+        const memberA = this.renderMemberName(a.memberId);
+        const memberB = this.renderMemberName(b.memberId);
+        return this.sortAscending ? memberA.localeCompare(memberB) : memberB.localeCompare(memberA);
+      });
+      this.sortAscending = !this.sortAscending;
+    },
+
   }
 }
 </script>
