@@ -242,7 +242,6 @@ export default {
       });
       this.sortAscending = !this.sortAscending;
     },
-
   }
 }
 </script>

@@ -23,11 +23,17 @@
             <thead>
             <tr>
               <th>Vorname</th>
-              <th>Nachname</th>
+              <th>Nachname
+                <font-awesome-icon @click="sortByMemberLastname" icon="sort"/>
+              </th>
               <th>Email</th>
               <th>Telefon</th>
-              <th>Aktiv</th>
-              <th>Eintritt</th>
+              <th>Aktiv
+                <font-awesome-icon @click="sortByActive" icon="sort"/>
+              </th>
+              <th>Eintritt
+                <font-awesome-icon @click="sortByEntryDate" icon="sort"/>
+              </th>
               <th>Actions</th>
             </tr>
             </thead>
@@ -106,6 +112,7 @@ export default {
       sumActiveMembers: 0,
       modalVisible: false,
       memberIdToDelete: null,
+      sortAscending: true,
       currentPage: 1,
       itemsPerPage: 10
     };
@@ -168,6 +175,24 @@ export default {
         this.getMembers();
         console.log("Bitte geben Sie einen Suchbegriff ein")
       }
+    },
+    sortByMemberLastname(){
+      this.members.sort((a, b) => {
+        return this.sortAscending ? a.lastname.localeCompare(b.lastname) : b.lastname.localeCompare(a.lastname);
+      });
+      this.sortAscending = !this.sortAscending;
+    },
+    sortByActive(){
+      this.members.sort((a, b) => {
+        return this.sortAscending ? a.active - b.active : b.active - a.active;
+      });
+      this.sortAscending = !this.sortAscending;
+    },
+    sortByEntryDate(){
+      this.members.sort((a, b) => {
+        return this.sortAscending ? new Date(a.entry_date) - new Date(b.entry_date) : new Date(b.entry_date) - new Date(a.entry_date);
+      });
+      this.sortAscending = !this.sortAscending;
     },
     filterActiveMembers() {
       const activeMembers = this.members.filter(member => member.active === 1);
