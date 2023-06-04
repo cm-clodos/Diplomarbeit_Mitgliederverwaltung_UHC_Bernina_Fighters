@@ -18,14 +18,6 @@ import MailExport from "@/components/MailExport.vue";
 export default {
   name: "ExportView",
   components: {MailExport, TrikotExport, MemberExport},
-  data() {
-    return {
-
-    }
-  },
-  methods: {
-
-  }
 }
 </script>
 
@@ -33,5 +25,10 @@ export default {
 .container {
     display: flex;
 }
-
+@media (max-width: 768px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+}
 </style>

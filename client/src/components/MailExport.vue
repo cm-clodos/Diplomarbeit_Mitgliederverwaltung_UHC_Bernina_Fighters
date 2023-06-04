@@ -1,6 +1,6 @@
 <template>
   <div class="export">
-    <h3>Export Mailliste</h3>
+    <h3 class="export-title">Export Mailliste</h3>
     <form ref="downloadForm" action="" method="POST">
       <input type="hidden" name="_method" value="POST" />
       <div class="form-check">
