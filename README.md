@@ -43,10 +43,12 @@ https://kinsta.com/de/blog/so-installierst-du-node-js/
 ### Datenbank
 #### Installation MariaDB für MacOS
 - Installieren Sie MariaDB mit Homebrew
-https://mariadb.com/kb/en/installing-mariadb-on-macos-using-homebrew/
+https://mariadb.com/resources/blog/installing-mariadb-10-1-16-on-mac-os-x-with-homebrew/
 
 #### Installation MariaDB für Windows
 - Installieren Sie MariaDB für Windows
+https://mariadb.com/downloads/community/community-server/
+- Anleitung zur Installation von MariaDB für Windows
 https://mariadb.com/kb/en/installing-mariadb-msi-packages-on-windows/
 
 #### Auto Start der Datenbank für MacOS mit Homebrew
@@ -98,6 +100,7 @@ In der .env Datei wurden nun die Variablen SECRET_KEY und ALGORITHM mit den ents
 Im Ordner sql befinden sich die SQL Skripte für die Erstellung der Datenbank und der Testdatenbank. Die Skripte müssen in der Reihenfolge ausgeführt werden, wie sie im Ordner sql aufgelistet sind.
 1. Ausführen des Datenbank Installations Skripts im Verzeichnis sql/installation (Der Datenbank Name muss der gleiche sein, wie in der .env Datei!)
 2. Ausführen der Tabellen Skripte im Verzeichnis sql/tables (Reihenfolge beachten!)
+3. OPTIONAL: Ausführen des Skripts im Verzeichnis sql/data (Erstellt initiale Trikotdaten)
 
 Wurde die Datenbank erstellt kann der Vorgang wiederholt werden und eine Testdatenbank erstellt werden. Die Testdatenbank muss einen anderen Namen haben, als die Produktive Datenbank.(Der Testdatenbank Name muss der gleiche sein, wie in der .env Datei!)
 ## Benutzung
