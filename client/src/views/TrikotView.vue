@@ -33,7 +33,6 @@
                   <option v-if="!trikot.memberId" v-for="member in membersWithoutTrikots" :value="member.id">{{ renderMemberName(member.id) }}</option>
                   <option v-if="trikot.memberId"  :value="trikot.memberId">{{ renderMemberName(trikot.memberId) }}</option>
                 </select>
-                {{ renderMemberName(trikot.memberId) }}
               </td>
               <td data-cell="nummer"> {{ trikot.number }}</td>
               <td data-cell="trikotname"><input type="text" class="form-control border-transparent" v-model="trikot.name"></td>
