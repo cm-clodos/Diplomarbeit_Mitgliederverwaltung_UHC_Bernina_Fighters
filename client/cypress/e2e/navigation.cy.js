@@ -1,6 +1,6 @@
 import {beforeEach} from "mocha";
 
-describe('home page', () => {
+describe('Test the navigation menü', () => {
   beforeEach(() => {
     cy.visit('http://127.0.0.1:8080')
   })

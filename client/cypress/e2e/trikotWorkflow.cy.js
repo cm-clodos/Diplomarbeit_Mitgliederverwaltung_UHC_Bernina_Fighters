@@ -1,6 +1,6 @@
 import {beforeEach} from "mocha";
 
-describe('member new page', () => {
+describe('Test the trikot administration workflow', () => {
   beforeEach(() => {
     cy.visit('http://127.0.0.1:8080/trikots/new')
   });
@@ -68,7 +68,7 @@ describe('member new page', () => {
     });
   });
 
-    context('Delete a trikot and cancel the confirm', () => {
+    context('Delete a trikot and cancel the confirm dialog', () => {
       it('Delete a trikot and cancel the confirm dialog should not delete the trikot', () => {
         cy.visit('http://127.0.0.1:8080/trikots')
         cy.getByData('delete-btn').click();
