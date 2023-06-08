@@ -35,17 +35,17 @@
                 </select>
               </td>
               <td data-cell="nummer"> {{ trikot.number }}</td>
-              <td data-cell="trikotname"><input type="text" class="form-control border-transparent" v-model="trikot.name"></td>
-              <td data-cell="verfügbar"><input type="checkbox" @change="toggleAvailable(trikot)"
+              <td data-cell="trikotname"><input data-test="input-trikotname" type="text" class="form-control border-transparent" v-model="trikot.name"></td>
+              <td data-cell="verfügbar"><input data-test="checkbox-available" type="checkbox" @change="toggleAvailable(trikot)"
                                                  v-bind:checked="trikot.available ===1" :value="trikot.available"></td>
               <td data-cell="actions">
                 <div class="actions-container">
-                <button type="button"
+                <button data-test="save-btn" type="button"
                         @click="updateTrikot(trikot.number, trikot.memberId, trikot.available, trikot.name)"
                         class="btn btn-success action-btn">
                   <font-awesome-icon class="action-icon" icon="floppy-disk"/>
                 </button>
-                <button type="button" @click="deleteConfirmation(trikot.number)" class="btn btn-danger action-btn">
+                <button data-test="delete-btn" type="button" @click="deleteConfirmation(trikot.number)" class="btn btn-danger action-btn">
                   <font-awesome-icon class="action-icon" icon="trash-can"/>
                 </button>
                 </div>
@@ -54,7 +54,7 @@
             </tbody>
             <tbody v-else>
             <tr>
-              <td colspan="8" class="text-center">Daten werden geladen...</td>
+              <td data-test="no-data-text" colspan="8" class="text-center">Daten werden geladen...</td>
             </tr>
             </tbody>
           </table>

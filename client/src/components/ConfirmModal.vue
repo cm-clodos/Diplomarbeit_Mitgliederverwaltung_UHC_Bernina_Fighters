@@ -9,8 +9,8 @@
           <p>{{ message }}</p>
         </div>
         <div class="confirm-modal-footer">
-          <button class="btn btn-success" @click="confirmClick">Bestätigen</button>
-          <button  class="btn btn-danger" @click="cancelClick">Abbrechen</button>
+          <button data-test="confirm-btn" class="btn btn-success" @click="confirmClick">Bestätigen</button>
+          <button data-test="cancel-btn" class="btn btn-danger" @click="cancelClick">Abbrechen</button>
         </div>
       </div>
     </div>

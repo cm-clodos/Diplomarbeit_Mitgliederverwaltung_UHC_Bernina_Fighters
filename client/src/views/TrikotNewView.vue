@@ -1,6 +1,6 @@
 <template>
   <main class="trikotNew">
-    <h1 class="view-title">Trikot hinzufügen</h1>
+    <h1 class="view-title" data-test="site-title">Trikot hinzufügen</h1>
     <div class="container">
       <form ref="form" @submit.prevent="handleSubmit">
       <div class="card">
@@ -12,14 +12,14 @@
             <div class="col-md-6">
               <div class="mb-3">
                 <label for="trikotNumber" class="form-label">Trikotnummer</label>
-                <input type="number" class="form-control" id="trikotNumber " v-model="model.trikot.number">
-                <span v-if="v$.model.trikot.number.$error" :class="`${v$.model.trikot.number.$error ? 'error-message' : ''}`">
+                <input data-test="input-number" type="number" class="form-control" id="trikotNumber " v-model="model.trikot.number">
+                <span v-if="v$.model.trikot.number.$error" data-test="error-message-number" :class="`${v$.model.trikot.number.$error ? 'error-message' : ''}`">
               {{ v$.model.trikot.number.required.$message }}
             </span>
               </div>
               <div class="mb-3">
                 <label for="trikotName" class="form-label">Trikotname</label>
-                <input type="text" class="form-control" id="trikotName" v-model="model.trikot.name" >
+                <input data-test="input-trikotname" type="text" class="form-control" id="trikotName" v-model="model.trikot.name" >
               </div>
               <div class="mb-3">
                 <label for="available" class="form-label">Verfügbar</label>
@@ -37,7 +37,7 @@
             </div>
           </div>
           <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Trikot hinzufügen</button>
+            <button data-test="submit-btn" type="submit" class="btn btn-primary">Trikot hinzufügen</button>
           </div>
         </div>
       </div>
