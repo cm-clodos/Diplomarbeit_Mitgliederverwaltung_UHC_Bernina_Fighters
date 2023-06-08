@@ -49,7 +49,7 @@
                 <div class="actions-container">
                 <RouterLink :to="{path: 'members/' + member.id + '/info' }" class="btn btn-warning action-btn"> <font-awesome-icon  class="action-icon" icon="eye" /></RouterLink>
                 <RouterLink :to="{path: 'members/' + member.id }" class="btn btn-success action-btn"> <font-awesome-icon class="action-icon" icon="pencil"/></RouterLink>
-                <button type="button" @click="deleteConfirmation(member.id)" class="btn btn-danger action-btn"><font-awesome-icon class="action-icon" icon="trash-can"/></button>
+                <button data-test="delete-btn" type="button" @click="deleteConfirmation(member.id)" class="btn btn-danger action-btn"><font-awesome-icon class="action-icon" icon="trash-can"/></button>
                 </div>
               </td>
             </tr>
@@ -62,7 +62,7 @@
             </tbody>
             <tbody v-else>
             <tr>
-              <td colspan="8" class="text-center">Mitgliederdaten werden geladen...</td>
+              <td data-test="no-data-text" colspan="8" class="text-center">Mitgliederdaten werden geladen...</td>
             </tr>
             </tbody>
           </table>
