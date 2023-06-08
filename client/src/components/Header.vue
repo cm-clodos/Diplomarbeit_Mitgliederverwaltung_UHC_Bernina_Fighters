@@ -48,7 +48,7 @@
         </ul>
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="#"> <router-link :to="{name:'Mitglieder Exporte'}">
+            <a class="nav-link" href="#"> <router-link data-test="link-csv-export" :to="{name:'Mitglieder Exporte'}">
               <span class="nav-icons"><font-awesome-icon icon="file-csv"/></span>
             </router-link></a>
           </li>

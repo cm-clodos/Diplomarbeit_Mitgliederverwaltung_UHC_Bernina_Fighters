@@ -9,7 +9,7 @@ describe('home page', () => {
     cy.location("pathname").should("eq", "/");
   })
 
-  context('Navigation test to all memberadministrations pages', () => {
+  context('Navigation test to all member administrations pages', () => {
     it("Navigate to the memberview page", () => {
       cy.getByData('dropdown-membermenu').click();
       cy.getByData("link-mitgliedsübersicht").click();
@@ -30,7 +30,7 @@ describe('home page', () => {
     });
   });
 
-  context('Navigation test to all trikotadministration pages', () => {
+  context('Navigation test to all trikot administration pages', () => {
     it("Navigate to the trikotview page", () => {
       cy.getByData('dropdown-trikotmenu').click();
       cy.getByData("link-trikotübersicht").click();
@@ -44,5 +44,10 @@ describe('home page', () => {
     });
 
   });
-
+  context('Navigation test to the CSV export pages', () => {
+    it("Navigate to the CSV page", () => {
+      cy.getByData('link-csv-export').click();
+      cy.location("pathname").should("eq", "/members/export");
+    });
+  });
 })
