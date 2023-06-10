@@ -11,10 +11,9 @@ Dieses Git Repository wurde erstellt für die Diplomarbeit von Claudia Martinez.
 - [Vorbereitung](#vorbereitung)
 - [Installation](#installation)
 - [Konfiguration](#konfiguration)
-- [Benutzung](#benutzung)
-- [Entwickler](#entwickler)
-- [Lizenz](#lizenz)
-- [Quellen](#quellen)
+- [Benutzung](#benutzung-lokal)
+- [Entwickler](#entwicklerin)
+
 
 
 
@@ -103,7 +102,7 @@ Im Ordner sql befinden sich die SQL Skripte für die Erstellung der Datenbank un
 3. OPTIONAL: Ausführen des Skripts im Verzeichnis sql/data (Erstellt initiale Trikotdaten)
 
 Wurde die Datenbank erstellt kann der Vorgang wiederholt werden und eine Testdatenbank erstellt werden. Die Testdatenbank muss einen anderen Namen haben, als die Produktive Datenbank.(Der Testdatenbank Name muss der gleiche sein, wie in der .env Datei!)
-## Benutzung
+## Benutzung (Lokal)
 ### Applikation starten (Server und Client in Production Mode)
 Mit folgendem Befehl wird die Applikation gestartet:
 ```bash
@@ -144,18 +143,11 @@ cd client && npm run test
 ```
 
 ### E2E Tests
-Um die E2E Tests auszuführen, muss die Applikation im Development Mode gestartet sein. Führen Sie folgenden Befehl aus:
+Um die E2E Tests auszuführen, muss die Applikation im Development Mode gestartet sein. Stellen Sie sicher, dass Sie sich im Hauptverzeichnis befinden. Führen Sie folgenden Befehl aus:
 ```bash
-npm run devStart
-```
-Die E2E Tests werden mit folgendem Befehl gestartet:
-```bash
-cd client && npm run test:e2e
+npm run test:e2e
 ```
 
+## Entwicklerin
+Claudia Martinez
 
-## Entwickler
-
-## Lizenz
-
-## Quellen
