@@ -917,7 +917,7 @@ router.put('/:id', memberDataSanitzer, validateMemberData, memberController.hand
  *         description: Die ID des Mitglieds
  *     responses:
  *       '200':
- *         description: Erfolgreiche Aktualisierung des Mitglieds
+ *         description: Erfolgreiche Löschung des Mitglieds
  *         content:
  *           application/json:
  *             schema:
