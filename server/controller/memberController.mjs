@@ -17,7 +17,6 @@ import {
     checkIfUniqueTelephone
 } from "../services/EmailAndPhoneChecker.mjs";
 
-
 const handleGetAllMembers = async (req, res) => {
     const memberHelper = new MemberHelper();
     const encryptionService = new EncryptionService();
