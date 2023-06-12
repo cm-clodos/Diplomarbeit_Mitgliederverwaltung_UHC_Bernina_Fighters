@@ -8,18 +8,20 @@ Dieses Git Repository wurde erstellt für die Diplomarbeit von Claudia Martinez.
 
 ## Inhaltsverzeichnis
 - [Einleitung](#einleitung)
-- [Vorbereitung](#vorbereitung)
 - [Installation](#installation)
 - [Konfiguration](#konfiguration)
 - [Benutzung](#benutzung-lokal)
-- [Entwickler](#entwicklerin)
+- [Test Ausführung](#test-ausführung)
+- [API Dokumentation](#api-dokumentation)
+- [Entwicklerin](#entwicklerin)
 
 
 
 
 ## Einleitung
-
-## Vorbereitung
+Diese Web-Applikation wurde speziell für den UHC Bernina Fighters entwickelt, um die Mitglieder- und Trikotverwaltung zu erleichtern.
+Mit dieser Anwendung können Mitgliederdaten, Trikotinformationen und Zahlungsstatus der Mitglieder effizient verwaltet werden. 
+Darüber hinaus besteht die Möglichkeit, CSV-Exportlisten zu generieren und herunterzuladen.
 
 ### Voraussetzungen
 
@@ -147,6 +149,15 @@ Um die E2E Tests auszuführen, muss die Applikation im Development Mode gestarte
 ```bash
 npm run test:e2e
 ```
+## API Dokumentation
+Die API Dokumentation wurde mit Swagger erstellt. Die Dokumentation kann unter folgendem Link aufgerufen werden:
+http://127.0.0.1:3000/api-docs/
+> **WICHTIG!**
+> 
+> Host und Port des Servers können in der .env Datei angepasst werden und von dem vorgeschlagenen Link abweichen.
+> 
+> Der Server muss gestartet sein, damit die API Dokumentation aufgerufen werden kann.
+
 
 ## Entwicklerin
 Claudia Martinez
