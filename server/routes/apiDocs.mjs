@@ -11,9 +11,9 @@ const swaggerOptions = {
     swaggerDefinition: {
         openapi: '3.0.0',
         info: {
-            title: 'Memberadministration API',
+            title: 'Mitgliederverwaltungs API',
             version: '1.0.0',
-            description: 'This is a REST API application made with Express. It retrieves data from a MariaDB database and returns it as JSON.',
+            description: 'Dies ist eine REST-API-Anwendung, die mit Express erstellt wurde. Sie ruft Daten aus einer MariaDB-Datenbank ab und gibt sie als JSON zurück.',
         },
         servers: [
             {
