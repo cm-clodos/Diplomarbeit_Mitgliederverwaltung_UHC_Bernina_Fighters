@@ -98,7 +98,6 @@ export default {
       })
     },
     updatePayment(id, paidStatus) {
-      try {
         axios.put(`/members/payments/${id}`, {
           paid: paidStatus
         }).then(res => {
@@ -106,15 +105,14 @@ export default {
             this.toast.success(res.data.message);
             this.getPayments();
           }
-        })
-      } catch (error) {
+        }).catch(error => {
         console.log(error);
         if ([404, 500].includes(error.response.status)) {
           this.toast.error(error.response.data.message);
         } else {
           console.log("Unexpected error: " + error.response.status);
         }
-      }
+        });
     },
     formatDate(date) {
       return formatInSwissTime(date);
@@ -139,21 +137,19 @@ export default {
       }
     },
     createNewPaymentPeriod(){
-        try{
-          axios.post("/members/payments/period").then(res => {
-            if (res.status === 201) {
-              this.toast.success(res.data.message);
-              this.getPayments();
-            }
-          })
-        }catch (error) {
-          console.log(error);
-          if ([500].includes(error.response.status)) {
-            this.toast.error(error.response.data.message);
-          } else {
-            console.log("Unexpected error: " + error.response.status);
-          }
+      axios.post("/members/payments/period").then(res => {
+        if (res.status === 201) {
+          this.toast.success(res.data.message);
+          this.getPayments();
         }
+      }).catch(error => {
+        console.log(error);
+        if ([500].includes(error.response.status)) {
+          this.toast.error(error.response.data.message);
+        } else {
+          console.log("Unexpected error: " + error.response.status);
+        }
+      });
     },
     sortByDate() {
       this.filteredPayments.sort((a, b) => {
