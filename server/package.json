@@ -9,7 +9,7 @@
     "dev": "cross-env DB_TYPE=test nodemon server.mjs",
     "config-keys": "node setupSecretKey.mjs"
   },
-  "author": "",
+  "author": "Claudia Martinez",
   "license": "ISC",
   "dependencies": {
     "@json2csv/plainjs": "^6.1.2",

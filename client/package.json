@@ -8,8 +8,8 @@
     "test": "mocha src/test/unit --recursive --extension mjs",
     "test:e2e": "cypress run",
     "start-api": "cd ../server && npm run start"
-
   },
+  "author": "Claudia Martinez",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-brands-svg-icons": "^6.3.0",
