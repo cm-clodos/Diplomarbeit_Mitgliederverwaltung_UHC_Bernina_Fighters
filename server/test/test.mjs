@@ -1,8 +1,12 @@
-import {expect, assert} from "chai";
+import {assert} from "chai";
 import {describe, it} from "mocha";
 import MemberHelper from "../helper/MemberHelper.mjs";
 import Member from "../model/Member.mjs";
 import {memberDataSanitzer, trikotDataSanitizer} from "../middleware/inputSanitizer.mjs";
+import TrikotHelper from "../helper/TrikotHelper.mjs";
+import Trikot from "../model/Trikot.mjs";
+import EncryptionService from "../services/EncryptionService.mjs";
+import {formatInSwissTime} from "../services/ExportService.mjs";
 import {
     checkActive, checkAvailable,
     checkEmail, checkEntryDate,
@@ -11,15 +15,10 @@ import {
     checkRoleId,
     checkTelephone, checkTrikotName, checkTrikotNumber, formatFirstLetterOfNames, trimData
 } from "../services/FieldChecker.mjs";
-import TrikotHelper from "../helper/TrikotHelper.mjs";
-import Trikot from "../model/Trikot.mjs";
-import EncryptionService from "../services/EncryptionService.mjs";
-import {formatInSwissTime} from "../services/ExportService.mjs";
 
 
 const memberHelper = new MemberHelper('test');
 const trikotHelper = new TrikotHelper('test');
-
 
 
 describe('check EncryptionService', () => {
@@ -30,6 +29,7 @@ describe('check EncryptionService', () => {
         assert.equal(decrypted, 'test');
     });
 });
+
 describe('Test formatInSwissTime', () => {
     it('should return a formatted string in Swiss date format', () => {
         let formattedDate = formatInSwissTime("2021-05-05T22:00:00.000Z");
@@ -62,6 +62,7 @@ describe('check the memberDataSanitizer', () => {
     });
 
 })
+
 describe('check the trikotDataSanitizer', () => {
     it('should sanitize trikot data field name', () => {
         const req = {
@@ -78,8 +79,6 @@ describe('check the trikotDataSanitizer', () => {
             assert.deepEqual(req.body, expected);
         });
     });
-
-
 });
 
 describe('checkFirstname from validateMemberData', () => {
@@ -106,7 +105,6 @@ describe('checkLastname from validateMemberData', () => {
         const error = checkLastname('');
         assert.deepEqual(error, {lastname: 'Nachname ist erforderlich.'});
     });
-
     it('should return an error if the lastname is longer than 50 characters', () => {
         const error = checkLastname('Thislastnameislongerthanfiftycharacterssoitshouldtriggeranerror');
         assert.deepEqual(error, {lastname: 'Nachname darf maximal 50 Zeichen lang sein.'});
@@ -120,22 +118,22 @@ describe('checkLastname from validateMemberData', () => {
         assert.deepEqual(error, {});
     });
 });
+
 describe('checkEmail from validateMemberData', () => {
     it('should return an error if the email is missing', () => {
         const error = checkEmail('');
         assert.deepEqual(error, {email: 'E-Mail-Adresse ist ungültig.'});
     });
-
     it('should return an error if the email is invalid', () => {
         const error = checkEmail('invalidemail');
         assert.deepEqual(error, {email: 'E-Mail-Adresse ist ungültig.'});
     });
-
     it('should not return an error if the email is valid', () => {
         const error = checkEmail('john@example.com');
         assert.deepEqual(error, {});
     });
 });
+
 describe('checkTelephone from from validateMemberData', () => {
     it('should return an error if the telephone is missing', () => {
         const error = checkTelephone('');
@@ -161,8 +159,8 @@ describe('checkTelephone from from validateMemberData', () => {
         const error = checkTelephone('00494115690');
         assert.deepEqual(error, {});
     });
-
 });
+
 describe('checkActive from from validateMemberData', () => {
     it('should not return an error if active is valid', () => {
         assert.deepEqual(checkActive(true), {});
@@ -170,7 +168,6 @@ describe('checkActive from from validateMemberData', () => {
         assert.deepEqual(checkActive(0), {});
         assert.deepEqual(checkActive(1), {});
     });
-
     it('should return an error object if active is an invalid value', () => {
         assert.deepEqual(checkActive('invalid'), {active: 'Aktives Flag muss true, false, 0 oder 1 sein.'});
         assert.deepEqual(checkActive('1'), {active: 'Aktives Flag muss true, false, 0 oder 1 sein.'});
@@ -178,48 +175,45 @@ describe('checkActive from from validateMemberData', () => {
         assert.deepEqual(checkActive(-1), {active: 'Aktives Flag muss true, false, 0 oder 1 sein.'});
     });
 });
+
 describe('checkRoleId from from validateMemberData', () => {
     it('should return an error object when roleId is not a number', () => {
         const error = checkRoleId('not a number');
         assert.deepEqual(error, {role_id: 'Rolle ist ungültig.'})
     });
-
     it('should return an error object when roleId is less than 1', () => {
         const error = checkRoleId(0);
         assert.deepEqual(error, {role_id: 'Rolle ist ungültig.'})
     });
-
     it('should return an error object when roleId is greater than 5', () => {
         const error = checkRoleId(6);
         assert.deepEqual(error, {role_id: 'Rolle ist ungültig.'})
     });
-
     it('should not return an error object when roleId is valid', () => {
         const result = checkRoleId(3);
         assert.deepEqual(result, {});
     });
 });
+
 describe('checkEntryDate from from validateMemberData', () => {
     it('should return an error object when entryDate is not a string', () => {
         const error = checkEntryDate(123);
         assert.deepEqual(error, {entry_date: 'Eintrittsdatum ist erforderlich.'})
     });
-
     it('should return an error object when entryDate is an empty string', () => {
         const error = checkEntryDate('');
         assert.deepEqual(error, {entry_date: 'Eintrittsdatum ist erforderlich.'})
     });
-
     it('should return an error object when entryDate is too long', () => {
         const error = checkEntryDate('2022-05-15T12:00:00Z');
         assert.deepEqual(error, {entry_date: 'Eintrittsdatum darf maximal 10 Zeichen lang sein.'})
     });
-
     it('should not return an error object when entryDate is valid', () => {
         const error = checkEntryDate('2022-05-15');
         assert.deepEqual(error, {});
     });
 });
+
 describe('checkTrikotNumber from validateTrikotData', () => {
     it('should return an error object when trikotNumber is empty', () => {
         const error = checkTrikotNumber(' ');
@@ -242,6 +236,7 @@ describe('checkTrikotNumber from validateTrikotData', () => {
         assert.deepEqual(error, {});
     });
 });
+
 describe('checkTrikotName from validateTrikotData', () => {
     it('should return an error object when trikotName is too long', () => {
         const error = checkTrikotName('Piz Bellavista von Graubünden');
@@ -252,6 +247,7 @@ describe('checkTrikotName from validateTrikotData', () => {
         assert.deepEqual(error, {});
     });
 });
+
 describe('checkAvailable from validateTrikotData', () => {
     it('should return an error object when available is not a boolean', () => {
         const error = checkAvailable('true');
@@ -270,6 +266,7 @@ describe('checkAvailable from validateTrikotData', () => {
         assert.deepEqual(error, {});
     });
 });
+
 describe('checkMemberId from validateTrikotData', () => {
    it('should return an error object when memberId is empty', () => {
         const error = checkMemberId(' ');
@@ -296,6 +293,7 @@ describe('checkMemberId from validateTrikotData', () => {
         assert.deepEqual(error, {});
     });
 });
+
 describe('trimData',  () => {
     it('should trim string values in the data object',  () => {
         const data = {
@@ -310,7 +308,6 @@ describe('trimData',  () => {
         assert.strictEqual(trimmedData.age, 25);
         assert.strictEqual(trimmedData.email, 'test@example.com');
     });
-
     it('should not modify non-string values in the data object',  () =>  {
         const data = {
             name: '  Test Testperson  ',
@@ -349,7 +346,6 @@ describe ("formatFirstLetterOfNames", () => {
     });
 });
 
-
 describe('Testing MemberHelper for checking database operations', () => {
     describe('addMember', () => {
         let memberId;
@@ -377,12 +373,10 @@ describe('Testing MemberHelper for checking database operations', () => {
                 assert.strictEqual(error.code, 'ER_DUP_ENTRY');
             }
         });
-
         after(async () => {
             await memberHelper.deleteMemberById(memberId);
         });
     })
-
 
     describe('getAllMembers', () => {
         it('should return an array of members', async () => {
@@ -409,7 +403,6 @@ describe('Testing MemberHelper for checking database operations', () => {
             const encryptedMember = encryptionService.encryptMemberData(member);
             const res = await memberHelper.addMember(encryptedMember);
             memberId = parseInt(res.data.insertId);
-
         });
         it('should return a member by id', async () => {
             const member = await memberHelper.getMemberById(memberId);
@@ -422,6 +415,7 @@ describe('Testing MemberHelper for checking database operations', () => {
             }
         );
     });
+
     describe('deleteMemberById', async () => {
         let memberId;
         before(async () => {
@@ -450,6 +444,7 @@ describe('Testing MemberHelper for checking database operations', () => {
             assert.strictEqual(res.data.affectedRows, 0);
         });
     });
+
     describe('deleteMemberByLastname', async () => {
         let memberId;
         before(async () => {
@@ -519,25 +514,24 @@ describe('Testing MemberHelper for checking database operations', () => {
             assert.strictEqual(decryptedMember.telephone, '000012345678');
             assert.strictEqual(decryptedMember.active, 0);
             assert.strictEqual(decryptedMember.role_id, 3);
-
         });
         it('should member not found and return no data', async function () {
             const updatedMember = await memberHelper.getMemberById(-1);
             assert.strictEqual(updatedMember.data.length, 0);
         });
-
         after(async () => {
                 await memberHelper.deleteMemberById(memberId);
             }
         );
     });
+
     describe('get all member-roles', async () => {
         it('should return an array of member-roles', async () => {
             const memberroles = await memberHelper.getAllMemberRoles();
             assert.isArray(memberroles, 'member-roles is an array');
         });
-
     });
+
     describe("create new member payment period for one member", async () => {
         let memberId;
         before(async () => {
@@ -567,15 +561,13 @@ describe('Testing MemberHelper for checking database operations', () => {
             assert.strictEqual(payment.data[0].id, 1);
             assert.strictEqual(payment.data[0].paid, 1);
         });
-
         after(async () => {
             await memberHelper.deleteMemberById(memberId);
             await memberHelper.resetMemberPaymentTable();
         });
     });
-
-
 });
+
 describe('Testing TrikotHelper for checking database operations', () => {
     describe('addTrikot', () => {
         const trikot = new Trikot(
@@ -596,17 +588,18 @@ describe('Testing TrikotHelper for checking database operations', () => {
                 assert.strictEqual(error.code, 'ER_DUP_ENTRY');
             }
         });
-
         after(async () => {
             await trikotHelper.deleteTrikotByNumber(1);
         });
     })
+
     describe('getAllTrikots', () => {
         it('should return an array of trikots', async () => {
             const trikots = await trikotHelper.getAllTrikots();
             assert.isArray(trikots, 'trikots is an array');
         });
     });
+
     describe('updateTrikot', () => {
         before(async () => {
             const trikot = new Trikot(
@@ -630,7 +623,6 @@ describe('Testing TrikotHelper for checking database operations', () => {
             assert.strictEqual(updatedTrikot[0].name, 'TestTrikotV2');
             assert.strictEqual(updatedTrikot[0].available, 1);
             assert.strictEqual(updatedTrikot[0].member_id, null);
-
         });
         it('should trikot not found and return no data', async function () {
             const updatedTrikot = await trikotHelper.getTrikotByNumber(-1)
@@ -640,8 +632,8 @@ describe('Testing TrikotHelper for checking database operations', () => {
             await trikotHelper.deleteTrikotByNumber(1);
             }
         );
-
     });
+
     describe('getTrikotByNumber', () => {
             before(async () => {
                 const trikot = new Trikot(
@@ -662,6 +654,7 @@ describe('Testing TrikotHelper for checking database operations', () => {
                 await trikotHelper.deleteTrikotByNumber(1);
             });
         });
+
     describe('deleteTrikotByNumber', async () => {
         before(async () => {
             const trikot = new Trikot(
