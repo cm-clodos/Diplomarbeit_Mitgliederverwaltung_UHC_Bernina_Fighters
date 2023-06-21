@@ -18,8 +18,6 @@
 </template>
 
 <script>
-
-
 export default {
   name: "ConfirmModal",
   components: {},
@@ -41,7 +39,6 @@ export default {
       modalVisible: false,
     };
   },
-
   methods: {
     confirmClick() {
       this.$emit("confirm", true);

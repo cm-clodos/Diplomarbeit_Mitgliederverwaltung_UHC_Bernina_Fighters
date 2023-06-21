@@ -38,7 +38,6 @@ export default {
       toast: useToast(),
     }
   },
-
   mounted() {
     this.memberId = this.$route.params.id;
     this.getMemberInfo(this.$route.params.id);
@@ -46,8 +45,7 @@ export default {
   methods: {
     formatActiveValue,
     getMemberInfo(id) {
-      axios
-          .get(`/members/${id}/info`)
+      axios.get(`/members/${id}/info`)
           .then((res) => {
             if (res.status === 200){
               this.model.member = res.data;

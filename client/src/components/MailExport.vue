@@ -24,7 +24,6 @@
       </div>
       <button class="btn btn-primary" @click="handleMailExport">Export Mailliste</button>
     </form>
-
   </div>
   <ConfirmModal :show="modalVisible"
                 @confirm="handleConfirm"
@@ -88,7 +87,5 @@ export default {
 </script>
 
 <style scoped>
-
-
 
 </style>
