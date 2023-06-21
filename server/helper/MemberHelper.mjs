@@ -18,6 +18,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getAllActiveMembers() {
         let sql = "SELECT members.id, members.firstname, members.lastname, members.email, members.telephone, members.active, memberrole.role, members.entry_date FROM members";
         sql += " JOIN memberrole ON members.role_id = memberrole.id";
@@ -30,6 +31,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async addMember(member) {
         const sql = "INSERT INTO members (firstname, lastname, email, telephone, active, role_id, entry_date) VALUES (?,?,?,?,?,?,?)";
         try {
@@ -38,6 +40,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getMemberById(id) {
         const sql = "SELECT * FROM members WHERE id = ?";
         try {
@@ -46,6 +49,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getMemberByIdWithRole(id) {
         let sql = "SELECT members.id, members.firstname, members.lastname, members.email, members.telephone, members.active, memberrole.role, members.entry_date FROM members";
         sql += " JOIN memberrole ON members.role_id = memberrole.id";
@@ -56,6 +60,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async deleteMemberById(id) {
         const sql = "DELETE FROM members WHERE id = ?";
         try {
@@ -64,6 +69,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async deleteMemberByLastname(lastname) {
         const sql = "DELETE FROM members WHERE lastname = ?";
         try {
@@ -72,6 +78,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async updateMember(id, member) {
         const data = [member.firstname, member.lastname, member.email, member.telephone, member.active, member.role, member.entryDate, id];
         const sql = "UPDATE members SET firstname=?, lastname=?, email=?, telephone=?, active=?, role_id=?, entry_date=? WHERE id=?";
@@ -81,6 +88,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getAllMemberRoles() {
         const sql = "SELECT * FROM memberrole";
         try {
@@ -90,6 +98,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getMemberPaymentsForPeriod() {
         let sql = "SELECT p.id, p.paid, p.paid_date, p.created_at, m.firstname, m.lastname ";
         sql += "FROM payment p ";
@@ -102,6 +111,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getMemberPaymentById(id) {
         const sql = "SELECT * FROM payment WHERE id = ?";
         try {
@@ -110,6 +120,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async updateMemberPayment(id, paid) {
         const data = [paid, id];
         const sql = "UPDATE payment SET paid=? WHERE id=?";
@@ -119,6 +130,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async addMemberPaymentPeriod(){
         let sql = "INSERT INTO payment (paid, member_id) SELECT 0, id FROM members ";
         sql += "WHERE role_id <> 3 AND active = 1";
@@ -128,6 +140,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getAllMemberPaymentsPeriods(){
         let sql = "SELECT created_at FROM payment";
         try {
@@ -137,6 +150,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async resetMemberPaymentTable(){
         let sql = "TRUNCATE TABLE payment";
         try {
@@ -145,6 +159,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getMemberTelephones() {
         let sql = "SELECT telephone FROM members"
         try {
@@ -154,6 +169,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getMemberEmails() {
         let sql = "SELECT email FROM members"
         try {
@@ -163,6 +179,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getActiveMemberEmails() {
         let sql = "SELECT email FROM members WHERE active = 1"
         try {
@@ -172,6 +189,7 @@ class MemberHelper {
             throw error;
         }
     }
+
     async getMemberEmailsWithPaymentInfos(){
         let sql = "SELECT p.paid, p.created_at, m.email FROM payment p ";
             sql += "JOIN members m ON p.member_id = m.id ";
@@ -182,7 +200,6 @@ class MemberHelper {
             throw error;
         }
     }
-
 }
 
 export default MemberHelper;
