@@ -128,7 +128,18 @@ export function trimData(data){
 export function formatFirstLetterOfNames(name){
     name = name.trim();
     name = name.toLowerCase();
-    name = name.replace(/\b\w/g, (match) => match.toUpperCase());
+    const words = name.split(' ');
+
+    const formattedWords = words.map(word => {
+        if (word.includes('-')) {
+            const parts = word.split('-');
+            const formattedParts = parts.map(part => part.charAt(0).toUpperCase() + part.slice(1));
+            return formattedParts.join('-');
+        } else {
+            return word.charAt(0).toUpperCase() + word.slice(1);
+        }
+    });
+    name = formattedWords.join(' ');
     return name;
 }
 

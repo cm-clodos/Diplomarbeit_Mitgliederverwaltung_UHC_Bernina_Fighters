@@ -328,8 +328,8 @@ describe('trimData',  () => {
 
 describe ("formatFirstLetterOfNames", () => {
     it('should format the first letter of a given name and converts the rest of the letters to lowercase.', function () {
-        const formattedName = formatFirstLetterOfNames('hans');
-        assert.strictEqual(formattedName, 'Hans');
+        const formattedName = formatFirstLetterOfNames('müller');
+        assert.strictEqual(formattedName, 'Müller');
     });
     it('should format the first letter of a given name and converts the rest of the letters to lowercase.', function () {
         const formattedName = formatFirstLetterOfNames('HANS');
