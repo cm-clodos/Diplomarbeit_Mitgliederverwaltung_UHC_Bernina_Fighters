@@ -54,6 +54,7 @@ import {formatInSwissTime} from "/src/services/formatterService.mjs";
 import {useToast} from 'vue-toast-notification';
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ConfirmModal from "@/components/ConfirmModal.vue";
+
 export default {
   name: "MemberPaymentView",
   components: {
@@ -96,7 +97,6 @@ export default {
         this.filteredPayments = this.formattedPayments
       })
     },
-
     updatePayment(id, paidStatus) {
       try {
         axios.put(`/members/payments/${id}`, {
@@ -132,14 +132,12 @@ export default {
         return createdAt.getFullYear() === year;
       });
       return this.filteredPayments = filteredPayments;
-
     },
     createYearRange() {
       for (let year = 2015; year <= 2099; year++) {
         this.years.push(year);
       }
     },
-
     createNewPaymentPeriod(){
         try{
           axios.post("/members/payments/period").then(res => {
@@ -157,7 +155,6 @@ export default {
           }
         }
     },
-
     sortByDate() {
       this.filteredPayments.sort((a, b) => {
         return this.sortAscending ? a.created_at.localeCompare(b.created_at) : b.created_at.localeCompare(a.created_at);

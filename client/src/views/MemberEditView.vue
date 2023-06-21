@@ -69,7 +69,6 @@
             <button type="submit"  class="btn btn-primary">Speichern</button>
           </div>
         </div>
-
       </div>
       </form>
     </div>
@@ -81,7 +80,8 @@ import axios from "/src/api/axios.mjs";
 import {useToast} from 'vue-toast-notification';
 import {formatInSwissTime} from "/src/services/formatterService.mjs";
 import {useVuelidate} from "@vuelidate/core";
-import {required, email, helpers} from "@vuelidate/validators";
+import {email, helpers, required} from "@vuelidate/validators";
+
 const phone = (value) => value.match(/^\d{10,13}$/)
 
 export default {
@@ -106,7 +106,6 @@ export default {
       },
       toast: useToast(),
       formattedDate: "",
-
     };
   },
   validations(){
@@ -129,10 +128,8 @@ export default {
   },
   methods: {
     getMemberById(id) {
-      axios
-          .get(`/members/${id}`)
+      axios.get(`/members/${id}`)
           .then((res) => {
-            console.log(res.data)
             if (res.status === 200) {
               this.model.member = res.data;
               this.model.member.entry_date = this.formatDate(this.model.member.entry_date);
@@ -147,10 +144,8 @@ export default {
             }
           });
     },
-
     getMemberRoles() {
-      axios
-          .get("/members/roles")
+      axios.get("/members/roles")
           .then((res) => {
             this.memberRoles = res.data;
           })
@@ -159,9 +154,7 @@ export default {
           });
     },
     updateMember() {
-      console.log(this.model.member)
-      axios
-          .put(`/members/${this.memberId}`, this.model.member)
+      axios.put(`/members/${this.memberId}`, this.model.member)
           .then((res) => {
             if (res.status === 200) {
               this.toast.success(res.data.message);
@@ -180,7 +173,6 @@ export default {
                   });
                 });
               }
-              console.log(error.response.data);
             } else {
               console.log("Unexpected error: " + error.response.status);
             }
@@ -199,13 +191,10 @@ export default {
         this.toast.error("Bitte fülle die Felder korrekt aus!")
       }
     },
-
     formatDate(entry_date) {
       const swissTimeString = formatInSwissTime(entry_date);
       let parts = swissTimeString.split(".");
-      let formatDatePicker = `${parts[2]}-${parts[1]}-${parts[0]}`;
-      console.log(formatDatePicker)
-      return formatDatePicker
+      return `${parts[2]}-${parts[1]}-${parts[0]}`
     },
   },
 }

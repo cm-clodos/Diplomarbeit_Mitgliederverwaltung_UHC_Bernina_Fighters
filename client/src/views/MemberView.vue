@@ -18,7 +18,6 @@
               <button type="button" @click="searchMember" class="btn btn-primary btn-block">Suchen</button>
             </div>
           </div>
-
           <table class="table table-bordered">
             <thead>
             <tr>
@@ -58,7 +57,6 @@
                 <h3 class="sum-text">Total aktive Mitglieder: {{ this.sumActiveMembers }}</h3>
               </div>
             </div>
-
             </tbody>
             <tbody v-else>
             <tr>
@@ -71,7 +69,6 @@
             :currentPage="currentPage"
             :changePage="changePage"
           ></Pagination>
-
           <ConfirmModal :show="modalVisible"
                         @confirm="handleConfirm"
                         @cancel="closeModal"
@@ -80,7 +77,6 @@
         </div>
       </div>
     </div>
-
   </main>
 </template>
 
@@ -88,7 +84,7 @@
 import Header from "@/components/Header.vue";
 import axios from "/src/api/axios.mjs";
 import {useToast} from 'vue-toast-notification';
-import {formatInSwissTime, formatActiveValue} from "@/services/formatterService.mjs";
+import {formatActiveValue, formatInSwissTime} from "@/services/formatterService.mjs";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import Pagination from "@/components/Pagination.vue";
@@ -102,7 +98,6 @@ export default {
     Header,
     Pagination
   },
-  //inject: ['host'],
   data() {
     return {
       members: [],
@@ -129,7 +124,6 @@ export default {
   },
   mounted() {
     this.getMembers();
-
   },
   methods: {
     formatActiveValue,
@@ -148,7 +142,6 @@ export default {
     },
     deleteMember(id) {
         axios.delete(`/members/${id}`).then(res => {
-          console.log(res)
           if (res.status === 200) {
             this.toast.success(res.data.message);
             this.getMembers();
@@ -163,17 +156,13 @@ export default {
         });
     },
     searchMember() {
-      console.log(this.search)
       if (this.search.length > 0) {
-        const matchingLastNames = this.members.filter(member => {
+        this.members = this.members.filter(member => {
           return member.lastname.toLocaleLowerCase().includes(this.search.toLocaleLowerCase());
         }).map(member => member);
-
-        console.log(matchingLastNames);
-        this.members = matchingLastNames;
       } else {
         this.getMembers();
-        console.log("Bitte geben Sie einen Suchbegriff ein")
+        this.toast.error("Bitte geben Sie einen Suchbegriff ein");
       }
     },
     sortByMemberLastname(){

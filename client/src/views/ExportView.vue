@@ -8,9 +8,8 @@
     </div>
   </div>
 </template>
+
 <script>
-
-
 import MemberExport from "@/components/MemberExport.vue";
 import TrikotExport from "@/components/TrikotExport.vue";
 import MailExport from "@/components/MailExport.vue";

@@ -63,7 +63,6 @@
             :currentPage="currentPage"
             :changePage="changePage"
           ></Pagination>
-
           <ConfirmModal :show="modalVisible"
                         @confirm="handleConfirm"
                         @cancel="closeModal"
@@ -81,6 +80,7 @@ import {useToast} from 'vue-toast-notification';
 import axios from "/src/api/axios.mjs";
 import ConfirmModal from "@/components/ConfirmModal.vue";
 import Pagination from "@/components/Pagination.vue";
+
 export default {
   name: "TrikotView",
   components: {
@@ -111,11 +111,9 @@ export default {
       return this.trikots.slice(startIndex, endIndex);
     }
   },
-
   mounted() {
     this.getAllTrikots();
     this.getAllMembers();
-
   },
   methods: {
     getAllTrikots() {
@@ -153,7 +151,6 @@ export default {
       })
           .then(res => {
             if (res.status === 200){
-              console.log(res.data)
               this.toast.success(res.data.message);
               this.filterMembersWithoutTrikot();
               this.getAllTrikots();
@@ -168,27 +165,23 @@ export default {
           });
     },
     deleteTrikot(trikotNumber) {
-            axios.delete(`/trikots/${trikotNumber}`)
-              .then(res => {
-                  if (res.status === 200) {
-                      console.log(res.data)
-                      this.toast.success(res.data.message);
-                      this.getAllTrikots();
-                  }
-              }).catch(error => {
-                console.log(error);
-                if ([404, 500].includes(error.response.status)) {
-                    this.toast.error(error.response.data.message);
-                } else {
-                    console.log("Unexpected error: " + error.response.status);
-                }
-            });
-
+      axios.delete(`/trikots/${trikotNumber}`)
+          .then(res => {
+            if (res.status === 200) {
+              this.toast.success(res.data.message);
+              this.getAllTrikots();
+            }
+          }).catch(error => {
+        console.log(error);
+        if ([404, 500].includes(error.response.status)) {
+          this.toast.error(error.response.data.message);
+        } else {
+          console.log("Unexpected error: " + error.response.status);
+        }
+      });
     },
-
     toggleAvailable(trikot) {
       trikot.available = trikot.available === 1 ? 0 : 1;
-      console.log(trikot.available)
     },
     renderMemberName(memberId) {
       const foundMember = this.members.find(member => member.id === memberId);

@@ -70,7 +70,6 @@
               <button data-test="submit-btn" type="submit" class="btn btn-primary">Mitglied hinzufügen</button>
             </div>
           </div>
-
         </div>
       </form>
     </div>
@@ -82,8 +81,8 @@ import axios from "/src/api/axios.mjs";
 import {useToast} from 'vue-toast-notification';
 import {useVuelidate} from "@vuelidate/core";
 import {required, email, helpers} from "@vuelidate/validators";
-const phone = (value) => value.match(/^\d{10,13}$/)
 
+const phone = (value) => value.match(/^\d{10,13}$/)
 
 export default {
   setup() {
@@ -120,14 +119,12 @@ export default {
       },
     };
   },
-
   mounted() {
     this.getMemberRoles();
   },
   methods: {
     getMemberRoles() {
-      axios
-        .get("/members/roles")
+      axios.get("/members/roles")
         .then((res) => {
           this.memberRoles = res.data;
         })
@@ -136,11 +133,8 @@ export default {
         });
     },
     addMember() {
-      console.log(this.model.member)
-      axios
-        .post("/members", this.model.member)
+      axios.post("/members", this.model.member)
         .then((res) => {
-          console.log(res.data)
           if (res.status === 201) {
             this.toast.success(res.data.message);
             this.$router.push("/members");

@@ -51,6 +51,7 @@ import {useToast} from 'vue-toast-notification';
 import axios from "/src/api/axios.mjs";
 import {useVuelidate} from "@vuelidate/core";
 import {required, helpers} from "@vuelidate/validators";
+
 export default {
   setup() {
     return {v$: useVuelidate()}
@@ -85,7 +86,6 @@ export default {
     this.getAllMembers();
     this.getAllTrikots();
   },
-
   methods: {
     getAllMembers() {
       axios.get('/members')
@@ -139,7 +139,6 @@ export default {
                   });
                 });
               }
-              console.log(error.response.data);
             } else {
               console.log("Unexpected error: " + error.response.status);
             }
