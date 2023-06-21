@@ -9,32 +9,28 @@ describe('Test formatInSwissTime', () => {
         assert.strictEqual(formattedDate, "06.05.2021");
     });
 });
+
 describe('Test formatActiveValue', () => {
     it('should return "Aktiv" when input is 1', () => {
         let result = formatActiveValue(1);
         assert.strictEqual(result, 'Aktiv');
     });
-
     it('should return "Inaktiv" when input is 0', () => {
         let result = formatActiveValue(0);
         assert.strictEqual(result, 'Inaktiv');
     });
-
     it('should return "Inaktiv" when input is -1', () => {
         let result = formatActiveValue(-1);
         assert.strictEqual(result, 'Inaktiv');
     });
-
     it('should return "Inaktiv" when input is a string', () => {
         let result = formatActiveValue('not a number');
         assert.strictEqual(result, 'Inaktiv');
     });
-
     it('should return "Inaktiv" when input is null', () => {
         let result = formatActiveValue(null);
         assert.strictEqual(result, 'Inaktiv');
     });
-
     it('should return "Inaktiv" when input is undefined', () => {
         let result = formatActiveValue(undefined);
         assert.strictEqual(result, 'Inaktiv');

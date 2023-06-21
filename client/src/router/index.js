@@ -21,10 +21,7 @@ const router = createRouter({
     {name: "Bezahlübersicht", path: '/members/payment', component: MemberPaymentView},
     {name: "Trikotverwaltung", path: '/trikots', component: TrikotView},
     {name: "Trikot hinzufügen", path: '/trikots/new', component: TrikotNewView},
-
-
   ]
-
 })
 
 export default router
