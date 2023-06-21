@@ -9,6 +9,7 @@ import {
 export function validateTrikotData(req, res, next) {
     if (req.body.number === undefined) req.body.number = req.params.id;
     req.body = trimData(req.body);
+
     const {number, name, available, member_id} = req.body;
 
     const errors = []

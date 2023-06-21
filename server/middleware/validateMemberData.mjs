@@ -16,7 +16,6 @@ export function validateMemberData(req, res, next) {
 
     const {firstname, lastname, email, telephone, active, role_id, entry_date} = req.body;
 
-
     const errors = []
     const firstnameError = checkFirstname(firstname);
     const lastnameError = checkLastname(lastname);

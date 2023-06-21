@@ -10,8 +10,8 @@ import sanitizeHtml from 'sanitize-html';
     req.body.email = sanitizeHtml(email, { allowedTags, allowedAttributes });
     req.body.telephone = sanitizeHtml(telephone, { allowedTags, allowedAttributes });
     next();
-
 }
+
 function trikotDataSanitizer(req, res, next) {
     const { name } = req.body;
     const allowedTags = [];
