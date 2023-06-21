@@ -339,7 +339,14 @@ describe ("formatFirstLetterOfNames", () => {
         const formattedName = formatFirstLetterOfNames('hAnS');
         assert.strictEqual(formattedName, 'Hans');
     });
-
+    it('should format a double name with space between', function () {
+        const formattedName = formatFirstLetterOfNames('hans ueli');
+        assert.strictEqual(formattedName, 'Hans Ueli');
+    });
+    it('should format a double name with - between', function () {
+        const formattedName = formatFirstLetterOfNames('jean-luc');
+        assert.strictEqual(formattedName, 'Jean-Luc');
+    });
 });
 
 

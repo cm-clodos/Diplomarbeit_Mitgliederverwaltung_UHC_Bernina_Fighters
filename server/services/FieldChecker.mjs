@@ -126,7 +126,10 @@ export function trimData(data){
 }
 
 export function formatFirstLetterOfNames(name){
-    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    name = name.trim();
+    name = name.toLowerCase();
+    name = name.replace(/\b\w/g, (match) => match.toUpperCase());
+    return name;
 }
 
 
