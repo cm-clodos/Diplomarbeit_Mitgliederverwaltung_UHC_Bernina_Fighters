@@ -2,8 +2,6 @@ import { Parser } from '@json2csv/plainjs';
 import fs from 'fs';
 
 class JSONToCSVConverter {
-
-
     constructor(options) {
         this.parser = new Parser(options);
     }
@@ -23,7 +21,6 @@ class JSONToCSVConverter {
         }
     }
 }
-
 export default JSONToCSVConverter;
 
 

@@ -1,7 +1,6 @@
 import MemberHelper from "../helper/MemberHelper.mjs";
 import EncryptionService from "./EncryptionService.mjs";
 
-
 export async function checkIfUniqueTelephone(telephone) {
     const memberHelper = new MemberHelper();
     const encryptionService = new EncryptionService();
@@ -23,6 +22,7 @@ export async function checkIfUniqueEmail(email) {
 export async function checkIfExistingEmailHasChanged(email, memberId) {
     const memberHelper = new MemberHelper();
     const encryptionService = new EncryptionService();
+
     const existingMemberData = await memberHelper.getMemberById(memberId)
     const decryptedMemberData = encryptionService.decryptMemberData(existingMemberData)
     const existingEmail = decryptedMemberData.email
@@ -32,6 +32,7 @@ export async function checkIfExistingEmailHasChanged(email, memberId) {
 export async function checkIfExistingTelephoneHasChanged(telephone, memberId) {
     const memberHelper = new MemberHelper();
     const encryptionService = new EncryptionService();
+
     const existingMemberData = await memberHelper.getMemberById(memberId)
     const decryptedMemberData = encryptionService.decryptMemberData(existingMemberData)
     const existingTelephone = decryptedMemberData.telephone

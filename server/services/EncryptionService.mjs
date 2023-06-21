@@ -1,12 +1,11 @@
 import * as crypto from "crypto";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 class EncryptionService {
     constructor() {
-        this.algorithm = process.env.ALGORITHM;     // <<<< Use a local .env file instead
-        this.secretKey = process.env.SECRET_KEY;      // like: "vOVl6sdmpNWjRRIqCa7rdxs01lwHzfr5" <<<< Use a local .env file instead
+        this.algorithm = process.env.ALGORITHM;
+        this.secretKey = process.env.SECRET_KEY;
     }
     encrypt (text) {
         const iv = crypto.randomBytes(16);
@@ -30,6 +29,7 @@ class EncryptionService {
             telephone: this.encrypt(member.telephone)
         };
     }
+
     decryptMembersListData(members){
         for (let member of members) {
             member.firstname = this.decrypt(member.firstname);
@@ -49,12 +49,14 @@ class EncryptionService {
             telephone: this.decrypt(member.data[0].telephone)
         };
     }
+
     decryptMemberEmails(emails){
         for (let email of emails) {
             email.email = this.decrypt(email.email);
         }
         return emails;
     }
+
     decryptPaymentData(payments){
         for (let payment of payments) {
             payment.firstname = this.decrypt(payment.firstname);
@@ -62,6 +64,7 @@ class EncryptionService {
         }
         return payments;
     }
+
     decryptTrikotData(trikots){
         for (let trikot of trikots) {
             if (trikot.firstname === null || trikot.lastname === null) continue;
