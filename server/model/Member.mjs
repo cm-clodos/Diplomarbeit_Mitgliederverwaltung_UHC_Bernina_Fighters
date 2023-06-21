@@ -18,7 +18,6 @@ class Member {
         this.role = role;
         this.entryDate = new Date(entryDate);
     }
-
 }
 
 export default Member;
