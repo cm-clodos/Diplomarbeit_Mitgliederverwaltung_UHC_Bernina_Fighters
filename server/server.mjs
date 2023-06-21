@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.SERVER_PORT || 3000;
 const hostname = process.env.SERVER_HOSTNAME || 'localhost';
 
-// Whitelist definieren für zugriff später nur client-url
+// * only for development purposes, remove in production environment and define allowed origins
 let corsOptions = {
     origin: "*",
     credentials: true,
@@ -23,7 +23,6 @@ let corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-// Für Built in Middleware für Formulardaten
 app.use(express.urlencoded({extended: true}));
 
 app.get('/',  function (req, res) {
