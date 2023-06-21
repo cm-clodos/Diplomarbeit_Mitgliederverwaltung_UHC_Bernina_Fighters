@@ -3,11 +3,11 @@ import TrikotHelper from "../helper/TrikotHelper.mjs";
 import ApiError from "../model/ApiError.mjs";
 import CreateResponse from "../model/CreateResponse.mjs";
 import EncryptionService from "../services/EncryptionService.mjs";
+import fs from "fs";
 import {
     exportAllTrikotList,
     exportAvailableTrikotList
 } from "../services/ExportService.mjs";
-import fs from "fs";
 
 const handleGetAllTrikots = async (req, res) => {
     const trikotHelper = new TrikotHelper();
@@ -21,8 +21,9 @@ const handleGetAllTrikots = async (req, res) => {
         res.status(500).json(new ApiError("ee-999"));
     }
 }
+
 const handleNewTrikot = async (req, res) => {
-    let trikot = new Trikot(
+    const trikot = new Trikot(
         req.body.number,
         req.body.name,
         req.body.available,
@@ -41,8 +42,9 @@ const handleNewTrikot = async (req, res) => {
         return res.status(500).json(new ApiError("ee-999"));
     }
 }
+
 const handleUpdateTrikot = async (req, res) => {
-    let trikot = new Trikot(
+    const trikot = new Trikot(
         req.params.id,
         req.body.name,
         req.body.available,
@@ -61,6 +63,7 @@ const handleUpdateTrikot = async (req, res) => {
         return res.status(500).json(new ApiError("ee-999"));
     }
 }
+
 const handleDeleteTrikot = async (req, res) => {
     const trikotNumber = req.params.id;
     const trikotHelper = new TrikotHelper();
@@ -73,8 +76,8 @@ const handleDeleteTrikot = async (req, res) => {
         res.status(500).json(new ApiError("ee-999"));
     }
 }
+
 const handleTrikotListExportFile = async (req, res) => {
-    console.log(req.query.filter);
     const filter = req.query.filter;
     let downloaded;
     try {
