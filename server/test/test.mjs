@@ -91,6 +91,10 @@ describe('checkFirstname from validateMemberData', () => {
         const error = checkFirstname('Thisfirstnameislongerthanfiftycharacterssoitshouldtriggeranerror');
         assert.deepEqual(error, {firstname: 'Vorname darf maximal 50 Zeichen lang sein.'});
     });
+    it('should return an error if the firstname contains digits',  () => {
+        const error = checkFirstname('John123');
+        assert.deepEqual(error, {firstname: 'Vorname darf keine Zahlen enthalten.'});
+    });
     it('should not return an error if the firstname is valid', () => {
         const error = checkFirstname('John');
         assert.deepEqual(error, {});
@@ -107,7 +111,10 @@ describe('checkLastname from validateMemberData', () => {
         const error = checkLastname('Thislastnameislongerthanfiftycharacterssoitshouldtriggeranerror');
         assert.deepEqual(error, {lastname: 'Nachname darf maximal 50 Zeichen lang sein.'});
     });
-
+    it('should return an error if the lastname contains digits',  () => {
+        const error = checkLastname('Doe123');
+        assert.deepEqual(error, {lastname: 'Nachname darf keine Zahlen enthalten.'});
+    });
     it('should not return an error if the lastname is valid', () => {
         const error = checkLastname('Doe');
         assert.deepEqual(error, {});

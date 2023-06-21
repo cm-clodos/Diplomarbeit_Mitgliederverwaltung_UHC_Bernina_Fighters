@@ -8,6 +8,8 @@ export function checkFirstname(firstname){
         error.firstname = 'Vorname ist erforderlich.';
     } else if (firstname.trim().length > 50) {
         error.firstname = 'Vorname darf maximal 50 Zeichen lang sein.';
+    } else if (firstname.match(/\d/)) {
+        error.firstname = 'Vorname darf keine Zahlen enthalten.';
     }
     return error;
 }
@@ -18,6 +20,8 @@ export function checkLastname(lastname){
         console.log("lastname: " + lastname)
     } else if (lastname.trim().length > 50) {
         error.lastname = 'Nachname darf maximal 50 Zeichen lang sein.';
+    }  else if (lastname.match(/\d/)) {
+        error.lastname = 'Nachname darf keine Zahlen enthalten.';
     }
     return error;
 }
